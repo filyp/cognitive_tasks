@@ -1,0 +1,4 @@
+*.pyc
+results
+.idea
+venv
