@@ -16,6 +16,7 @@ def get_screen_res():
 
         output = subprocess.Popen('xrandr | grep "\*" | cut -d" " -f4', shell=True, stdout=subprocess.PIPE)
         output = output.communicate()[0]
+        output = output.decode()
         valid_res = lambda x: re.match('^\d{3,4}x\d{3,4}$', x)
         if not valid_res(output):
             output = subprocess.Popen(' xdpyinfo | grep dimensions | cut -d" " -f7', shell=True, stdout=subprocess.PIPE)
@@ -53,7 +54,8 @@ def create_win(screen_color):
     :return: zwraca ekran na ktorym bedzie wszystko wyswietlane
     """
     screen_res = get_screen_res()
-    win = visual.Window(screen_res.values(), fullscr=True, monitor='TestMonitor',
+    screen_res_list = list(screen_res.values())
+    win = visual.Window(screen_res_list, fullscr=True, monitor='TestMonitor',
                         units='pix', screen=0, color=screen_color)
     event.Mouse(visible=False, newPos=None, win=win)
     win.flip()

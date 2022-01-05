@@ -11,7 +11,7 @@ possible_audio_format = ('mp3', 'au', 'mp2', 'wav', 'wma', 'ogg')
 def load_config():
     try:
         with open(join("docs", "config.yaml")) as yaml_file:
-            doc = yaml.load(yaml_file)
+            doc = yaml.safe_load(yaml_file)
         return doc
     except:
         raise Exception("Can't load config file")
