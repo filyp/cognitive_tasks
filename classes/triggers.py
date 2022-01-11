@@ -2,17 +2,18 @@ import time
 
 
 class TriggerTypes(object):
-    BLINK = 'BLINK'
-    CUE = 'CU'
-    TARGET = 'TG'
-    RE = 'RE'
-    FEEDB_GOOD = 'FG'
-    FEEDB_BAD = 'FB'
+    BLINK = "BLINK"
+    CUE = "CU"
+    TARGET = "TG"
+    RE = "RE"
+    FEEDB_GOOD = "FG"
+    FEEDB_BAD = "FB"
 
 
 def create_eeg_port():
     try:
         import parallel
+
         port = parallel.Parallel()
         port.setData(0x00)
         return port
@@ -23,6 +24,7 @@ def create_eeg_port():
 def create_nirs_dev():
     try:
         import pyxid
+
         devices = pyxid.get_xid_devices()
         dev = devices[0]
         return dev
@@ -31,11 +33,11 @@ def create_nirs_dev():
 
 
 def prepare_trigger_name(trial, block_type):
-    cue_name = trial['cue']['name'][:3]
-    target_name = trial['target']['name'][:3] + trial['target']['name'][-2:]
+    cue_name = trial["cue"]["name"][:3]
+    target_name = trial["target"]["name"][:3] + trial["target"]["name"][-2:]
     name = "*{}*{}*{}".format(block_type[:2], cue_name, target_name)
     # for response
-    name += '*-'
+    name += "*-"
     return name
 
 
@@ -49,7 +51,13 @@ def prepare_trigger(trigger_no, triggers_list, trigger_type, trigger_name=None):
     return trigger_no, triggers_list
 
 
-def send_trigger(trigger_no, port_eeg=None, port_nirs=None, send_eeg_triggers=False, send_nirs_triggers=False):
+def send_trigger(
+    trigger_no,
+    port_eeg=None,
+    port_nirs=None,
+    send_eeg_triggers=False,
+    send_nirs_triggers=False,
+):
     if send_eeg_triggers:
         try:
             port_eeg.setData(trigger_no)

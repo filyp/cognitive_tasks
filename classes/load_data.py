@@ -4,8 +4,8 @@ import codecs
 from os.path import join
 import yaml
 
-possible_images_format = ('bmp', 'jpg', 'png', 'gif')
-possible_audio_format = ('mp3', 'au', 'mp2', 'wav', 'wma', 'ogg')
+possible_images_format = ("bmp", "jpg", "png", "gif")
+possible_audio_format = ("mp3", "au", "mp2", "wav", "wma", "ogg")
 
 
 def load_config():
@@ -31,30 +31,40 @@ def load_data(win, folder_name, config, screen_res):
     for name in names:
         path = os.path.join(folder_name, name)
         try:
-            if name[-3:] == 'txt':
-                with open(path, 'r') as text_file:
+            if name[-3:] == "txt":
+                with open(path, "r") as text_file:
                     for line in text_file:
-                        trigger_name = line.split(':')[0]
-                        text = line.split(':')[1]
-                        text = text.split('\n')[0]
-                        word = visual.TextStim(win=win, antialias=True, font=u'Arial', text=text,
-                                               height=config['Text_size'], wrapWidth=screen_res['width'],
-                                               color=u'black', alignHoriz='center', alignVert='center')
-                        data.append({'type': 'text', 'name': trigger_name, 'stimulus': word})
+                        trigger_name = line.split(":")[0]
+                        text = line.split(":")[1]
+                        text = text.split("\n")[0]
+                        word = visual.TextStim(
+                            win=win,
+                            antialias=True,
+                            font=u"Arial",
+                            text=text,
+                            height=config["Text_size"],
+                            wrapWidth=screen_res["width"],
+                            color=u"black",
+                            alignHoriz="center",
+                            alignVert="center",
+                        )
+                        data.append({"type": "text", "name": trigger_name, "stimulus": word})
             elif name[-3:] in possible_images_format:
-                image = visual.ImageStim(win, image=path, interpolate=True, size=config['Figure_size'])
-                data.append({'type': 'image', 'name': name.split('.')[0], 'stimulus': image})
+                image = visual.ImageStim(
+                    win, image=path, interpolate=True, size=config["Figure_size"]
+                )
+                data.append({"type": "image", "name": name.split(".")[0], "stimulus": image})
             elif name[-3:] in possible_audio_format:
-                data.append({'type': 'sound', 'name': name.split('.')[0], 'stimulus': path})
+                data.append({"type": "sound", "name": name.split(".")[0], "stimulus": path})
             else:
-                raise Exception('Error while loading a file ' + name)
+                raise Exception("Error while loading a file " + name)
         except:
-            raise Exception('Error while loading a file ' + name)
+            raise Exception("Error while loading a file " + name)
 
     return data
 
 
-def read_text_from_file(file_name, insert=''):
+def read_text_from_file(file_name, insert=""):
     """
     Method that read message from text file, and optionally add some
     dynamically generated info.
@@ -63,14 +73,14 @@ def read_text_from_file(file_name, insert=''):
     :return: message
     """
     if not isinstance(file_name, str):
-        raise TypeError('file_name must be a string')
+        raise TypeError("file_name must be a string")
     msg = list()
-    with codecs.open(file_name, encoding='utf-8', mode='r') as data_file:
+    with codecs.open(file_name, encoding="utf-8", mode="r") as data_file:
         for line in data_file:
-            if not line.startswith('#'):  # if not commented line
-                if line.startswith('<--insert-->'):
+            if not line.startswith("#"):  # if not commented line
+                if line.startswith("<--insert-->"):
                     if insert:
                         msg.append(insert)
                 else:
                     msg.append(line)
-    return ''.join(msg)
+    return "".join(msg)

@@ -12,10 +12,10 @@ def experiment_info(observer):
     date = now.strftime("%Y-%m-%d %H:%M")
 
     my_dlg = gui.Dlg(title="Go No-Go 2")
-    my_dlg.addText('Informacje:')
-    my_dlg.addField('ID:')
-    my_dlg.addField('Wiek:')
-    my_dlg.addField('Plec:', choices=['Mezczyzna', "Kobieta"])
+    my_dlg.addText("Informacje:")
+    my_dlg.addField("ID:")
+    my_dlg.addField("Wiek:")
+    my_dlg.addField("Plec:", choices=["Mezczyzna", "Kobieta"])
 
     my_dlg.show()
     if not my_dlg.OK:
@@ -31,8 +31,8 @@ def eeg_info():
     """
 
     my_dlg = gui.Dlg(title="Go No-Go 2")
-    my_dlg.addText('\n\tUruchom ActiView zanim zaczniesz zadanie.')
-    my_dlg.addText('')
+    my_dlg.addText("\n\tUruchom ActiView zanim zaczniesz zadanie.")
+    my_dlg.addText("")
 
     my_dlg.show()
     if not my_dlg.OK:

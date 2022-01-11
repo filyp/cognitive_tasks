@@ -13,10 +13,12 @@ def prepare_stimulus_pairs(cue_name, target_name, stim_name, stimulus):
     stimulus_pairs = []
     idx = 1
     while True:
-        cue = [stim for stim in stimulus if stim['name'].startswith('{}_{}'.format(idx, cue_name))]
-        target = [stim for stim in stimulus if stim['name'].startswith('{}_{}'.format(idx, target_name))]
+        cue = [stim for stim in stimulus if stim["name"].startswith("{}_{}".format(idx, cue_name))]
+        target = [
+            stim for stim in stimulus if stim["name"].startswith("{}_{}".format(idx, target_name))
+        ]
         if cue and target:
-            pair = {'type': stim_name, 'cue': cue[0], 'target': target[0]}
+            pair = {"type": stim_name, "cue": cue[0], "target": target[0]}
             stimulus_pairs.append(pair)
             idx += 1
         else:
@@ -26,30 +28,49 @@ def prepare_stimulus_pairs(cue_name, target_name, stim_name, stimulus):
 def prepare_trials(block, stimulus):
     all_trials = []
 
-    if 'number_of_shape_trials' in block:
+    if "number_of_shape_trials" in block:
 
-        stimulus_pairs = prepare_stimulus_pairs(cue_name='neutral', target_name='color_1',
-                                                stim_name='shape', stimulus=stimulus)
+        stimulus_pairs = prepare_stimulus_pairs(
+            cue_name="neutral",
+            target_name="color_1",
+            stim_name="shape",
+            stimulus=stimulus,
+        )
 
         for idx in range(len(stimulus_pairs)):
-            target_name = stimulus_pairs[idx]['target']['name']
-            new_target_idx = (int(target_name.split('_')[0]) % len(stimulus_pairs)) + 1
-            new_target_name = '{}_{}'.format(new_target_idx, target_name.split("_", 1)[1])
-            stimulus_pairs[idx]['target'] = [stim for stim in stimulus if stim['name'] == new_target_name][0]
+            target_name = stimulus_pairs[idx]["target"]["name"]
+            new_target_idx = (int(target_name.split("_")[0]) % len(stimulus_pairs)) + 1
+            new_target_name = "{}_{}".format(new_target_idx, target_name.split("_", 1)[1])
+            stimulus_pairs[idx]["target"] = [
+                stim for stim in stimulus if stim["name"] == new_target_name
+            ][0]
 
-        trials = prepare_trials_type(stimulus_pairs=stimulus_pairs, number_of_trials=block['number_of_shape_trials'])
+        trials = prepare_trials_type(
+            stimulus_pairs=stimulus_pairs,
+            number_of_trials=block["number_of_shape_trials"],
+        )
         all_trials += trials
 
-    if 'number_of_go_trials' in block:
-        stimulus_pairs = prepare_stimulus_pairs(cue_name='neutral', target_name='color_1',
-                                                stim_name='go', stimulus=stimulus)
-        trials = prepare_trials_type(stimulus_pairs=stimulus_pairs, number_of_trials=block['number_of_go_trials'])
+    if "number_of_go_trials" in block:
+        stimulus_pairs = prepare_stimulus_pairs(
+            cue_name="neutral", target_name="color_1", stim_name="go", stimulus=stimulus
+        )
+        trials = prepare_trials_type(
+            stimulus_pairs=stimulus_pairs, number_of_trials=block["number_of_go_trials"]
+        )
         all_trials += trials
 
-    if 'number_of_color_trials' in block:
-        stimulus_pairs = prepare_stimulus_pairs(cue_name='neutral', target_name='color_2',
-                                                stim_name='color', stimulus=stimulus)
-        trials = prepare_trials_type(stimulus_pairs=stimulus_pairs, number_of_trials=block['number_of_color_trials'])
+    if "number_of_color_trials" in block:
+        stimulus_pairs = prepare_stimulus_pairs(
+            cue_name="neutral",
+            target_name="color_2",
+            stim_name="color",
+            stimulus=stimulus,
+        )
+        trials = prepare_trials_type(
+            stimulus_pairs=stimulus_pairs,
+            number_of_trials=block["number_of_color_trials"],
+        )
         all_trials += trials
 
     random.shuffle(all_trials)
@@ -60,15 +81,17 @@ def prepare_experiment(experiment_blocks, stimulus):
 
     experiment = []
     for block in experiment_blocks:
-        if block['type'] == 'break':
+        if block["type"] == "break":
             experiment.append(block)
-        elif block['type'] in ['calibration', 'experiment', 'training']:
+        elif block["type"] in ["calibration", "experiment", "training"]:
             trials = prepare_trials(block, stimulus)
-            prepared_block = {'type': block['type'], 'trials': trials}
-            if block['type'] == 'experiment':
-                prepared_block['cutoff'] = block['cutoff']
+            prepared_block = {"type": block["type"], "trials": trials}
+            if block["type"] == "experiment":
+                prepared_block["cutoff"] = block["cutoff"]
             experiment.append(prepared_block)
         else:
-            raise Exception('{} is bad block type in config Experiment_blocks'.format(block['type']))
+            raise Exception(
+                "{} is bad block type in config Experiment_blocks".format(block["type"])
+            )
 
     return experiment
