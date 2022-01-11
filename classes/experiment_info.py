@@ -2,11 +2,11 @@ import datetime
 from psychopy import gui
 
 
-def experiment_info(observer):
+def get_participant_info(observer):
     """
     okienko dialogowe na podczas uruchomienia procedury
     :param observer: observer_id
-    :return: part_id, observer_id, date
+    :return: participant_info
     """
     now = datetime.datetime.now()
     date = now.strftime("%Y-%m-%d %H:%M")
@@ -21,16 +21,21 @@ def experiment_info(observer):
     if not my_dlg.OK:
         exit(1)
 
-    #          id               sex             age
-    return my_dlg.data[0], my_dlg.data[2], my_dlg.data[1], date
+    part_id = my_dlg.data[0]
+    sex = my_dlg.data[2]
+    age = my_dlg.data[1]
+
+    date = date.replace(":", "-")
+    participant_info = "{}_{}_{}_{}".format(part_id, sex, age, date)
+    return participant_info
 
 
-def eeg_info():
+def display_eeg_info():
     """
     Dialog info shows at the beginning of the experiment.
     """
 
-    my_dlg = gui.Dlg(title="Go No-Go 2")
+    my_dlg = gui.Dlg(title="Flanker task")
     my_dlg.addText("\n\tUruchom ActiView zanim zaczniesz zadanie.")
     my_dlg.addText("")
 

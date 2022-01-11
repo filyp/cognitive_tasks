@@ -17,7 +17,7 @@ def show(
     screen_res,
     experiment,
     config,
-    part_id,
+    participant_info,
     port_eeg,
     trigger_no,
     triggers_list,
@@ -39,7 +39,7 @@ def show(
                 file_name=block["file_name"],
                 text_size=config["Text_size"],
                 screen_width=screen_res["width"],
-                part_id=part_id,
+                participant_info=participant_info,
                 beh=beh,
                 triggers_list=triggers_list,
             )
@@ -59,7 +59,7 @@ def show(
             fixation_show_time = random.uniform(
                 config["Fixation_show_time"][0], config["Fixation_show_time"][1]
             )
-            show_text(win, fixation, fixation_show_time, part_id, beh, triggers_list)
+            show_text(win, fixation, fixation_show_time, participant_info, beh, triggers_list)
 
             # draw cue
             trigger_no, triggers_list = prepare_trigger(
@@ -81,7 +81,7 @@ def show(
             )
 
             while clock.getTime() < cue_show_time:
-                check_exit(part_id=part_id, beh=beh, triggers_list=triggers_list)
+                check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
                 win.flip()
             # print (cue_show_time - clock.getTime())*1000
             trial["cue"]["stimulus"].setAutoDraw(False)
@@ -126,7 +126,7 @@ def show(
                     response = key[0]
                     break
 
-                check_exit(part_id=part_id, beh=beh, triggers_list=triggers_list)
+                check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
                 win.flip()
             # print (target_show_time-clock.getTime())*1000
             trial["target"]["stimulus"].setAutoDraw(False)
@@ -137,7 +137,7 @@ def show(
                 config["Empty_screen_show_time"][0], config["Empty_screen_show_time"][1]
             )
             while clock.getTime() < empty_screen_show_time:
-                check_exit(part_id=part_id, beh=beh, triggers_list=triggers_list)
+                check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
                 win.flip()
             # print (empty_screen_show_time-clock.getTime())*1000
 
@@ -196,7 +196,7 @@ def show(
                     )
                     time.sleep(feedback_show_time - frame_time)
                     feedback_text.setAutoDraw(False)
-                    check_exit(part_id=part_id, beh=beh, triggers_list=triggers_list)
+                    check_exit(part_id=participant_info, beh=beh, triggers_list=triggers_list)
                     win.flip()
 
             # save beh

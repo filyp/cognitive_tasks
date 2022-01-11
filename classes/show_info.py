@@ -13,7 +13,7 @@ def show_info(
     text_size,
     screen_width,
     insert="",
-    part_id=None,
+    participant_info=None,
     beh=None,
     triggers_list=None,
 ):
@@ -42,17 +42,17 @@ def show_info(
     win.flip()
     key = event.waitKeys(keyList=["f7", "return", "space"])
     if key == ["f7"]:
-        save_beh(beh, part_id)
-        save_triggers(triggers_list, part_id)
+        save_beh(beh, participant_info)
+        save_triggers(triggers_list, participant_info)
         logging.critical("Experiment finished by user! {} pressed.".format(key))
         exit(1)
     win.flip()
 
 
-def show_text(win, text, show_time, part_id=None, beh=None, triggers_list=None):
+def show_text(win, text, show_time, participant_info=None, beh=None, triggers_list=None):
     text.setAutoDraw(True)
     win.flip()
     time.sleep(show_time)
     text.setAutoDraw(False)
-    check_exit(part_id=part_id, beh=beh, triggers_list=triggers_list)
+    check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
     win.flip()
