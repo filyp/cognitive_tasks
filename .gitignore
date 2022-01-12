@@ -1,4 +1,5 @@
 *.pyc
 results
 .idea
+.vscode
 venv

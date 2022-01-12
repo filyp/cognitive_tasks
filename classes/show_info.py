@@ -35,8 +35,6 @@ def show_info(
         height=text_size,
         wrapWidth=screen_width,
         color=u"black",
-        alignHoriz="center",
-        alignVert="center",
     )
     hello_msg.draw()
     win.flip()

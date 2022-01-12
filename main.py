@@ -13,18 +13,17 @@ from classes.show import show
 from classes.save_data import save_beh, save_triggers
 from classes.triggers import create_eeg_port
 from classes.show_info import show_info
-from classes.prepare_experiment import prepare_experiment
 
-__author__ = "ociepkam"
+__author__ = ["ociepkam", "filyp"]
 
 
 def run():
-    # Prepare experiment
+    # Load config
     config = load_config()
 
     display_eeg_info()
-
     participant_info = get_participant_info(config["Observer"])
+    # participant_info = "mock_info"
 
     # EEG triggers
     if config["Send_EEG_trigg"]:
@@ -32,19 +31,13 @@ def run():
     else:
         port_eeg = None
 
-    triggers_list = list()
-    trigger_no = 0
-
     # screen
     win, screen_res, frames_per_sec = create_win(screen_color=config["Screen_color"])
 
-    # load stimulus
-    stimulus = load_data(win=win, folder_name="stimulus", config=config, screen_res=screen_res)
-
-    # prepare experiment
-    experiment = prepare_experiment(config["Experiment_blocks"], stimulus)
     # Run experiment
     # Ophthalmic procedure
+    triggers_list = list()
+    trigger_no = 0
     if config["Ophthalmic_procedure"]:
         trigger_no, triggers_list = ophthalmic_procedure(
             win=win,
@@ -70,11 +63,14 @@ def run():
             triggers_list=triggers_list,
         )
 
+    # load stimulus
+    stimulus = load_data(win=win, folder_name="stimulus", config=config, screen_res=screen_res)
+
     # Experiment
     beh, triggers_list = show(
         win=win,
         screen_res=screen_res,
-        experiment=experiment,
+        stimulus=stimulus,
         config=config,
         participant_info=participant_info,
         port_eeg=port_eeg,

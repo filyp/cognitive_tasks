@@ -75,23 +75,3 @@ def prepare_trials(block, stimulus):
 
     random.shuffle(all_trials)
     return all_trials
-
-
-def prepare_experiment(experiment_blocks, stimulus):
-
-    experiment = []
-    for block in experiment_blocks:
-        if block["type"] == "break":
-            experiment.append(block)
-        elif block["type"] in ["calibration", "experiment", "training"]:
-            trials = prepare_trials(block, stimulus)
-            prepared_block = {"type": block["type"], "trials": trials}
-            if block["type"] == "experiment":
-                prepared_block["cutoff"] = block["cutoff"]
-            experiment.append(prepared_block)
-        else:
-            raise Exception(
-                "{} is bad block type in config Experiment_blocks".format(block["type"])
-            )
-
-    return experiment

@@ -4,6 +4,7 @@ import time
 
 from classes.check_exit import check_exit
 from classes.show_info import show_info, show_text
+from classes.prepare_experiment import prepare_trials
 from classes.triggers import (
     prepare_trigger,
     TriggerTypes,
@@ -15,7 +16,7 @@ from classes.triggers import (
 def show(
     win,
     screen_res,
-    experiment,
+    stimulus,
     config,
     participant_info,
     port_eeg,
@@ -31,8 +32,7 @@ def show(
     )
     clock = core.Clock()
 
-    for block in experiment:
-
+    for block in config["Experiment_blocks"]:
         if block["type"] == "break":
             show_info(
                 win=win,
@@ -44,6 +44,12 @@ def show(
                 triggers_list=triggers_list,
             )
             continue
+        elif block["type"] in ["calibration", "experiment", "training"]:
+            block["trials"] = prepare_trials(block, stimulus)
+        else:
+            raise Exception(
+                "{} is bad block type in config Experiment_blocks".format(block["type"])
+            )
 
         if block["type"] == "calibration":
             rt_mean = 0
@@ -196,7 +202,7 @@ def show(
                     )
                     time.sleep(feedback_show_time - frame_time)
                     feedback_text.setAutoDraw(False)
-                    check_exit(part_id=participant_info, beh=beh, triggers_list=triggers_list)
+                    check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
                     win.flip()
 
             # save beh
