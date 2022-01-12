@@ -1,5 +1,6 @@
-from psychopy import logging, visual, event
 from collections import OrderedDict
+
+from psychopy import event, logging, visual
 
 
 def get_screen_res():
@@ -11,8 +12,8 @@ def get_screen_res():
 
     system = platform.system()
     if "Linux" in system:
-        import subprocess
         import re
+        import subprocess
 
         output = subprocess.Popen(
             'xrandr | grep "\*" | cut -d" " -f4', shell=True, stdout=subprocess.PIPE

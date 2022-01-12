@@ -1,8 +1,9 @@
-import os
-from psychopy import visual
 import codecs
+import os
 from os.path import join
+
 import yaml
+from psychopy import visual
 
 possible_images_format = ("bmp", "jpg", "png", "gif")
 possible_audio_format = ("mp3", "au", "mp2", "wav", "wma", "ogg")

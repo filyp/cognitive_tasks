@@ -1,9 +1,10 @@
-from psychopy import visual, event, logging
-import time
 import os
+import time
 
-from classes.load_data import read_text_from_file
+from psychopy import event, logging, visual
+
 from classes.check_exit import check_exit
+from classes.load_data import read_text_from_file
 from classes.save_data import save_beh, save_triggers
 
 

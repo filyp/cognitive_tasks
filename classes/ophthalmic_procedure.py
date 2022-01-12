@@ -1,9 +1,10 @@
-from psychopy import visual, logging
 import os
 
-from classes.load_data import read_text_from_file
+from psychopy import logging, visual
+
 from classes.check_exit import check_exit
-from classes.triggers import prepare_trigger, TriggerTypes, send_trigger
+from classes.load_data import read_text_from_file
+from classes.triggers import TriggerTypes, prepare_trigger, send_trigger
 
 
 def ophthalmic_procedure(

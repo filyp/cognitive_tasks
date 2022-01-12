@@ -1,16 +1,12 @@
-from psychopy import visual, event, core
 import random
 import time
 
+from psychopy import core, event, visual
+
 from classes.check_exit import check_exit
-from classes.show_info import show_info, show_text
 from classes.prepare_experiment import prepare_trials
-from classes.triggers import (
-    prepare_trigger,
-    TriggerTypes,
-    prepare_trigger_name,
-    send_trigger,
-)
+from classes.show_info import show_info, show_text
+from classes.triggers import TriggerTypes, prepare_trigger, prepare_trigger_name, send_trigger
 
 
 def show(
@@ -202,7 +198,9 @@ def show(
                     )
                     time.sleep(feedback_show_time - frame_time)
                     feedback_text.setAutoDraw(False)
-                    check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
+                    check_exit(
+                        participant_info=participant_info, beh=beh, triggers_list=triggers_list
+                    )
                     win.flip()
 
             # save beh

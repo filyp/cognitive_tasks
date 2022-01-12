@@ -1,5 +1,5 @@
-import os
 import csv
+import os
 
 
 def save_triggers(data, name):

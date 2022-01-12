@@ -4,15 +4,16 @@
 import os
 import random
 
+from classes.experiment_info import display_eeg_info, get_participant_info
+
 # from classes.prepare_experiment import prepare_trials, create_stops_times_dict, randomize_buttons
-from classes.load_data import load_data, load_config
-from classes.screen import create_win
-from classes.experiment_info import get_participant_info, display_eeg_info
+from classes.load_data import load_config, load_data
 from classes.ophthalmic_procedure import ophthalmic_procedure
-from classes.show import show
 from classes.save_data import save_beh, save_triggers
-from classes.triggers import create_eeg_port
+from classes.screen import create_win
+from classes.show import show
 from classes.show_info import show_info
+from classes.triggers import create_eeg_port
 
 __author__ = ["ociepkam", "filyp"]
 
