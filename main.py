@@ -4,6 +4,10 @@
 import os
 import random
 
+from psychopy import logging
+
+logging.console.setLevel(logging.DATA)
+
 from classes.experiment_info import display_eeg_info, get_participant_info
 
 # from classes.prepare_experiment import prepare_trials, create_stops_times_dict, randomize_buttons
