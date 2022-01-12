@@ -1,0 +1,4 @@
+congruent_lll:<<<<<
+congruent_rrr:>>>>>
+incongruent_lrl:<<><<
+incongruent_rlr:>><>>

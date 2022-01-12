@@ -4,10 +4,14 @@
 import os
 import random
 
+from psychopy import logging
+
+logging.console.setLevel(logging.DATA)
+
 from classes.experiment_info import display_eeg_info, get_participant_info
 
 # from classes.prepare_experiment import prepare_trials, create_stops_times_dict, randomize_buttons
-from classes.load_data import load_config, load_data
+from classes.load_data import load_config, load_stimuli
 from classes.ophthalmic_procedure import ophthalmic_procedure
 from classes.save_data import save_beh, save_triggers
 from classes.screen import create_win
@@ -22,9 +26,9 @@ def run():
     # Load config
     config = load_config()
 
-    display_eeg_info()
-    participant_info = get_participant_info(config["Observer"])
-    # participant_info = "mock_info"
+    # display_eeg_info()
+    # participant_info = get_participant_info(config["Observer"])
+    participant_info = "mock_info"  # TODO reenable after testing
 
     # EEG triggers
     if config["Send_EEG_trigg"]:
@@ -65,7 +69,7 @@ def run():
         )
 
     # load stimulus
-    stimulus = load_data(win=win, folder_name="stimulus", config=config, screen_res=screen_res)
+    stimulus = load_stimuli(win=win, folder_name="stimulus", config=config, screen_res=screen_res)
 
     # Experiment
     beh, triggers_list = show(

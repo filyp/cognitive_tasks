@@ -6,7 +6,12 @@ from psychopy import core, event, visual
 from classes.check_exit import check_exit
 from classes.prepare_experiment import prepare_trials
 from classes.show_info import show_info, show_text
-from classes.triggers import TriggerTypes, prepare_trigger, prepare_trigger_name, send_trigger
+from classes.triggers import (
+    TriggerTypes,
+    prepare_trigger,
+    prepare_trigger_name,
+    send_trigger,
+)
 
 
 def show(
@@ -21,8 +26,6 @@ def show(
     frame_time=1 / 60.0,
 ):
     beh = []
-    rt_sum = 0
-    rt_mean = 0
     fixation = visual.TextStim(
         win, color="black", text="+", height=2 * config["Fix_size"], pos=(0, 10)
     )
@@ -40,16 +43,12 @@ def show(
                 triggers_list=triggers_list,
             )
             continue
-        elif block["type"] in ["calibration", "experiment", "training"]:
+        elif block["type"] in ["experiment", "training"]:
             block["trials"] = prepare_trials(block, stimulus)
         else:
             raise Exception(
                 "{} is bad block type in config Experiment_blocks".format(block["type"])
             )
-
-        if block["type"] == "calibration":
-            rt_mean = 0
-            rt_sum = 0
 
         for trial in block["trials"]:
             trigger_name = prepare_trigger_name(trial=trial, block_type=block["type"])
@@ -58,36 +57,8 @@ def show(
             acc = "negative"
 
             # draw fixation
-            fixation_show_time = random.uniform(
-                config["Fixation_show_time"][0], config["Fixation_show_time"][1]
-            )
+            fixation_show_time = random.uniform(*config["Fixation_show_time"])
             show_text(win, fixation, fixation_show_time, participant_info, beh, triggers_list)
-
-            # draw cue
-            trigger_no, triggers_list = prepare_trigger(
-                trigger_type=TriggerTypes.CUE,
-                trigger_no=trigger_no,
-                triggers_list=triggers_list,
-                trigger_name=trigger_name,
-            )
-            cue_show_time = random.uniform(config["Cue_show_time"][0], config["Cue_show_time"][1])
-            trial["cue"]["stimulus"].setAutoDraw(True)
-            win.callOnFlip(clock.reset)
-            event.clearEvents()
-            win.flip()
-
-            send_trigger(
-                port_eeg=port_eeg,
-                trigger_no=trigger_no,
-                send_eeg_triggers=config["Send_EEG_trigg"],
-            )
-
-            while clock.getTime() < cue_show_time:
-                check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
-                win.flip()
-            # print (cue_show_time - clock.getTime())*1000
-            trial["cue"]["stimulus"].setAutoDraw(False)
-            win.flip()
 
             # draw target
             trigger_no, triggers_list = prepare_trigger(
@@ -96,9 +67,7 @@ def show(
                 triggers_list=triggers_list,
                 trigger_name=trigger_name,
             )
-            target_show_time = random.uniform(
-                config["Target_show_time"][0], config["Target_show_time"][1]
-            )
+            target_show_time = random.uniform(*config["Target_show_time"])
             trial["target"]["stimulus"].setAutoDraw(True)
             win.callOnFlip(clock.reset)
             event.clearEvents()
@@ -135,73 +104,11 @@ def show(
             win.flip()
 
             # empty screen
-            empty_screen_show_time = random.uniform(
-                config["Empty_screen_show_time"][0], config["Empty_screen_show_time"][1]
-            )
+            empty_screen_show_time = random.uniform(*config["Empty_screen_show_time"])
             while clock.getTime() < empty_screen_show_time:
                 check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
                 win.flip()
             # print (empty_screen_show_time-clock.getTime())*1000
-
-            # verify reaction
-            if response and trial["type"] == "go":
-                if not (
-                    block["type"] == "experiment"
-                    and reaction_time > rt_mean - rt_mean * block["cutoff"]
-                ):
-                    acc = "positive"
-            elif not response and trial["type"] != "go":
-                acc = "positive"
-
-            # calibration
-            if (
-                block["type"] == "calibration"
-                and trial["type"] == "go"
-                and reaction_time is not None
-            ):
-                rt_sum += reaction_time
-
-            # feedback
-            if block["type"] == "experiment":
-                # choose feedback type
-                feedback_type = "Feedback_{}_{}_".format(trial["type"], acc)
-
-                # draw feedback
-                if config[feedback_type + "show"]:
-                    feedback_text = config[feedback_type + "text"]
-                    feedback_text = visual.TextStim(
-                        win,
-                        color="black",
-                        text=feedback_text,
-                        height=config["Feedback_size"],
-                    )
-                    feedback_show_time = random.uniform(
-                        config["Feedback_show_time"][0], config["Feedback_show_time"][1]
-                    )
-                    if acc == "positive":
-                        trigger_type = TriggerTypes.FEEDB_GOOD
-                    else:
-                        trigger_type = TriggerTypes.FEEDB_BAD
-
-                    trigger_no, triggers_list = prepare_trigger(
-                        trigger_type=trigger_type,
-                        trigger_no=trigger_no,
-                        triggers_list=triggers_list,
-                        trigger_name=trigger_name,
-                    )
-                    feedback_text.setAutoDraw(True)
-                    win.flip()
-                    send_trigger(
-                        port_eeg=port_eeg,
-                        trigger_no=trigger_no,
-                        send_eeg_triggers=config["Send_EEG_trigg"],
-                    )
-                    time.sleep(feedback_show_time - frame_time)
-                    feedback_text.setAutoDraw(False)
-                    check_exit(
-                        participant_info=participant_info, beh=beh, triggers_list=triggers_list
-                    )
-                    win.flip()
 
             # save beh
             beh.append(
@@ -213,12 +120,7 @@ def show(
                     "response": response,
                     "rt": reaction_time,
                     "reaction": True if acc == "positive" else False,
-                    "cal mean rt": rt_mean,
-                    "cutoff": block["cutoff"] if block["type"] == "experiment" else None,
                 }
             )
-
-        if block["type"] == "calibration":
-            rt_mean = rt_sum / len([trial for trial in block["trials"] if trial["type"] == "go"])
 
     return beh, triggers_list

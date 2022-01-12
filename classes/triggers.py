@@ -64,6 +64,7 @@ def send_trigger(
             time.sleep(0.01)
             port_eeg.setData(0x00)
         except:
+            # TODO it should at least log the error
             pass
     if send_nirs_triggers:
         try:

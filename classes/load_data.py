@@ -18,7 +18,7 @@ def load_config():
         raise Exception("Can't load config file")
 
 
-def load_data(win, folder_name, config, screen_res):
+def load_stimuli(win, folder_name, config, screen_res):
     """
     ladowanie tekstu, zdjec i dzwiekow
     :param screen_res:
@@ -46,8 +46,6 @@ def load_data(win, folder_name, config, screen_res):
                             height=config["Text_size"],
                             wrapWidth=screen_res["width"],
                             color=u"black",
-                            alignHoriz="center",
-                            alignVert="center",
                         )
                         data.append({"type": "text", "name": trigger_name, "stimulus": word})
             elif name[-3:] in possible_images_format:

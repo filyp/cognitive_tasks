@@ -1,5 +1,7 @@
 import random
 
+from psychopy import logging
+
 
 def prepare_trials_type(stimulus_pairs, number_of_trials):
     trials = []
@@ -26,6 +28,10 @@ def prepare_stimulus_pairs(cue_name, target_name, stim_name, stimulus):
 
 
 def prepare_trials(block, stimulus):
+    logging.data(f"{block=}")
+    logging.data(f"{stimulus=}")
+    logging.flush()
+
     all_trials = []
 
     if "number_of_shape_trials" in block:
