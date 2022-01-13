@@ -55,11 +55,13 @@ def show(
                 "{} is bad block type in config Experiment_blocks".format(block["type"])
             )
 
+        # logging.data(f"trials: {block['trials']}")
+        # logging.flush()
+
         for trial in block["trials"]:
             trigger_name = prepare_trigger_name(trial=trial, block_type=block["type"])
             reaction_time = None
             response = None
-            acc = "negative"
 
             # draw fixation
             fixation_show_time = random.uniform(*config["Fixation_show_time"])
@@ -108,12 +110,18 @@ def show(
             trial["target"]["stimulus"].setAutoDraw(False)
             win.flip()
 
-            # empty screen
-            empty_screen_show_time = random.uniform(*config["Empty_screen_show_time"])
-            while clock.getTime() < empty_screen_show_time:
-                check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
-                win.flip()
-            # print (empty_screen_show_time-clock.getTime())*1000
+            # check if reaction was correct
+            if trial["target"]["name"] in ["congruent_lll", "incongruent_rlr"]:
+                # left is correct
+                correct_key = config["Keys"][0]
+            elif trial["target"]["name"] in ["congruent_rrr", "incongruent_lrl"]:
+                # right is correct
+                correct_key = config["Keys"][1]
+
+            if response == correct_key:
+                reaction = "correct"
+            else:
+                reaction = "incorrect"
 
             # save beh
             behavioral_data = {
@@ -123,10 +131,17 @@ def show(
                 "target name": trial["target"]["name"],
                 "response": response,
                 "rt": reaction_time,
-                "reaction": True if acc == "positive" else False,
+                "reaction": reaction,
             }
             beh.append(behavioral_data)
             logging.data(f"Behavioral data: {behavioral_data}")
             logging.flush()
+
+            # empty screen
+            empty_screen_show_time = random.uniform(*config["Empty_screen_show_time"])
+            while clock.getTime() < empty_screen_show_time:
+                check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
+                win.flip()
+            # print (empty_screen_show_time-clock.getTime())*1000
 
     return beh, triggers_list
