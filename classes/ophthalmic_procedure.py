@@ -14,6 +14,7 @@ def ophthalmic_procedure(
     trigger_no,
     triggers_list,
     text_size,
+    text_color,
     send_eeg_triggers=False,
     send_nirs_triggers=False,
     port_eeg=None,
@@ -28,6 +29,7 @@ def ophthalmic_procedure(
     :param port_eeg:
     :param send_nirs_triggers:
     :param text_size:
+    :param text_color:
     :param triggers_list:
     :param trigger_no:
     :param frames_per_sec:
@@ -53,7 +55,7 @@ def ophthalmic_procedure(
         text=ophthalmic_info,
         height=text_size,
         wrapWidth=screen_res["width"],
-        color=u"black",
+        color=text_color,
     )
     corners_info = visual.TextStim(
         win=win,
@@ -61,7 +63,7 @@ def ophthalmic_procedure(
         text=corners_info,
         height=text_size,
         wrapWidth=screen_res["width"],
-        color=u"black",
+        color=text_color,
     )
     # crosses are located in corners
     crosses = [
@@ -76,7 +78,7 @@ def ophthalmic_procedure(
         ]
     ]
     crosses = [
-        visual.TextStim(win=win, text=u"+", height=3 * text_size, color=u"black", pos=pos)
+        visual.TextStim(win=win, text=u"+", height=3 * text_size, color=text_color, pos=pos)
         for pos in crosses
     ]
 

@@ -33,9 +33,13 @@ def create_nirs_dev():
 
 
 def prepare_trigger_name(trial, block_type):
-    cue_name = trial["cue"]["name"][:3]
-    target_name = trial["target"]["name"][:3] + trial["target"]["name"][-2:]
-    name = "*{}*{}*{}".format(block_type[:2], cue_name, target_name)
+    # cue_name = trial["cue"]["name"][:3]
+    # target_name = trial["target"]["name"][:3] + trial["target"]["name"][-2:]
+    # name = "*{}*{}*{}".format(block_type[:2], cue_name, target_name)
+
+    target_name = trial["target"]["name"][-3:]
+    name = "*{}*{}".format(block_type[:2], target_name)
+
     # for response
     name += "*-"
     return name

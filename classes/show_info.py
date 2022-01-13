@@ -12,6 +12,7 @@ def show_info(
     win,
     file_name,
     text_size,
+    text_color,
     screen_width,
     insert="",
     participant_info=None,
@@ -24,6 +25,7 @@ def show_info(
     :param file_name:
     :param screen_width:
     :param text_size:
+    :param text_color:
     :param insert: extra text for read_text_from_file
     :return:
     """
@@ -35,7 +37,7 @@ def show_info(
         text=hello_msg,
         height=text_size,
         wrapWidth=screen_width,
-        color=u"black",
+        color=text_color,
     )
     hello_msg.draw()
     win.flip()

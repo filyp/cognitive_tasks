@@ -1,58 +1,27 @@
 Observer: Patrycja
 
 # EEG
-Ophthalmic_procedure: True
-Send_EEG_trigg: True
+Ophthalmic_procedure: False
+Send_EEG_trigg: False
 
 # view parameters
-Screen_color: 000000
+Screen_color: "black"
+Text_color: "white"
 Text_size: 40
-Feedback_size: 130
-Figure_size: 80
-Fix_size: 30
+Fixation_size: 30
+Flanker_size: 100
 
 # times
 Fixation_show_time: [0.5, 0.5]
-Cue_show_time: [1, 2]
 Target_show_time: [1, 1]
 Empty_screen_show_time: [1, 1]
-Feedback_show_time: [1, 1]
 
 # reaction keys
-Keys: [num_separator]
+Keys: [rshift]
 
 # experiment structure
 Experiment_blocks: [
-    {type: training, number_of_go_trials: 10, number_of_shape_trials: 0, number_of_color_trials: 0},
+    {type: training, number_of_congruent_trials: 4, number_of_incongruent_trials: 2},
     {type: break, file_name: end_training1.txt},
-    {type: training, number_of_go_trials: 10, number_of_shape_trials: 6, number_of_color_trials: 6},
-    {type: break, file_name: end_training2.txt},
-    {type: calibration, number_of_go_trials: 20, number_of_shape_trials: 4, number_of_color_trials: 4},
-    {type: break, file_name: break1.txt},
-    {type: experiment, number_of_go_trials: 56, number_of_shape_trials: 14, number_of_color_trials: 14, cutoff: 0.1},
-    {type: break, file_name: break2.txt},
-    {type: experiment, number_of_go_trials: 56, number_of_shape_trials: 14, number_of_color_trials: 14, cutoff: 0.1},
-    {type: break, file_name: break3.txt},
-    {type: calibration, number_of_go_trials: 20, number_of_shape_trials: 4, number_of_color_trials: 4},
-    {type: break, file_name: break4.txt},
-    {type: experiment, number_of_go_trials: 56, number_of_shape_trials: 14, number_of_color_trials: 14, cutoff: 0.1},
-    {type: break, file_name: break5.txt},
-    {type: experiment, number_of_go_trials: 56, number_of_shape_trials: 14, number_of_color_trials: 14, cutoff: 0.2},
+    {type: experiment, number_of_congruent_trials: 4, number_of_incongruent_trials: 2},
     {type: break, file_name: end.txt}]
-
-# show feedback
-Feedback_go_positive_show: True
-Feedback_go_negative_show: True
-Feedback_shape_positive_show: False
-Feedback_shape_negative_show: False
-Feedback_color_positive_show: False
-Feedback_color_negative_show: False
-
-# feedback text
-Feedback_go_positive_text: ☺
-Feedback_go_negative_text: ☹
-Feedback_shape_positive_text: Feedback_shape_positives
-Feedback_shape_negative_text: Feedback_shape_negatives
-Feedback_color_positive_text: Feedback_color_positives
-Feedback_color_negative_text: Feedback_color_negatives
-

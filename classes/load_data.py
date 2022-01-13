@@ -43,18 +43,18 @@ def load_stimuli(win, folder_name, config, screen_res):
                             antialias=True,
                             font=u"Arial",
                             text=text,
-                            height=config["Text_size"],
+                            height=config["Flanker_size"],
                             wrapWidth=screen_res["width"],
-                            color=u"black",
+                            color=config["Text_color"],
                         )
                         data.append({"type": "text", "name": trigger_name, "stimulus": word})
-            elif name[-3:] in possible_images_format:
-                image = visual.ImageStim(
-                    win, image=path, interpolate=True, size=config["Figure_size"]
-                )
-                data.append({"type": "image", "name": name.split(".")[0], "stimulus": image})
-            elif name[-3:] in possible_audio_format:
-                data.append({"type": "sound", "name": name.split(".")[0], "stimulus": path})
+            # elif name[-3:] in possible_images_format:
+            #     image = visual.ImageStim(
+            #         win, image=path, interpolate=True, size=config["Figure_size"]
+            #     )
+            #     data.append({"type": "image", "name": name.split(".")[0], "stimulus": image})
+            # elif name[-3:] in possible_audio_format:
+            #     data.append({"type": "sound", "name": name.split(".")[0], "stimulus": path})
             else:
                 raise Exception("Error while loading a file " + name)
         except:

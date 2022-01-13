@@ -1,7 +1,8 @@
+from cmath import log
 import random
 import time
 
-from psychopy import core, event, visual
+from psychopy import core, event, visual, logging
 
 from classes.check_exit import check_exit
 from classes.prepare_experiment import prepare_trials
@@ -27,16 +28,20 @@ def show(
 ):
     beh = []
     fixation = visual.TextStim(
-        win, color="black", text="+", height=2 * config["Fix_size"], pos=(0, 10)
+        win, color=config["Text_color"], text="+", height=2 * config["Fixation_size"], pos=(0, 0)
     )
     clock = core.Clock()
 
     for block in config["Experiment_blocks"]:
+        logging.data(f"Entering block: {block}")
+        logging.flush()
+
         if block["type"] == "break":
             show_info(
                 win=win,
                 file_name=block["file_name"],
                 text_size=config["Text_size"],
+                text_color=config["Text_color"],
                 screen_width=screen_res["width"],
                 participant_info=participant_info,
                 beh=beh,
@@ -111,16 +116,17 @@ def show(
             # print (empty_screen_show_time-clock.getTime())*1000
 
             # save beh
-            beh.append(
-                {
-                    "block type": block["type"],
-                    "trial type": trial["type"],
-                    "cue name": trial["cue"]["name"],
-                    "target name": trial["target"]["name"],
-                    "response": response,
-                    "rt": reaction_time,
-                    "reaction": True if acc == "positive" else False,
-                }
-            )
+            behavioral_data = {
+                "block type": block["type"],
+                "trial type": trial["type"],
+                # "cue name": trial["cue"]["name"],
+                "target name": trial["target"]["name"],
+                "response": response,
+                "rt": reaction_time,
+                "reaction": True if acc == "positive" else False,
+            }
+            beh.append(behavioral_data)
+            logging.data(f"Behavioral data: {behavioral_data}")
+            logging.flush()
 
     return beh, triggers_list

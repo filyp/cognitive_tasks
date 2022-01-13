@@ -53,6 +53,7 @@ def run():
             trigger_no=trigger_no,
             triggers_list=triggers_list,
             text_size=config["Text_size"],
+            text_color=config["Text_color"],
         )
 
     # Instruction
@@ -62,6 +63,7 @@ def run():
             win=win,
             file_name=instruction,
             text_size=config["Text_size"],
+            text_color=config["Text_color"],
             screen_width=screen_res["width"],
             participant_info=participant_info,
             beh=[],
