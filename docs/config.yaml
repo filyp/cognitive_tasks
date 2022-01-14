@@ -18,7 +18,8 @@ Empty_screen_show_time: [4, 4]
 
 # reaction keys
 # first one is for left response, second one is for right response
-Keys: [lshift, rshift]
+Keys: [mouse_left, mouse_right]
+# Keys: [lshift, rshift]
 
 # experiment structure
 Experiment_blocks: [

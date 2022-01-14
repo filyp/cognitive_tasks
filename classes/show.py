@@ -31,6 +31,7 @@ def show(
         win, color=config["Text_color"], text="+", height=2 * config["Fixation_size"], pos=(0, 0)
     )
     clock = core.Clock()
+    mouse = event.Mouse(win=win, visible=False)
 
     for block in config["Experiment_blocks"]:
         logging.data(f"Entering block: {block}")
@@ -77,6 +78,7 @@ def show(
             target_show_time = random.uniform(*config["Target_show_time"])
             trial["target"]["stimulus"].setAutoDraw(True)
             win.callOnFlip(clock.reset)
+            win.callOnFlip(mouse.clickReset)
             event.clearEvents()
             win.flip()
 
@@ -87,21 +89,33 @@ def show(
             )
 
             while clock.getTime() < target_show_time:
-                key = event.getKeys(keyList=config["Keys"])
-                if key:
+                keys = event.getKeys(keyList=config["Keys"])
+                _, mouse_press_times = mouse.getPressed(getTime=True)
+
+                if mouse_press_times[0] != 0.0:
+                    keys.append("mouse_left")
+                elif mouse_press_times[1] != 0.0:
+                    keys.append("mouse_middle")
+                elif mouse_press_times[2] != 0.0:
+                    keys.append("mouse_right")
+
+                if keys:
                     reaction_time = clock.getTime()
+                    logging.data(f"{mouse_press_times=}")
+                    logging.data(f"{keys=}")
+
                     trigger_no, triggers_list = prepare_trigger(
                         trigger_type=TriggerTypes.RE,
                         trigger_no=trigger_no,
                         triggers_list=triggers_list,
-                        trigger_name=trigger_name[:-1] + key[0],
+                        trigger_name=trigger_name[:-1] + keys[0],
                     )
                     send_trigger(
                         port_eeg=port_eeg,
                         trigger_no=trigger_no,
                         send_eeg_triggers=config["Send_EEG_trigg"],
                     )
-                    response = key[0]
+                    response = keys[0]
                     break
 
                 check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
@@ -134,7 +148,7 @@ def show(
                 "reaction": reaction,
             }
             beh.append(behavioral_data)
-            logging.data(f"Behavioral data: {behavioral_data}")
+            logging.data(f"Behavioral data: {behavioral_data}\n")
             logging.flush()
 
             # empty screen
