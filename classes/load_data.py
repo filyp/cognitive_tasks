@@ -27,7 +27,7 @@ def load_stimuli(win, folder_name, config, screen_res):
     """
 
     names = [f for f in os.listdir(folder_name)]
-    data = list()
+    stimuli = list()
     for name in names:
         path = os.path.join(folder_name, name)
         try:
@@ -46,7 +46,7 @@ def load_stimuli(win, folder_name, config, screen_res):
                             wrapWidth=screen_res["width"],
                             color=config["Text_color"],
                         )
-                        data.append({"type": "text", "name": trigger_name, "stimulus": word})
+                        stimuli.append({"type": "text", "name": trigger_name, "stimulus": word})
             # elif name[-3:] in possible_images_format:
             #     image = visual.ImageStim(
             #         win, image=path, interpolate=True, size=config["Figure_size"]
@@ -59,7 +59,34 @@ def load_stimuli(win, folder_name, config, screen_res):
         except:
             raise Exception("Error while loading a file " + name)
 
-    return data
+    # create cues
+    if config["Cues"] is not None:
+        cue1_text, cue2_text = config["Cues"]
+        cue1 = visual.TextStim(
+            win=win,
+            antialias=True,
+            font=u"Arial",
+            text=cue1_text,
+            height=config["Flanker_size"],
+            wrapWidth=screen_res["width"],
+            color=config["Text_color"],
+        )
+        cue2 = visual.TextStim(
+            win=win,
+            antialias=True,
+            font=u"Arial",
+            text=cue2_text,
+            height=config["Flanker_size"],
+            wrapWidth=screen_res["width"],
+            color=config["Text_color"],
+        )
+    else:
+        cue1 = None
+        cue2 = None
+    stimuli.append({"type": "text", "name": "cue1", "stimulus": cue1})
+    stimuli.append({"type": "text", "name": "cue2", "stimulus": cue2})
+
+    return stimuli
 
 
 def read_text_from_file(file_name, insert=""):

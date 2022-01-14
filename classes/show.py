@@ -68,7 +68,8 @@ def show(
                 # it's a version of the experiment where we show cues before stimuli
                 # ! draw cue
                 cue_show_time = random.uniform(*config["Cue_show_time"])
-                show_text(win, fixation, cue_show_time, participant_info, beh, triggers_list)
+                cue = trial["cue"]["stimulus"]
+                show_text(win, cue, cue_show_time, participant_info, beh, triggers_list)
 
                 # ! draw empty screen
                 empty_screen_show_time = random.uniform(*config["Empty_screen_1_show_time"])
@@ -104,6 +105,15 @@ def show(
             )
 
             while clock.getTime() < target_show_time:
+                check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
+                win.flip()
+            # print (target_show_time-clock.getTime())*1000
+            trial["target"]["stimulus"].setAutoDraw(False)
+            win.flip()
+
+            # ! draw empty screen
+            empty_screen_show_time = random.uniform(*config["Empty_screen_2_show_time"])
+            while clock.getTime() < target_show_time + empty_screen_show_time:
                 keys = event.getKeys(keyList=config["Keys"])
                 _, mouse_press_times = mouse.getPressed(getTime=True)
 
@@ -131,13 +141,12 @@ def show(
                         send_eeg_triggers=config["Send_EEG_trigg"],
                     )
                     response = keys[0]
-                    break
+                    mouse.clickReset()
+                    event.clearEvents()
+                    logging.flush()
 
                 check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
                 win.flip()
-            # print (target_show_time-clock.getTime())*1000
-            trial["target"]["stimulus"].setAutoDraw(False)
-            win.flip()
 
             # check if reaction was correct
             if trial["target"]["name"] in ["congruent_lll", "incongruent_rlr"]:
@@ -156,7 +165,7 @@ def show(
             behavioral_data = {
                 "block type": block["type"],
                 "trial type": trial["type"],
-                # "cue name": trial["cue"]["name"],
+                "cue name": trial["cue"]["name"] if config["Cues"] is not None else None,
                 "target name": trial["target"]["name"],
                 "response": response,
                 "rt": reaction_time,
@@ -165,12 +174,5 @@ def show(
             beh.append(behavioral_data)
             logging.data(f"Behavioral data: {behavioral_data}\n")
             logging.flush()
-
-            # ! draw empty screen
-            empty_screen_show_time = random.uniform(*config["Empty_screen_2_show_time"])
-            clock.reset()
-            while clock.getTime() < empty_screen_show_time:
-                check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
-                win.flip()
 
     return beh, triggers_list

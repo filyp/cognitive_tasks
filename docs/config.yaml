@@ -12,16 +12,16 @@ Fixation_size: 30
 Flanker_size: 100
 
 # cue definition
-# Cues: [5, 100]
-Cues: null
+Cues: [5, 100]
+# Cues: null
 
 
 # times
 Cue_show_time: [2.000, 2.000]
-Empty_screen_1_show_time: [4, 4]
-Fixation_show_time: [0.5, 0.5]
-Target_show_time: [1, 1]
-Empty_screen_2_show_time: [1.500, 1.500]
+Empty_screen_1_show_time: [0.100, 0.100]
+Fixation_show_time: [0.600, 0.800]
+Target_show_time: [0.200, 0.200]
+Empty_screen_2_show_time: [1.700, 2.300]
 
 # reaction keys
 # first one is for left response, second one is for right response
@@ -31,7 +31,7 @@ Keys: [mouse_left, mouse_right]
 # experiment structure
 Experiment_blocks: [
     {type: break, file_name: instruction.txt},
-    {type: training, number_of_congruent_trials: 4, number_of_incongruent_trials: 2},
+    {type: training, number_of_congruent_trials: 8, number_of_incongruent_trials: 4},
     {type: break, file_name: end_training1.txt},
-    {type: experiment, number_of_congruent_trials: 4, number_of_incongruent_trials: 2},
+    {type: experiment, number_of_congruent_trials: 8, number_of_incongruent_trials: 4},
     {type: break, file_name: end.txt}]
