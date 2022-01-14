@@ -1,8 +1,10 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# how to run:
+# venv/bin/python main.py docs/config.yaml
 
 import os
 import random
+import sys
 
 from psychopy import logging
 
@@ -24,7 +26,8 @@ __author__ = ["ociepkam", "filyp"]
 
 def run():
     # Load config
-    config = load_config()
+    config_path = sys.argv[1]
+    config = load_config(config_path)
 
     # display_eeg_info()
     # participant_info = get_participant_info(config["Observer"])
@@ -43,6 +46,7 @@ def run():
     # Ophthalmic procedure
     triggers_list = list()
     trigger_no = 0
+
     if config["Ophthalmic_procedure"]:
         trigger_no, triggers_list = ophthalmic_procedure(
             win=win,

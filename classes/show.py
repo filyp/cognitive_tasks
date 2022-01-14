@@ -1,8 +1,8 @@
-from cmath import log
 import random
 import time
+from cmath import log
 
-from psychopy import core, event, visual, logging
+from psychopy import core, event, logging, visual
 
 from classes.check_exit import check_exit
 from classes.prepare_experiment import prepare_trials
@@ -64,11 +64,26 @@ def show(
             reaction_time = None
             response = None
 
-            # draw fixation
+            if config["Cues"] is not None:
+                # it's a version of the experiment where we show cues before stimuli
+                # ! draw cue
+                cue_show_time = random.uniform(*config["Cue_show_time"])
+                show_text(win, fixation, cue_show_time, participant_info, beh, triggers_list)
+
+                # ! draw empty screen
+                empty_screen_show_time = random.uniform(*config["Empty_screen_1_show_time"])
+                clock.reset()
+                while clock.getTime() < empty_screen_show_time:
+                    check_exit(
+                        participant_info=participant_info, beh=beh, triggers_list=triggers_list
+                    )
+                    win.flip()
+
+            # ! draw fixation
             fixation_show_time = random.uniform(*config["Fixation_show_time"])
             show_text(win, fixation, fixation_show_time, participant_info, beh, triggers_list)
 
-            # draw target
+            # ! draw target
             trigger_no, triggers_list = prepare_trigger(
                 trigger_type=TriggerTypes.TARGET,
                 trigger_no=trigger_no,
@@ -151,11 +166,11 @@ def show(
             logging.data(f"Behavioral data: {behavioral_data}\n")
             logging.flush()
 
-            # empty screen
-            empty_screen_show_time = random.uniform(*config["Empty_screen_show_time"])
+            # ! draw empty screen
+            empty_screen_show_time = random.uniform(*config["Empty_screen_2_show_time"])
+            clock.reset()
             while clock.getTime() < empty_screen_show_time:
                 check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
                 win.flip()
-            # print (empty_screen_show_time-clock.getTime())*1000
 
     return beh, triggers_list
