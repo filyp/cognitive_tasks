@@ -56,20 +56,6 @@ def run():
             text_color=config["Text_color"],
         )
 
-    # Instruction
-    instructions = sorted([f for f in os.listdir("messages") if f.startswith("instruction")])
-    for instruction in instructions:
-        show_info(
-            win=win,
-            file_name=instruction,
-            text_size=config["Text_size"],
-            text_color=config["Text_color"],
-            screen_width=screen_res["width"],
-            participant_info=participant_info,
-            beh=[],
-            triggers_list=triggers_list,
-        )
-
     # load stimulus
     stimulus = load_stimuli(win=win, folder_name="stimulus", config=config, screen_res=screen_res)
 
