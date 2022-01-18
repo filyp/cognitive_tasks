@@ -6,13 +6,8 @@ from psychopy import core, event, logging, visual
 
 from classes.check_exit import check_exit
 from classes.prepare_experiment import prepare_trials
-from classes.show_info import show_info, show_text
-from classes.triggers import (
-    TriggerTypes,
-    prepare_trigger,
-    prepare_trigger_name,
-    send_trigger,
-)
+from classes.show_info import show_info
+from classes.triggers import TriggerTypes
 
 
 def show(
@@ -21,9 +16,7 @@ def show(
     stimulus,
     config,
     participant_info,
-    port_eeg,
-    trigger_no,
-    triggers_list,
+    trigger_handler,
     frame_time=1 / 60.0,
 ):
     beh = []
@@ -46,7 +39,7 @@ def show(
                 screen_width=screen_res["width"],
                 participant_info=participant_info,
                 beh=beh,
-                triggers_list=triggers_list,
+                triggers_list=trigger_handler.triggers_list,
             )
             continue
         elif block["type"] in ["experiment", "training"]:
@@ -60,7 +53,6 @@ def show(
         # logging.flush()
 
         for trial in block["trials"]:
-            trigger_name = prepare_trigger_name(trial=trial, block_type=block["type"])
             reaction_time = None
             response = None
 
@@ -69,27 +61,56 @@ def show(
                 # ! draw cue
                 cue_show_time = random.uniform(*config["Cue_show_time"])
                 cue = trial["cue"]["stimulus"]
-                show_text(win, cue, cue_show_time, participant_info, beh, triggers_list)
+                trigger_handler.prepare_trigger(
+                    trigger_type=TriggerTypes.CUE,
+                    block_name=block["type"][:2],
+                    cue_name=trial["cue"]["name"],
+                    target_name=trial["target"]["name"][-3:],
+                )
+
+                cue.setAutoDraw(True)
+                win.flip()
+                trigger_handler.send_trigger()
+
+                time.sleep(cue_show_time)
+                cue.setAutoDraw(False)
+                check_exit(
+                    participant_info=participant_info,
+                    beh=beh,
+                    triggers_list=trigger_handler.triggers_list,
+                )
+                win.flip()
 
                 # ! draw empty screen
                 empty_screen_show_time = random.uniform(*config["Empty_screen_1_show_time"])
                 clock.reset()
                 while clock.getTime() < empty_screen_show_time:
                     check_exit(
-                        participant_info=participant_info, beh=beh, triggers_list=triggers_list
+                        participant_info=participant_info,
+                        beh=beh,
+                        triggers_list=trigger_handler.triggers_list,
                     )
                     win.flip()
 
             # ! draw fixation
             fixation_show_time = random.uniform(*config["Fixation_show_time"])
-            show_text(win, fixation, fixation_show_time, participant_info, beh, triggers_list)
+            fixation.setAutoDraw(True)
+            win.flip()
+            time.sleep(fixation_show_time)
+            fixation.setAutoDraw(False)
+            check_exit(
+                participant_info=participant_info,
+                beh=beh,
+                triggers_list=trigger_handler.triggers_list,
+            )
+            win.flip()
 
             # ! draw target
-            trigger_no, triggers_list = prepare_trigger(
+            trigger_handler.prepare_trigger(
                 trigger_type=TriggerTypes.TARGET,
-                trigger_no=trigger_no,
-                triggers_list=triggers_list,
-                trigger_name=trigger_name,
+                block_name=block["type"][:2],
+                cue_name=trial["cue"]["name"],
+                target_name=trial["target"]["name"][-3:],
             )
             target_show_time = random.uniform(*config["Target_show_time"])
             trial["target"]["stimulus"].setAutoDraw(True)
@@ -97,15 +118,14 @@ def show(
             win.callOnFlip(mouse.clickReset)
             event.clearEvents()
             win.flip()
-
-            send_trigger(
-                port_eeg=port_eeg,
-                trigger_no=trigger_no,
-                send_eeg_triggers=config["Send_EEG_trigg"],
-            )
+            trigger_handler.send_trigger()
 
             while clock.getTime() < target_show_time:
-                check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
+                check_exit(
+                    participant_info=participant_info,
+                    beh=beh,
+                    triggers_list=trigger_handler.triggers_list,
+                )
                 win.flip()
             # print (target_show_time-clock.getTime())*1000
             trial["target"]["stimulus"].setAutoDraw(False)
@@ -129,23 +149,24 @@ def show(
                     logging.data(f"{mouse_press_times=}")
                     logging.data(f"{keys=}")
 
-                    trigger_no, triggers_list = prepare_trigger(
+                    trigger_handler.prepare_trigger(
                         trigger_type=TriggerTypes.RE,
-                        trigger_no=trigger_no,
-                        triggers_list=triggers_list,
-                        trigger_name=trigger_name[:-1] + keys[0],
+                        block_name=block["type"][:2],
+                        cue_name=trial["cue"]["name"],
+                        target_name=trial["target"]["name"][-3:],
+                        response=keys[0],
                     )
-                    send_trigger(
-                        port_eeg=port_eeg,
-                        trigger_no=trigger_no,
-                        send_eeg_triggers=config["Send_EEG_trigg"],
-                    )
+                    trigger_handler.send_trigger()
                     response = keys[0]
                     mouse.clickReset()
                     event.clearEvents()
                     logging.flush()
 
-                check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
+                check_exit(
+                    participant_info=participant_info,
+                    beh=beh,
+                    triggers_list=trigger_handler.triggers_list,
+                )
                 win.flip()
 
             # check if reaction was correct
@@ -175,4 +196,4 @@ def show(
             logging.data(f"Behavioral data: {behavioral_data}\n")
             logging.flush()
 
-    return beh, triggers_list
+    return beh, trigger_handler.triggers_list

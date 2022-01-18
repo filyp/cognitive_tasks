@@ -48,12 +48,3 @@ def show_info(
         logging.critical("Experiment finished by user! {} pressed.".format(key))
         exit(1)
     win.flip()
-
-
-def show_text(win, text, show_time, participant_info=None, beh=None, triggers_list=None):
-    text.setAutoDraw(True)
-    win.flip()
-    time.sleep(show_time)
-    text.setAutoDraw(False)
-    check_exit(participant_info=participant_info, beh=beh, triggers_list=triggers_list)
-    win.flip()

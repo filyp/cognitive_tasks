@@ -1,4 +1,7 @@
 import time
+from cmath import log
+
+from psychopy import logging
 
 
 class TriggerTypes(object):
@@ -6,8 +9,8 @@ class TriggerTypes(object):
     CUE = "CU"
     TARGET = "TG"
     RE = "RE"
-    FEEDB_GOOD = "FG"
-    FEEDB_BAD = "FB"
+    # FEEDB_GOOD = "FG"
+    # FEEDB_BAD = "FB"
 
 
 def create_eeg_port():
@@ -32,46 +35,35 @@ def create_nirs_dev():
         raise Exception("Can't connect to NIRS")
 
 
-def prepare_trigger_name(trial, block_type):
-    # cue_name = trial["cue"]["name"][:3]
-    # target_name = trial["target"]["name"][:3] + trial["target"]["name"][-2:]
-    # name = "*{}*{}*{}".format(block_type[:2], cue_name, target_name)
+class TriggerHandler:
+    def __init__(self, port_eeg):
+        self.port_eeg = port_eeg
+        self.triggers_list = []
+        self.trigger_no = 0
 
-    target_name = trial["target"]["name"][-3:]
-    name = "*{}*{}".format(block_type[:2], target_name)
+    def prepare_trigger(self, trigger_type, block_name, cue_name, target_name, response=None):
+        self.trigger_no += 1
+        if self.trigger_no == 9:
+            self.trigger_no = 1
 
-    # for response
-    name += "*-"
-    return name
+        trigger_name = (
+            f"{self.trigger_no}:{trigger_type}*{block_name}*{cue_name}*{target_name}*{response}"
+        )
+        self.triggers_list.append(trigger_name)
 
-
-def prepare_trigger(trigger_no, triggers_list, trigger_type, trigger_name=None):
-    trigger_no += 1
-    if trigger_no == 9:
-        trigger_no = 1
-    if trigger_name is not None:
-        trigger_type = trigger_type + trigger_name
-    triggers_list.append((str(trigger_no), trigger_type))
-    return trigger_no, triggers_list
-
-
-def send_trigger(
-    trigger_no,
-    port_eeg=None,
-    port_nirs=None,
-    send_eeg_triggers=False,
-    send_nirs_triggers=False,
-):
-    if send_eeg_triggers:
-        try:
-            port_eeg.setData(trigger_no)
-            time.sleep(0.01)
-            port_eeg.setData(0x00)
-        except:
-            # TODO it should at least log the error
-            pass
-    if send_nirs_triggers:
-        try:
-            port_nirs.activate_line(trigger_no)
-        except:
-            pass
+    def send_trigger(self):
+        logging.data("TRIGGER: " + self.triggers_list[-1])
+        logging.flush()  # TODO after testing delete this to avoid potential delay
+        if self.port_eeg is not None:
+            try:
+                self.port_eeg.setData(self.trigger_no)
+                time.sleep(0.01)
+                self.port_eeg.setData(0x00)
+            except:
+                # TODO it should at least log the error
+                pass
+        # if self.port_nirs is not None:
+        #     try:
+        #         self.port_nirs.activate_line(self.trigger_no)
+        #     except:
+        #         pass

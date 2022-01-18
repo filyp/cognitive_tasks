@@ -19,7 +19,7 @@ from classes.save_data import save_beh, save_triggers
 from classes.screen import create_win
 from classes.show import show
 from classes.show_info import show_info
-from classes.triggers import create_eeg_port
+from classes.triggers import TriggerHandler, create_eeg_port
 
 __author__ = ["ociepkam", "filyp"]
 
@@ -38,27 +38,24 @@ def run():
         port_eeg = create_eeg_port()
     else:
         port_eeg = None
+    trigger_handler = TriggerHandler(port_eeg)
 
     # screen
     win, screen_res, frames_per_sec = create_win(screen_color=config["Screen_color"])
 
-    # Run experiment
-    # Ophthalmic procedure
-    triggers_list = list()
-    trigger_no = 0
-
-    if config["Ophthalmic_procedure"]:
-        trigger_no, triggers_list = ophthalmic_procedure(
-            win=win,
-            send_eeg_triggers=config["Send_EEG_trigg"],
-            screen_res=screen_res,
-            frames_per_sec=frames_per_sec,
-            port_eeg=port_eeg,
-            trigger_no=trigger_no,
-            triggers_list=triggers_list,
-            text_size=config["Text_size"],
-            text_color=config["Text_color"],
-        )
+    # # Ophthalmic procedure
+    # if config["Ophthalmic_procedure"]:
+    #     trigger_no, triggers_list = ophthalmic_procedure(
+    #         win=win,
+    #         send_eeg_triggers=config["Send_EEG_trigg"],
+    #         screen_res=screen_res,
+    #         frames_per_sec=frames_per_sec,
+    #         port_eeg=port_eeg,
+    #         trigger_no=trigger_no,
+    #         triggers_list=triggers_list,
+    #         text_size=config["Text_size"],
+    #         text_color=config["Text_color"],
+    #     )
 
     # load stimulus
     stimulus = load_stimuli(win=win, folder_name="stimulus", config=config, screen_res=screen_res)
@@ -70,9 +67,7 @@ def run():
         stimulus=stimulus,
         config=config,
         participant_info=participant_info,
-        port_eeg=port_eeg,
-        trigger_no=trigger_no,
-        triggers_list=triggers_list,
+        trigger_handler=trigger_handler,
         frame_time=1.0 / frames_per_sec,
     )
 

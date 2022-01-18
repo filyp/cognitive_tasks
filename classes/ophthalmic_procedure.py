@@ -4,7 +4,9 @@ from psychopy import logging, visual
 
 from classes.check_exit import check_exit
 from classes.load_data import read_text_from_file
-from classes.triggers import TriggerTypes, prepare_trigger, send_trigger
+from classes.triggers import TriggerTypes
+
+# TODO this file is outdated - it has to be modified to use TriggerHandler
 
 
 def ophthalmic_procedure(
