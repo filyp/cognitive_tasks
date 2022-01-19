@@ -20,6 +20,7 @@ def prepare_trials(block, stimulus):
                 dict(
                     type="congruent",
                     cue=stimulus_dict["cue1"],
+                    flankers=stimulus_dict["flankers_l"],
                     target=stimulus_dict["congruent_lll"],
                 )
             )
@@ -27,6 +28,7 @@ def prepare_trials(block, stimulus):
                 dict(
                     type="congruent",
                     cue=stimulus_dict["cue1"],
+                    flankers=stimulus_dict["flankers_r"],
                     target=stimulus_dict["congruent_rrr"],
                 )
             )
@@ -34,6 +36,7 @@ def prepare_trials(block, stimulus):
                 dict(
                     type="congruent",
                     cue=stimulus_dict["cue2"],
+                    flankers=stimulus_dict["flankers_l"],
                     target=stimulus_dict["congruent_lll"],
                 )
             )
@@ -41,6 +44,7 @@ def prepare_trials(block, stimulus):
                 dict(
                     type="congruent",
                     cue=stimulus_dict["cue2"],
+                    flankers=stimulus_dict["flankers_r"],
                     target=stimulus_dict["congruent_rrr"],
                 )
             )
@@ -53,6 +57,7 @@ def prepare_trials(block, stimulus):
                 dict(
                     type="incongruent",
                     cue=stimulus_dict["cue1"],
+                    flankers=stimulus_dict["flankers_l"],
                     target=stimulus_dict["incongruent_lrl"],
                 )
             )
@@ -60,6 +65,7 @@ def prepare_trials(block, stimulus):
                 dict(
                     type="incongruent",
                     cue=stimulus_dict["cue1"],
+                    flankers=stimulus_dict["flankers_r"],
                     target=stimulus_dict["incongruent_rlr"],
                 )
             )
@@ -67,6 +73,7 @@ def prepare_trials(block, stimulus):
                 dict(
                     type="incongruent",
                     cue=stimulus_dict["cue2"],
+                    flankers=stimulus_dict["flankers_l"],
                     target=stimulus_dict["incongruent_lrl"],
                 )
             )
@@ -74,6 +81,7 @@ def prepare_trials(block, stimulus):
                 dict(
                     type="incongruent",
                     cue=stimulus_dict["cue2"],
+                    flankers=stimulus_dict["flankers_r"],
                     target=stimulus_dict["incongruent_rlr"],
                 )
             )

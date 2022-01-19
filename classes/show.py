@@ -59,9 +59,9 @@ def show(
                 cue = trial["cue"]["stimulus"]
                 trigger_handler.prepare_trigger(
                     trigger_type=TriggerTypes.CUE,
-                    block_name=block["type"][:2],
+                    block_type=block["type"],
                     cue_name=trial["cue"]["name"],
-                    target_name=trial["target"]["name"][-3:],
+                    target_name=trial["target"]["name"],
                 )
 
                 cue.setAutoDraw(True)
@@ -87,27 +87,42 @@ def show(
             time.sleep(fixation_show_time)
             fixation.setAutoDraw(False)
             data_saver.check_exit()
-            win.flip()
+
+            if "Flanker_show_time" in config:
+                # it's a version of the experiment where we first draw flankers, then target
+                # ! draw flankers
+                trigger_handler.prepare_trigger(
+                    trigger_type=TriggerTypes.FLANKER,
+                    block_type=block["type"],
+                    cue_name=trial["cue"]["name"],
+                    target_name=trial["target"]["name"],
+                )
+                flanker_show_time = random.uniform(*config["Flanker_show_time"])
+                trial["flankers"]["stimulus"].setAutoDraw(True)
+
+                win.flip()
+                trigger_handler.send_trigger()
+                time.sleep(flanker_show_time)
+                trial["flankers"]["stimulus"].setAutoDraw(False)
 
             # ! draw target
             trigger_handler.prepare_trigger(
                 trigger_type=TriggerTypes.TARGET,
-                block_name=block["type"][:2],
+                block_type=block["type"],
                 cue_name=trial["cue"]["name"],
-                target_name=trial["target"]["name"][-3:],
+                target_name=trial["target"]["name"],
             )
             target_show_time = random.uniform(*config["Target_show_time"])
             trial["target"]["stimulus"].setAutoDraw(True)
+            event.clearEvents()
             win.callOnFlip(clock.reset)
             win.callOnFlip(mouse.clickReset)
-            event.clearEvents()
+
             win.flip()
             trigger_handler.send_trigger()
-
             while clock.getTime() < target_show_time:
                 data_saver.check_exit()
                 win.flip()
-            # print (target_show_time-clock.getTime())*1000
             trial["target"]["stimulus"].setAutoDraw(False)
             win.flip()
 
@@ -131,9 +146,9 @@ def show(
 
                     trigger_handler.prepare_trigger(
                         trigger_type=TriggerTypes.RE,
-                        block_name=block["type"][:2],
+                        block_type=block["type"],
                         cue_name=trial["cue"]["name"],
-                        target_name=trial["target"]["name"][-3:],
+                        target_name=trial["target"]["name"],
                         response=keys[0],
                     )
                     trigger_handler.send_trigger()

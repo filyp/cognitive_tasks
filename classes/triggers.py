@@ -9,6 +9,7 @@ class TriggerTypes(object):
     CUE = "CU"
     TARGET = "TG"
     RE = "RE"
+    FLANKER = "FL"
     # FEEDB_GOOD = "FG"
     # FEEDB_BAD = "FB"
 
@@ -41,14 +42,12 @@ class TriggerHandler:
         self.data_saver = data_saver
         self.trigger_no = 0
 
-    def prepare_trigger(self, trigger_type, block_name, cue_name, target_name, response=None):
+    def prepare_trigger(self, trigger_type, block_type, cue_name, target_name, response=None):
         self.trigger_no += 1
         if self.trigger_no == 9:
             self.trigger_no = 1
 
-        trigger_name = (
-            f"{self.trigger_no}:{trigger_type}*{block_name}*{cue_name}*{target_name}*{response}"
-        )
+        trigger_name = f"{self.trigger_no}:{trigger_type}*{block_type[:2]}*{cue_name}*{target_name[-3:]}*{response}"
         self.data_saver.triggers_list.append(trigger_name)
 
     def send_trigger(self):

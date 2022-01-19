@@ -40,7 +40,7 @@ def load_stimuli(win, folder_name, config, screen_res):
                         word = visual.TextStim(
                             win=win,
                             antialias=True,
-                            font=u"Arial",
+                            font=config["Font"],
                             text=text,
                             height=config["Flanker_size"],
                             wrapWidth=screen_res["width"],
@@ -65,7 +65,7 @@ def load_stimuli(win, folder_name, config, screen_res):
         cue1 = visual.TextStim(
             win=win,
             antialias=True,
-            font=u"Arial",
+            font=config["Font"],
             text=cue1_text,
             height=config["Flanker_size"],
             wrapWidth=screen_res["width"],
@@ -74,7 +74,7 @@ def load_stimuli(win, folder_name, config, screen_res):
         cue2 = visual.TextStim(
             win=win,
             antialias=True,
-            font=u"Arial",
+            font=config["Font"],
             text=cue2_text,
             height=config["Flanker_size"],
             wrapWidth=screen_res["width"],
