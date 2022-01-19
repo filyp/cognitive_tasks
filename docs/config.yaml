@@ -13,13 +13,14 @@ Flanker_size: 100
 
 # cue definition
 Cues: [5, 100]
-# Cues: null
+# Cues: null    # if left as null, no cues will be shown
 
 
 # times
-Cue_show_time: [2.000, 2.000]
-Empty_screen_1_show_time: [0.100, 0.100]
+Cue_show_time: [2.000, 2.000]       # this has no effect of Cues is null
+Empty_screen_1_show_time: [0.100, 0.100]    # this has no effect of Cues is null
 Fixation_show_time: [0.600, 0.800]
+# Flanker_show_time: [0.500, 0.500]   # this one is optional
 Target_show_time: [0.200, 0.200]
 Empty_screen_2_show_time: [1.700, 2.300]
 

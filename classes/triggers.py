@@ -36,9 +36,9 @@ def create_nirs_dev():
 
 
 class TriggerHandler:
-    def __init__(self, port_eeg):
+    def __init__(self, port_eeg, data_saver):
         self.port_eeg = port_eeg
-        self.triggers_list = []
+        self.data_saver = data_saver
         self.trigger_no = 0
 
     def prepare_trigger(self, trigger_type, block_name, cue_name, target_name, response=None):
@@ -49,10 +49,10 @@ class TriggerHandler:
         trigger_name = (
             f"{self.trigger_no}:{trigger_type}*{block_name}*{cue_name}*{target_name}*{response}"
         )
-        self.triggers_list.append(trigger_name)
+        self.data_saver.triggers_list.append(trigger_name)
 
     def send_trigger(self):
-        logging.data("TRIGGER: " + self.triggers_list[-1])
+        logging.data("TRIGGER: " + self.data_saver.triggers_list[-1])
         logging.flush()  # TODO after testing delete this to avoid potential delay
         if self.port_eeg is not None:
             try:

@@ -15,10 +15,9 @@ from classes.experiment_info import display_eeg_info, get_participant_info
 # from classes.prepare_experiment import prepare_trials, create_stops_times_dict, randomize_buttons
 from classes.load_data import load_config, load_stimuli
 from classes.ophthalmic_procedure import ophthalmic_procedure
-from classes.save_data import save_beh, save_triggers
+from classes.save_data import DataSaver
 from classes.screen import create_win
 from classes.show import show
-from classes.show_info import show_info
 from classes.triggers import TriggerHandler, create_eeg_port
 
 __author__ = ["ociepkam", "filyp"]
@@ -33,12 +32,14 @@ def run():
     # participant_info = get_participant_info(config["Observer"])
     participant_info = "mock_info"  # TODO reenable after testing
 
+    data_saver = DataSaver(participant_info, beh=[], triggers_list=[])
+
     # EEG triggers
     if config["Send_EEG_trigg"]:
         port_eeg = create_eeg_port()
     else:
         port_eeg = None
-    trigger_handler = TriggerHandler(port_eeg)
+    trigger_handler = TriggerHandler(port_eeg, data_saver=data_saver)
 
     # screen
     win, screen_res, frames_per_sec = create_win(screen_color=config["Screen_color"])
@@ -55,25 +56,26 @@ def run():
     #         triggers_list=triggers_list,
     #         text_size=config["Text_size"],
     #         text_color=config["Text_color"],
+    #         data_saver=data_saver,
     #     )
 
     # load stimulus
     stimulus = load_stimuli(win=win, folder_name="stimulus", config=config, screen_res=screen_res)
 
     # Experiment
-    beh, triggers_list = show(
+    show(
         win=win,
         screen_res=screen_res,
         stimulus=stimulus,
         config=config,
-        participant_info=participant_info,
+        data_saver=data_saver,
         trigger_handler=trigger_handler,
         frame_time=1.0 / frames_per_sec,
     )
 
     # Save data
-    save_beh(data=beh, name=participant_info)
-    save_triggers(data=triggers_list, name=participant_info)
+    data_saver.save_beh()
+    data_saver.save_triggers()
 
 
 run()

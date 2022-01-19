@@ -2,7 +2,6 @@ import os
 
 from psychopy import logging, visual
 
-from classes.check_exit import check_exit
 from classes.load_data import read_text_from_file
 from classes.triggers import TriggerTypes
 
@@ -25,6 +24,7 @@ def ophthalmic_procedure(
     secs_of_msg=5,
     secs_of_blinks=9,
     secs_of_saccades=9,
+    data_saver=None,
 ):
     """
     :param port_nirs:
@@ -42,6 +42,7 @@ def ophthalmic_procedure(
     :param secs_of_msg:
     :param secs_of_blinks:
     :param secs_of_saccades:
+    :param data_saver:
     :return:
     """
     logging.info("Starting ophthalmic procedure... ")
@@ -87,7 +88,7 @@ def ophthalmic_procedure(
     ophthalmic_info.setAutoDraw(True)
     for _ in range(frames_per_sec * secs_of_msg):
         win.flip()
-        check_exit()
+        data_saver.check_exit()
     ophthalmic_info.setAutoDraw(False)
     win.flip()
 
@@ -106,12 +107,12 @@ def ophthalmic_procedure(
                 send_nirs_triggers=send_nirs_triggers,
             )
         win.flip()
-        check_exit()
+        data_saver.check_exit()
 
     corners_info.setAutoDraw(True)
     for _ in range(frames_per_sec * secs_of_msg):
         win.flip()
-        check_exit()
+        data_saver.check_exit()
     corners_info.setAutoDraw(False)
 
     [item.setAutoDraw(True) for item in crosses]
@@ -130,7 +131,7 @@ def ophthalmic_procedure(
                 send_nirs_triggers=send_nirs_triggers,
             )
         win.flip()
-        check_exit()
+        data_saver.check_exit()
     [item.setAutoDraw(False) for item in crosses]
     win.flip()
 

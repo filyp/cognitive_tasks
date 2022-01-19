@@ -3,9 +3,7 @@ import time
 
 from psychopy import event, logging, visual
 
-from classes.check_exit import check_exit
 from classes.load_data import read_text_from_file
-from classes.save_data import save_beh, save_triggers
 
 
 def show_info(
@@ -14,10 +12,8 @@ def show_info(
     text_size,
     text_color,
     screen_width,
+    data_saver,
     insert="",
-    participant_info=None,
-    beh=None,
-    triggers_list=None,
 ):
     """
     Clear way to show info message into screen.
@@ -43,8 +39,8 @@ def show_info(
     win.flip()
     key = event.waitKeys(keyList=["f7", "return", "space"])
     if key == ["f7"]:
-        save_beh(beh, participant_info)
-        save_triggers(triggers_list, participant_info)
+        data_saver.save_beh()
+        data_saver.save_triggers()
         logging.critical("Experiment finished by user! {} pressed.".format(key))
         exit(1)
     win.flip()

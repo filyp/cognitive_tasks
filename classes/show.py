@@ -4,7 +4,6 @@ from cmath import log
 
 from psychopy import core, event, logging, visual
 
-from classes.check_exit import check_exit
 from classes.prepare_experiment import prepare_trials
 from classes.show_info import show_info
 from classes.triggers import TriggerTypes
@@ -15,11 +14,10 @@ def show(
     screen_res,
     stimulus,
     config,
-    participant_info,
+    data_saver,
     trigger_handler,
     frame_time=1 / 60.0,
 ):
-    beh = []
     fixation = visual.TextStim(
         win, color=config["Text_color"], text="+", height=2 * config["Fixation_size"], pos=(0, 0)
     )
@@ -37,9 +35,7 @@ def show(
                 text_size=config["Text_size"],
                 text_color=config["Text_color"],
                 screen_width=screen_res["width"],
-                participant_info=participant_info,
-                beh=beh,
-                triggers_list=trigger_handler.triggers_list,
+                data_saver=data_saver,
             )
             continue
         elif block["type"] in ["experiment", "training"]:
@@ -74,22 +70,14 @@ def show(
 
                 time.sleep(cue_show_time)
                 cue.setAutoDraw(False)
-                check_exit(
-                    participant_info=participant_info,
-                    beh=beh,
-                    triggers_list=trigger_handler.triggers_list,
-                )
+                data_saver.check_exit()
                 win.flip()
 
                 # ! draw empty screen
                 empty_screen_show_time = random.uniform(*config["Empty_screen_1_show_time"])
                 clock.reset()
                 while clock.getTime() < empty_screen_show_time:
-                    check_exit(
-                        participant_info=participant_info,
-                        beh=beh,
-                        triggers_list=trigger_handler.triggers_list,
-                    )
+                    data_saver.check_exit()
                     win.flip()
 
             # ! draw fixation
@@ -98,11 +86,7 @@ def show(
             win.flip()
             time.sleep(fixation_show_time)
             fixation.setAutoDraw(False)
-            check_exit(
-                participant_info=participant_info,
-                beh=beh,
-                triggers_list=trigger_handler.triggers_list,
-            )
+            data_saver.check_exit()
             win.flip()
 
             # ! draw target
@@ -121,11 +105,7 @@ def show(
             trigger_handler.send_trigger()
 
             while clock.getTime() < target_show_time:
-                check_exit(
-                    participant_info=participant_info,
-                    beh=beh,
-                    triggers_list=trigger_handler.triggers_list,
-                )
+                data_saver.check_exit()
                 win.flip()
             # print (target_show_time-clock.getTime())*1000
             trial["target"]["stimulus"].setAutoDraw(False)
@@ -162,11 +142,7 @@ def show(
                     event.clearEvents()
                     logging.flush()
 
-                check_exit(
-                    participant_info=participant_info,
-                    beh=beh,
-                    triggers_list=trigger_handler.triggers_list,
-                )
+                data_saver.check_exit()
                 win.flip()
 
             # check if reaction was correct
@@ -192,8 +168,6 @@ def show(
                 "rt": reaction_time,
                 "reaction": reaction,
             }
-            beh.append(behavioral_data)
+            data_saver.beh.append(behavioral_data)
             logging.data(f"Behavioral data: {behavioral_data}\n")
             logging.flush()
-
-    return beh, trigger_handler.triggers_list
