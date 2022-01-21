@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "flanker_task"
+version = "0.1.0"
+description = "Psychopy implemetation of the flanker task (multiple variants)"
+authors = ["Michal Ociepka", "Filip Sondej <sondejfilip@protonmail.com>"]
+license = "GPLv2"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+PsychoPy = "^2021.2.3"
+wxPython = "^4.1.1"
+
+[tool.poetry.dev-dependencies]
+black = "^21.12b0"
+isort = "^5.10.1"
+pytest = "^6.2.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
