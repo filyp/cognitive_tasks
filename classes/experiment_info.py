@@ -3,10 +3,9 @@ import datetime
 from psychopy import gui
 
 
-def get_participant_info(observer):
+def get_participant_info():
     """
     okienko dialogowe na podczas uruchomienia procedury
-    :param observer: observer_id
     :return: participant_info
     """
     now = datetime.datetime.now()

@@ -29,7 +29,7 @@ def run():
     config = load_config(config_path)
 
     # display_eeg_info()
-    # participant_info = get_participant_info(config["Observer"])
+    # participant_info = get_participant_info()
     participant_info = "mock_info"  # TODO reenable after testing
 
     data_saver = DataSaver(participant_info, beh=[], triggers_list=[])

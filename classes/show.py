@@ -106,6 +106,9 @@ def show(
                 trial["flankers"]["stimulus"].setAutoDraw(False)
 
             # ! draw target
+            # we assume no one will respond correctly during target
+            # if someone clicks while target is displayed,
+            # it will be registered as a click immediatly after target disappears
             trigger_handler.prepare_trigger(
                 trigger_type=TriggerTypes.TARGET,
                 block_type=block["type"],
