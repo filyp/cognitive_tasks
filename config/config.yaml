@@ -19,7 +19,7 @@ Cues: [5, 100]
 Cue_show_time: [2.000, 2.000]       # this has no effect of Cues is null
 Empty_screen_1_show_time: [0.100, 0.100]    # this has no effect of Cues is null
 Fixation_show_time: [0.600, 0.800]
-# Flanker_show_time: [0.500, 0.500]   # this one is optional
+Flanker_show_time: [0.500, 0.500]   # this one is optional
 Target_show_time: [0.200, 0.200]
 Empty_screen_2_show_time: [1.700, 2.300]
 
@@ -31,7 +31,7 @@ Keys: [mouse_left, mouse_right]
 # experiment structure
 Experiment_blocks: [
     {type: break, file_name: instruction.txt},
-    {type: training, number_of_trials: 48, ratio_of_congruent: 0.8, ratio_of_first_cue: 0.5},
+    {type: training, number_of_trials: 8, ratio_of_congruent: 0.5, ratio_of_first_cue: 0.5},
     {type: break, file_name: end_training.txt},
-    {type: experiment, number_of_trials: 40, ratio_of_congruent: 0.8, ratio_of_first_cue: 0.25},
+    {type: experiment, number_of_trials: 8, ratio_of_congruent: 0.5, ratio_of_first_cue: 0.5},
     {type: break, file_name: end.txt}]

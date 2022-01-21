@@ -16,17 +16,19 @@ def get_participant_info():
     my_dlg.addField("ID:")
     my_dlg.addField("Wiek:")
     my_dlg.addField("Plec:", choices=["Mezczyzna", "Kobieta"])
+    my_dlg.addField("Wersja:", choices=["-", "Nadz", "BezNadz"])
 
     my_dlg.show()
     if not my_dlg.OK:
         exit(1)
 
     part_id = my_dlg.data[0]
-    sex = my_dlg.data[2]
     age = my_dlg.data[1]
+    sex = my_dlg.data[2]
+    version = my_dlg.data[3]
 
     date = date.replace(":", "-")
-    participant_info = "{}_{}_{}_{}".format(part_id, sex, age, date)
+    participant_info = "{}_{}_{}_{}_{}".format(part_id, sex, age, version, date)
     return participant_info
 
 

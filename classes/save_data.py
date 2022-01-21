@@ -23,15 +23,13 @@ class DataSaver:
         )
         with open(path, "w") as csvfile:
             fieldnames = [
-                "block type",
-                "trial type",
-                "cue name",
-                "target name",
+                "block_type",
+                "trial_type",
+                "cue_name",
+                "target_name",
                 "response",
                 "rt",
                 "reaction",
-                "cal mean rt",
-                "cutoff",
             ]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()

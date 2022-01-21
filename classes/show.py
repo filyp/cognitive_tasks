@@ -177,15 +177,16 @@ def show(
                 reaction = "incorrect"
 
             # save beh
-            behavioral_data = {
-                "block type": block["type"],
-                "trial type": trial["type"],
-                "cue name": trial["cue"]["name"] if config["Cues"] is not None else None,
-                "target name": trial["target"]["name"],
-                "response": response,
-                "rt": reaction_time,
-                "reaction": reaction,
-            }
+            cue_name = trial["cue"]["stimulus"].text if config["Cues"] is not None else None
+            behavioral_data = dict(
+                block_type=block["type"],
+                trial_type=trial["type"],
+                cue_name=cue_name,
+                target_name=trial["target"]["name"],
+                response=response,
+                rt=reaction_time,
+                reaction=reaction,
+            )
             data_saver.beh.append(behavioral_data)
             logging.data(f"Behavioral data: {behavioral_data}\n")
             logging.flush()
