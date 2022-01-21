@@ -1,6 +1,4 @@
 import random
-import time
-from cmath import log
 
 from psychopy import core, event, logging, visual
 
@@ -68,7 +66,7 @@ def show(
                 win.flip()
                 trigger_handler.send_trigger()
 
-                time.sleep(cue_show_time)
+                core.wait(cue_show_time)
                 cue.setAutoDraw(False)
                 data_saver.check_exit()
                 win.flip()
@@ -84,7 +82,7 @@ def show(
             fixation_show_time = random.uniform(*config["Fixation_show_time"])
             fixation.setAutoDraw(True)
             win.flip()
-            time.sleep(fixation_show_time)
+            core.wait(fixation_show_time)
             fixation.setAutoDraw(False)
             data_saver.check_exit()
 
@@ -102,7 +100,7 @@ def show(
 
                 win.flip()
                 trigger_handler.send_trigger()
-                time.sleep(flanker_show_time)
+                core.wait(flanker_show_time)
                 trial["flankers"]["stimulus"].setAutoDraw(False)
 
             # ! draw target
