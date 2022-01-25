@@ -4,8 +4,8 @@ from psychopy import logging
 
 
 def prepare_trials(block, stimulus):
-    # logging.data(f"{block=}")
-    # logging.data(f"{stimulus=}")
+    # logging.data(f"{block}=block")
+    # logging.data(f"{stimulus}=stimulus")
     # logging.flush()
 
     all_trials = []
@@ -27,11 +27,11 @@ def prepare_trials(block, stimulus):
     logging.data(
         f"""
     Preparing trials:
-        {block=}
-        {num_of_congruent_first_cue=}
-        {num_of_congruent_second_cue=}
-        {num_of_incongruent_first_cue=}
-        {num_of_incongruent_second_cue=}
+        {block}=block
+        {num_of_congruent_first_cue}=num_of_congruent_first_cue
+        {num_of_congruent_second_cue}=num_of_congruent_second_cue
+        {num_of_incongruent_first_cue}=num_of_incongruent_first_cue
+        {num_of_incongruent_second_cue}=num_of_incongruent_second_cue
     """
     )
 

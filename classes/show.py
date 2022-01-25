@@ -142,8 +142,8 @@ def show(
 
                 if keys:
                     reaction_time = clock.getTime()
-                    logging.data(f"{mouse_press_times=}")
-                    logging.data(f"{keys=}")
+                    logging.data(f"{mouse_press_times}=mouse_press_times")
+                    logging.data(f"{keys}=keys")
 
                     trigger_handler.prepare_trigger(
                         trigger_type=TriggerTypes.RE,
