@@ -8,7 +8,7 @@ Text_color: "white"
 Text_size: 40
 Fixation_size: 30
 Flanker_size: 100
-Font: "Droid Sans Mono"
+Font: "Noto Mono"
 
 # cue definition
 # Cues: [5, 100]
