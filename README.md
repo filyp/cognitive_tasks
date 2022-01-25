@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-You need python3.6 or newer, and installed `psychopy`.
+You need python3.6 or newer, and installed `psychopy`, and `wxpython`.
 ## Running
 
 ```bash

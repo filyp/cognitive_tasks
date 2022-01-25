@@ -5,9 +5,9 @@ Send_EEG_trigg: False
 # view parameters
 Screen_color: "black"
 Text_color: "white"
-Text_size: 40
-Fixation_size: 30
-Flanker_size: 100
+Text_size: 60
+Fixation_size: 20
+Flanker_size: 50
 Font: "Noto Mono"
 
 # cue definition
@@ -16,12 +16,12 @@ Cues: [5, 100]
 
 
 # times
-Cue_show_time: [2.000, 2.000]       # this has no effect of Cues is null
+Cue_show_time: [1.000, 1.000]       # this has no effect of Cues is null
 Empty_screen_1_show_time: [0.100, 0.100]    # this has no effect of Cues is null
 Fixation_show_time: [0.600, 0.800]
-Flanker_show_time: [0.500, 0.500]   # this one is optional
+Flanker_show_time: [0.035, 0.035]   # this one is optional
 Target_show_time: [0.200, 0.200]
-Empty_screen_2_show_time: [1.700, 2.300]
+Empty_screen_2_show_time: [0.600, 0.600]
 
 # reaction keys
 # first one is for left response, second one is for right response

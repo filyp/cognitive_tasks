@@ -67,7 +67,7 @@ def load_stimuli(win, folder_name, config, screen_res):
             antialias=True,
             font=config["Font"],
             text=cue1_text,
-            height=config["Flanker_size"],
+            height=config["Text_size"],
             wrapWidth=screen_res["width"],
             color=config["Text_color"],
         )
@@ -76,7 +76,7 @@ def load_stimuli(win, folder_name, config, screen_res):
             antialias=True,
             font=config["Font"],
             text=cue2_text,
-            height=config["Flanker_size"],
+            height=config["Text_size"],
             wrapWidth=screen_res["width"],
             color=config["Text_color"],
         )
