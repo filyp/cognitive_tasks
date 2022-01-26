@@ -10,8 +10,6 @@ def prepare_trials(block, stimulus):
 
     all_trials = []
 
-    stimulus_dict = {stim["name"]: stim for stim in stimulus}
-
     number_of_trials = block.get("number_of_trials", 0)  # if not given, assume it's a break block
     ratio_of_congruent = block.get("ratio_of_congruent", 0.5)
     ratio_of_first_cue = block.get("ratio_of_first_cue", 0.5)
@@ -40,17 +38,17 @@ def prepare_trials(block, stimulus):
         all_trials.append(
             dict(
                 type="congruent",
-                cue=stimulus_dict["cue1"],
-                flankers=stimulus_dict["flankers_l"],
-                target=stimulus_dict["congruent_lll"],
+                cue=stimulus["cue1"],
+                flankers=stimulus["flankers_l"],
+                target=stimulus["congruent_lll"],
             )
         )
         all_trials.append(
             dict(
                 type="congruent",
-                cue=stimulus_dict["cue1"],
-                flankers=stimulus_dict["flankers_r"],
-                target=stimulus_dict["congruent_rrr"],
+                cue=stimulus["cue1"],
+                flankers=stimulus["flankers_r"],
+                target=stimulus["congruent_rrr"],
             )
         )
 
@@ -59,17 +57,17 @@ def prepare_trials(block, stimulus):
         all_trials.append(
             dict(
                 type="congruent",
-                cue=stimulus_dict["cue2"],
-                flankers=stimulus_dict["flankers_l"],
-                target=stimulus_dict["congruent_lll"],
+                cue=stimulus["cue2"],
+                flankers=stimulus["flankers_l"],
+                target=stimulus["congruent_lll"],
             )
         )
         all_trials.append(
             dict(
                 type="congruent",
-                cue=stimulus_dict["cue2"],
-                flankers=stimulus_dict["flankers_r"],
-                target=stimulus_dict["congruent_rrr"],
+                cue=stimulus["cue2"],
+                flankers=stimulus["flankers_r"],
+                target=stimulus["congruent_rrr"],
             )
         )
 
@@ -78,17 +76,17 @@ def prepare_trials(block, stimulus):
         all_trials.append(
             dict(
                 type="incongruent",
-                cue=stimulus_dict["cue1"],
-                flankers=stimulus_dict["flankers_l"],
-                target=stimulus_dict["incongruent_lrl"],
+                cue=stimulus["cue1"],
+                flankers=stimulus["flankers_l"],
+                target=stimulus["incongruent_lrl"],
             )
         )
         all_trials.append(
             dict(
                 type="incongruent",
-                cue=stimulus_dict["cue1"],
-                flankers=stimulus_dict["flankers_r"],
-                target=stimulus_dict["incongruent_rlr"],
+                cue=stimulus["cue1"],
+                flankers=stimulus["flankers_r"],
+                target=stimulus["incongruent_rlr"],
             )
         )
 
@@ -97,17 +95,17 @@ def prepare_trials(block, stimulus):
         all_trials.append(
             dict(
                 type="incongruent",
-                cue=stimulus_dict["cue2"],
-                flankers=stimulus_dict["flankers_l"],
-                target=stimulus_dict["incongruent_lrl"],
+                cue=stimulus["cue2"],
+                flankers=stimulus["flankers_l"],
+                target=stimulus["incongruent_lrl"],
             )
         )
         all_trials.append(
             dict(
                 type="incongruent",
-                cue=stimulus_dict["cue2"],
-                flankers=stimulus_dict["flankers_r"],
-                target=stimulus_dict["incongruent_rlr"],
+                cue=stimulus["cue2"],
+                flankers=stimulus["flankers_r"],
+                target=stimulus["incongruent_rlr"],
             )
         )
 

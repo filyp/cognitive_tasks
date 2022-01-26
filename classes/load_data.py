@@ -26,38 +26,42 @@ def load_stimuli(win, folder_name, config, screen_res):
     :param folder_name: nazwa folderu z ktorego beda ladowane pliki
     """
 
-    names = [f for f in os.listdir(folder_name)]
-    stimuli = list()
-    for name in names:
-        path = os.path.join(folder_name, name)
-        try:
-            if name[-3:] == "txt":
-                with open(path, "r") as text_file:
-                    for line in text_file:
-                        trigger_name = line.split(":")[0]
-                        text = line.split(":")[1]
-                        text = text.split("\n")[0]
-                        word = visual.TextStim(
-                            win=win,
-                            antialias=True,
-                            font=config["Font"],
-                            text=text,
-                            height=config["Flanker_size"],
-                            wrapWidth=screen_res["width"],
-                            color=config["Text_color"],
-                        )
-                        stimuli.append({"type": "text", "name": trigger_name, "stimulus": word})
-            # elif name[-3:] in possible_images_format:
-            #     image = visual.ImageStim(
-            #         win, image=path, interpolate=True, size=config["Figure_size"]
-            #     )
-            #     data.append({"type": "image", "name": name.split(".")[0], "stimulus": image})
-            # elif name[-3:] in possible_audio_format:
-            #     data.append({"type": "sound", "name": name.split(".")[0], "stimulus": path})
-            else:
-                raise Exception("Error while loading a file " + name)
-        except:
-            raise Exception("Error while loading a file " + name)
+    orientation = config.get("Orientation", "horizontal")
+    if orientation == "horizontal":
+        rotation = 0
+    elif orientation == "vertical":
+        rotation = 90
+    else:
+        raise Exception("Wrong orientation")
+
+    stimuli = dict()
+    stimuli["fixation"] = visual.TextStim(
+        win,
+        color=config["Text_color"],
+        text="+",
+        height=2 * config["Fixation_size"],
+        pos=(0, 0),
+        ori=rotation,
+        name="fixation",
+    )
+
+    path = os.path.join(folder_name, "flankers.txt")
+    with open(path, "r") as text_file:
+        for line in text_file:
+            stimulus_name = line.split(":")[0]
+            text = line.split(":")[1]
+            text = text.split("\n")[0]
+            stimuli[stimulus_name] = visual.TextStim(
+                win=win,
+                antialias=True,
+                font=config["Font"],
+                text=text,
+                height=config["Flanker_size"],
+                wrapWidth=screen_res["width"],
+                color=config["Text_color"],
+                ori=rotation,
+                name=stimulus_name,
+            )
 
     # create cues
     if config["Cues"] is not None:
@@ -70,6 +74,7 @@ def load_stimuli(win, folder_name, config, screen_res):
             height=config["Text_size"],
             wrapWidth=screen_res["width"],
             color=config["Text_color"],
+            name="cue1",
         )
         cue2 = visual.TextStim(
             win=win,
@@ -79,12 +84,13 @@ def load_stimuli(win, folder_name, config, screen_res):
             height=config["Text_size"],
             wrapWidth=screen_res["width"],
             color=config["Text_color"],
+            name="cue2",
         )
     else:
         cue1 = None
         cue2 = None
-    stimuli.append({"type": "text", "name": "cue1", "stimulus": cue1})
-    stimuli.append({"type": "text", "name": "cue2", "stimulus": cue2})
+    stimuli["cue1"] = cue1
+    stimuli["cue2"] = cue2
 
     return stimuli
 

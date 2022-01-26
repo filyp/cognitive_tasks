@@ -6,9 +6,12 @@ Send_EEG_trigg: False
 Screen_color: "black"
 Text_color: "white"
 Text_size: 60
+
+# flanker parameters
 Fixation_size: 20
 Flanker_size: 50
 Font: "Noto Mono"
+Orientation: "vertical"
 
 # cue definition
 Cues: [5, 100]
