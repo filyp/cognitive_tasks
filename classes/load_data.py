@@ -17,7 +17,7 @@ def load_config(config_path):
         raise Exception("Can't load config file")
 
 
-def load_stimuli(win, folder_name, config, screen_res):
+def load_stimuli(win, config, screen_res):
     """
     ladowanie tekstu, zdjec i dzwiekow
     :param screen_res:
@@ -34,36 +34,44 @@ def load_stimuli(win, folder_name, config, screen_res):
     else:
         raise Exception("Wrong orientation")
 
+    # ! create fixation
     stimuli = dict()
     stimuli["fixation"] = visual.TextStim(
         win,
         color=config["Text_color"],
-        text="+",
-        height=2 * config["Fixation_size"],
+        text=config["Fixation_char"],
+        font=config["Flanker_font"],
+        height=config["Flanker_size"],
         pos=(0, 0),
         ori=rotation,
         name="fixation",
     )
 
-    path = os.path.join(folder_name, "flankers.txt")
-    with open(path, "r") as text_file:
-        for line in text_file:
-            stimulus_name = line.split(":")[0]
-            text = line.split(":")[1]
-            text = text.split("\n")[0]
-            stimuli[stimulus_name] = visual.TextStim(
-                win=win,
-                antialias=True,
-                font=config["Font"],
-                text=text,
-                height=config["Flanker_size"],
-                wrapWidth=screen_res["width"],
-                color=config["Text_color"],
-                ori=rotation,
-                name=stimulus_name,
-            )
+    # ! create targets and flankers
+    r = config["Right_char"]
+    l = config["Left_char"]
+    stimuli_to_create = dict(
+        congruent_rrr=r + r + r + r + r,
+        congruent_lll=l + l + l + l + l,
+        incongruent_rlr=r + r + l + r + r,
+        incongruent_lrl=l + l + r + l + l,
+        flankers_r=r + r + " " + r + r,
+        flankers_l=l + l + " " + l + l,
+    )
+    for stimulus_name, text in stimuli_to_create.items():
+        stimuli[stimulus_name] = visual.TextStim(
+            win=win,
+            antialias=True,
+            font=config["Flanker_font"],
+            text=text,
+            height=config["Flanker_size"],
+            wrapWidth=screen_res["width"],
+            color=config["Text_color"],
+            ori=rotation,
+            name=stimulus_name,
+        )
 
-    # create cues
+    # ! create cues
     if config["Cues"] is not None:
         cue1_text, cue2_text = config["Cues"]
         cue1 = visual.TextStim(
@@ -91,6 +99,8 @@ def load_stimuli(win, folder_name, config, screen_res):
         cue2 = None
     stimuli["cue1"] = cue1
     stimuli["cue2"] = cue2
+
+    # ! create feedback
 
     return stimuli
 

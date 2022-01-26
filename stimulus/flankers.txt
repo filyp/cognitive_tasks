@@ -1,6 +1,0 @@
-congruent_lll:<<<<<
-congruent_rrr:>>>>>
-incongruent_lrl:<<><<
-incongruent_rlr:>><>>
-flankers_l:<< <<
-flankers_r:>> >>
