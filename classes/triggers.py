@@ -4,14 +4,14 @@ from cmath import log
 from psychopy import logging
 
 
-class TriggerTypes(object):
+class TriggerTypes:
     BLINK = "BLINK"
-    CUE = "CU"
-    TARGET = "TG"
-    RE = "RE"
-    FLANKER = "FL"
-    # FEEDB_GOOD = "FG"
-    # FEEDB_BAD = "FB"
+    CUE = "CUE_____"
+    TARGET = "TARGET__"
+    REACTION = "REACTION"
+    FLANKER = "FLANKER_"
+    FEEDB_GOOD = "F_GOOD__"
+    FEEDB_BAD = "F_BAD___"
 
 
 def create_eeg_port():

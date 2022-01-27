@@ -5,6 +5,7 @@ from psychopy import core, event, logging, visual
 from classes.prepare_experiment import prepare_trials
 from classes.show_info import show_info
 from classes.triggers import TriggerTypes
+from classes.feedback import FeedbackTimer
 
 
 def show(
@@ -40,14 +41,18 @@ def show(
                 "{} is bad block type in config Experiment_blocks".format(block["type"])
             )
 
-        # logging.data(f"trials: {block['trials']}")
-        # logging.flush()
+        if config["Show_feedback"]:
+            # if we show cues, we need a separate cutoff for each of them
+            feedback_timer = FeedbackTimer(
+                config["Feedback_initial_cutoff"],
+                timer_names=config["Cues"] if config["Show_cues"] else [""],
+            )
 
         for trial in block["trials"]:
             reaction_time = None
             response = None
 
-            if config["Cues"] is not None:
+            if config["Show_cues"]:
                 # it's a version of the experiment where we show cues before stimuli
                 # ! draw cue
                 cue_show_time = random.uniform(*config["Cue_show_time"])
@@ -55,7 +60,7 @@ def show(
                 trigger_handler.prepare_trigger(
                     trigger_type=TriggerTypes.CUE,
                     block_type=block["type"],
-                    cue_name=trial["cue"].name,
+                    cue_name=trial["cue"].text,
                     target_name=trial["target"].name,
                 )
 
@@ -89,7 +94,7 @@ def show(
                 trigger_handler.prepare_trigger(
                     trigger_type=TriggerTypes.FLANKER,
                     block_type=block["type"],
-                    cue_name=trial["cue"].name,
+                    cue_name=trial["cue"].text,
                     target_name=trial["target"].name,
                 )
                 flanker_show_time = random.uniform(*config["Flanker_show_time"])
@@ -107,7 +112,7 @@ def show(
             trigger_handler.prepare_trigger(
                 trigger_type=TriggerTypes.TARGET,
                 block_type=block["type"],
-                cue_name=trial["cue"].name,
+                cue_name=trial["cue"].text,
                 target_name=trial["target"].name,
             )
             target_show_time = random.uniform(*config["Target_show_time"])
@@ -139,13 +144,13 @@ def show(
 
                 if keys:
                     reaction_time = clock.getTime()
-                    logging.data(f"{mouse_press_times}=mouse_press_times")
-                    logging.data(f"{keys}=keys")
+                    # logging.data(f"mouse_press_times={mouse_press_times}")
+                    # logging.data(f"keys={keys}")
 
                     trigger_handler.prepare_trigger(
-                        trigger_type=TriggerTypes.RE,
+                        trigger_type=TriggerTypes.REACTION,
                         block_type=block["type"],
-                        cue_name=trial["cue"].name,
+                        cue_name=trial["cue"].text,
                         target_name=trial["target"].name,
                         response=keys[0],
                     )
@@ -171,12 +176,39 @@ def show(
             else:
                 reaction = "incorrect"
 
+            # ! draw feedback
+            if config["Show_feedback"]:
+                feedback_timer.update_cutoff(
+                    target_name=trial["target"].name,
+                    reaction=reaction,
+                    timer_name=trial["cue"].text,
+                )
+                if reaction == "correct":
+                    # TODO is it the way it's supposed to be? (only show on correct)
+                    feedback_type, trigger_type = feedback_timer.get_feedback(
+                        reaction_time=reaction_time,
+                        timer_name=trial["cue"].text,
+                    )
+                    feedback_show_time = random.uniform(*config["Feedback_show_time"])
+                    trigger_handler.prepare_trigger(
+                        trigger_type=trigger_type,
+                        block_type=block["type"],
+                        cue_name=trial["cue"].text,
+                        target_name=trial["target"].name,
+                    )
+                    stimulus[feedback_type].setAutoDraw(True)
+
+                    win.flip()
+                    trigger_handler.send_trigger()
+                    core.wait(feedback_show_time)
+                    stimulus[feedback_type].setAutoDraw(False)
+                    data_saver.check_exit()
+
             # save beh
-            cue_name = trial["cue"].text if config["Cues"] is not None else None
             behavioral_data = dict(
                 block_type=block["type"],
                 trial_type=trial["type"],
-                cue_name=cue_name,
+                cue_name=trial["cue"].text,
                 target_name=trial["target"].name,
                 response=response,
                 rt=reaction_time,

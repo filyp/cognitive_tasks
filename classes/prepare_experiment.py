@@ -4,10 +4,6 @@ from psychopy import logging
 
 
 def prepare_trials(block, stimulus):
-    # logging.data(f"{block}=block")
-    # logging.data(f"{stimulus}=stimulus")
-    # logging.flush()
-
     all_trials = []
 
     number_of_trials = block.get("number_of_trials", 0)  # if not given, assume it's a break block
@@ -25,11 +21,11 @@ def prepare_trials(block, stimulus):
     logging.data(
         f"""
     Preparing trials:
-        {block}=block
-        {num_of_congruent_first_cue}=num_of_congruent_first_cue
-        {num_of_congruent_second_cue}=num_of_congruent_second_cue
-        {num_of_incongruent_first_cue}=num_of_incongruent_first_cue
-        {num_of_incongruent_second_cue}=num_of_incongruent_second_cue
+        block={block}
+        num_of_congruent_first_cue={num_of_congruent_first_cue}
+        num_of_congruent_second_cue={num_of_congruent_second_cue}
+        num_of_incongruent_first_cue={num_of_incongruent_first_cue}
+        num_of_incongruent_second_cue={num_of_incongruent_second_cue}
     """
     )
 

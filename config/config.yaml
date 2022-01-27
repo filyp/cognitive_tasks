@@ -1,5 +1,5 @@
 # * EEG
-Ophthalmic_procedure: False
+Ophthalmic_procedure: False     # this is currently not supported
 Send_EEG_trigg: False
 
 
@@ -7,12 +7,12 @@ Send_EEG_trigg: False
 Screen_color: "black"
 Text_color: "white"
 Text_size: 60
-Font: "Arial"
+Text_font: "Arial"
 
 
 # * flanker parameters
 Flanker_font: "DejaVu Sans Mono"   # FreeMono, Noto Sans Mono, DejaVu Sans Mono
-Fixation_size: 20
+Flanker_size: 50
 # Orientation: "horizontal"
 # Right_char: ">"
 # Left_char: "<"
@@ -24,34 +24,35 @@ Fixation_char: "↕"
 
 
 # * cue definition
+Show_cues: True    # if False, the rest of this block has no effect
 Cues: [5, 100]
-# Cues: null    # if left as null, no cues will be shown
 
 # * feedback  definition
 Show_feedback: True    # if False, the rest of this block has no effect
 Feedback_good: "OK"
 Feedback_bad: "respond faster"
-Feedback_initial_show_time: 0.420
+Feedback_initial_cutoff: 0.420
 
 
 # * times
-Cue_show_time: [1.000, 1.000]       # this has no effect if Cues is null
-Empty_screen_1_show_time: [0.100, 0.100]    # this has no effect if Cues is null
+Cue_show_time: [1.000, 1.000]       # this has no effect if Show_cues is False
+Empty_screen_1_show_time: [0.100, 0.100]    # this has no effect if Show_cues is False
 Fixation_show_time: [0.600, 0.800]
 Flanker_show_time: [0.035, 0.035]   # this one is optional
 Target_show_time: [0.200, 0.200]
 Empty_screen_2_show_time: [0.600, 0.600]
+Feedback_show_time: [0.600, 0.600]  # this one is needed only if Show_feedback is True
 
 
 # * reaction keys
 # first one is for left response, second one is for right response
-Keys: [mouse_left, mouse_right]
-# Keys: [lshift, rshift]
+# Keys: [mouse_left, mouse_right]
+Keys: [lshift, rshift]
 
 
 # * experiment structure
 Experiment_blocks: [
-    {type: break, file_name: instruction.txt},
+    # {type: break, file_name: instruction.txt},
     {type: training, number_of_trials: 8, ratio_of_congruent: 0.5, ratio_of_first_cue: 0.5},
     {type: break, file_name: end_training.txt},
     {type: experiment, number_of_trials: 8, ratio_of_congruent: 0.5, ratio_of_first_cue: 0.5},

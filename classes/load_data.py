@@ -33,6 +33,7 @@ def load_stimuli(win, config, screen_res):
         rotation = 90
     else:
         raise Exception("Wrong orientation")
+    text_position_offset = (0, 0)
 
     # ! create fixation
     stimuli = dict()
@@ -42,7 +43,7 @@ def load_stimuli(win, config, screen_res):
         text=config["Fixation_char"],
         font=config["Flanker_font"],
         height=config["Flanker_size"],
-        pos=(0, 0),
+        pos=text_position_offset,
         ori=rotation,
         name="fixation",
     )
@@ -72,22 +73,22 @@ def load_stimuli(win, config, screen_res):
         )
 
     # ! create cues
-    if config["Cues"] is not None:
+    if config["Show_cues"]:
         cue1_text, cue2_text = config["Cues"]
-        cue1 = visual.TextStim(
+        stimuli["cue1"] = visual.TextStim(
             win=win,
             antialias=True,
-            font=config["Font"],
+            font=config["Text_font"],
             text=cue1_text,
             height=config["Text_size"],
             wrapWidth=screen_res["width"],
             color=config["Text_color"],
             name="cue1",
         )
-        cue2 = visual.TextStim(
+        stimuli["cue2"] = visual.TextStim(
             win=win,
             antialias=True,
-            font=config["Font"],
+            font=config["Text_font"],
             text=cue2_text,
             height=config["Text_size"],
             wrapWidth=screen_res["width"],
@@ -95,12 +96,30 @@ def load_stimuli(win, config, screen_res):
             name="cue2",
         )
     else:
-        cue1 = None
-        cue2 = None
-    stimuli["cue1"] = cue1
-    stimuli["cue2"] = cue2
+        # create mock cue stimuli
+        stimuli["cue1"] = visual.TextStim(win, text=None)
+        stimuli["cue2"] = visual.TextStim(win, text=None)
 
     # ! create feedback
+    if config["Show_feedback"]:
+        stimuli["feedback_good"] = visual.TextStim(
+            win,
+            color=config["Text_color"],
+            text=config["Feedback_good"],
+            font=config["Text_font"],
+            height=config["Text_size"],
+            pos=text_position_offset,
+            name="feedback_good",
+        )
+        stimuli["feedback_bad"] = visual.TextStim(
+            win,
+            color=config["Text_color"],
+            text=config["Feedback_bad"],
+            font=config["Text_font"],
+            height=config["Text_size"],
+            pos=text_position_offset,
+            name="feedback_bad",
+        )
 
     return stimuli
 
