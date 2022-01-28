@@ -106,8 +106,8 @@ def load_stimuli(win, config, screen_res):
             win,
             color=config["Text_color"],
             text=config["Feedback_good"],
-            font=config["Text_font"],
-            height=config["Text_size"],
+            font=config["Feedback_font"],
+            height=config["Feedback_size"],
             pos=text_position_offset,
             name="feedback_good",
         )
@@ -115,8 +115,8 @@ def load_stimuli(win, config, screen_res):
             win,
             color=config["Text_color"],
             text=config["Feedback_bad"],
-            font=config["Text_font"],
-            height=config["Text_size"],
+            font=config["Feedback_font"],
+            height=config["Feedback_size"],
             pos=text_position_offset,
             name="feedback_bad",
         )

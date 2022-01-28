@@ -34,6 +34,8 @@ Show_feedback: True    # if False, the rest of this block has no effect
 Feedback_good: "☺"
 Feedback_bad: "☹"
 Feedback_initial_cutoff: 0.420
+Feedback_font: "DejaVu Sans Mono"
+Feedback_size: 200
 
 # * times
 # Cue_show_time: [1.000, 1.000]       # this has no effect if Show_cues is False
