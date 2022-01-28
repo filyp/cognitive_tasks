@@ -129,8 +129,8 @@ def show(
             trial["target"].setAutoDraw(False)
             win.flip()
 
-            # ! draw empty screen
-            empty_screen_show_time = random.uniform(*config["Empty_screen_2_show_time"])
+            # ! draw empty screen and await response
+            empty_screen_show_time = random.uniform(*config["Response_time_window"])
             while clock.getTime() < target_show_time + empty_screen_show_time:
                 keys = event.getKeys(keyList=config["Keys"])
                 _, mouse_press_times = mouse.getPressed(getTime=True)
@@ -159,9 +159,19 @@ def show(
                     mouse.clickReset()
                     event.clearEvents()
                     logging.flush()
-
+                    break  # if we hot a response, break out of this stage
                 data_saver.check_exit()
                 win.flip()
+
+            if config["Use_whole_response_time_window"]:
+                while clock.getTime() < target_show_time + empty_screen_show_time:
+                    data_saver.check_exit()
+                    win.flip()
+
+            # ! show empty screen after response
+            empty_show_time = random.uniform(*config["Empty_screen_after_response_show_time"])
+            core.wait(empty_show_time)
+            data_saver.check_exit()
 
             # check if reaction was correct
             if trial["target"].name in ["congruent_lll", "incongruent_rlr"]:
@@ -183,13 +193,12 @@ def show(
                     reaction=reaction,
                     timer_name=trial["cue"].text,
                 )
+                feedback_show_time = random.uniform(*config["Feedback_show_time"])
                 if reaction == "correct":
-                    # TODO is it the way it's supposed to be? (only show on correct)
                     feedback_type, trigger_type = feedback_timer.get_feedback(
                         reaction_time=reaction_time,
                         timer_name=trial["cue"].text,
                     )
-                    feedback_show_time = random.uniform(*config["Feedback_show_time"])
                     trigger_handler.prepare_trigger(
                         trigger_type=trigger_type,
                         block_type=block["type"],
@@ -203,16 +212,21 @@ def show(
                     core.wait(feedback_show_time)
                     stimulus[feedback_type].setAutoDraw(False)
                     data_saver.check_exit()
+                else:
+                    core.wait(feedback_show_time)
+                    data_saver.check_exit()
 
             # save beh
+            cue_name = trial["cue"].text
             behavioral_data = dict(
                 block_type=block["type"],
                 trial_type=trial["type"],
-                cue_name=trial["cue"].text,
+                cue_name=cue_name,
                 target_name=trial["target"].name,
                 response=response,
                 rt=reaction_time,
                 reaction=reaction,
+                cutoff=feedback_timer.cutoffs[cue_name] if config["Show_feedback"] else None,
             )
             data_saver.beh.append(behavioral_data)
             logging.data(f"Behavioral data: {behavioral_data}\n")

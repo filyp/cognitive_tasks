@@ -16,9 +16,10 @@ class FeedbackTimer:
             return
 
         if reaction == "correct":
-            update = -0.002
+            update = -0.005
+            # TODO calculate those updates based on configurable arguments
         elif reaction == "incorrect":
-            update = 0.010
+            update = 0.020
 
         self.cutoffs[timer_name] += update
         logging.data(f"updated cutoff for timer={timer_name} to {self.cutoffs[timer_name]}")

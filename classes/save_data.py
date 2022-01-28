@@ -30,6 +30,7 @@ class DataSaver:
                 "response",
                 "rt",
                 "reaction",
+                "cutoff",
             ]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
