@@ -33,7 +33,11 @@ def load_stimuli(win, config, screen_res):
         rotation = 90
     else:
         raise Exception("Wrong orientation")
-    text_position_offset = (0, 0)
+    
+    pos_x, pos_y = config["Flanker_position"]
+    abs_flanker_position = (pos_x * config["Flanker_size"], pos_y * config["Flanker_size"])
+    
+    
 
     # ! create fixation
     stimuli = dict()
@@ -43,9 +47,9 @@ def load_stimuli(win, config, screen_res):
         text=config["Fixation_char"],
         font=config["Flanker_font"],
         height=config["Flanker_size"],
-        pos=text_position_offset,
         ori=rotation,
         name="fixation",
+        pos=abs_flanker_position,
     )
 
     # ! create targets and flankers
@@ -70,6 +74,7 @@ def load_stimuli(win, config, screen_res):
             color=config["Text_color"],
             ori=rotation,
             name=stimulus_name,
+            pos=abs_flanker_position,
         )
 
     # ! create cues
@@ -108,7 +113,6 @@ def load_stimuli(win, config, screen_res):
             text=config["Feedback_good"],
             font=config["Feedback_font"],
             height=config["Feedback_size"],
-            pos=text_position_offset,
             name="feedback_good",
         )
         stimuli["feedback_bad"] = visual.TextStim(
@@ -117,7 +121,6 @@ def load_stimuli(win, config, screen_res):
             text=config["Feedback_bad"],
             font=config["Feedback_font"],
             height=config["Feedback_size"],
-            pos=text_position_offset,
             name="feedback_bad",
         )
 

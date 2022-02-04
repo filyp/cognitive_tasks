@@ -52,6 +52,11 @@ def show(
             reaction_time = None
             response = None
 
+            # ! show empty screen between trials 
+            empty_show_time = random.uniform(*config["Empty_screen_between_trials"])
+            core.wait(empty_show_time)
+            data_saver.check_exit()
+
             if config["Show_cues"]:
                 # it's a version of the experiment where we show cues before stimuli
                 # ! draw cue
@@ -211,6 +216,7 @@ def show(
                     trigger_handler.send_trigger()
                     core.wait(feedback_show_time)
                     stimulus[feedback_type].setAutoDraw(False)
+                    win.flip()
                     data_saver.check_exit()
                 else:
                     core.wait(feedback_show_time)

@@ -4,8 +4,8 @@ Send_EEG_trigg: False
 
 
 # * view parameters
-Screen_color: "black"
-Text_color: "white"
+Screen_color: -0.5
+Text_color: "black"
 Text_size: 60
 Text_font: "Arial"
 
@@ -21,7 +21,7 @@ Orientation: "vertical"    # note that for vertical, arrows are rotated 90 degre
 Right_char: "↑"
 Left_char: "↓"
 Fixation_char: "↕"
-
+Flanker_position: [0.14, 0] # this is needed to align arrows at the center of the screen
 
 # * cue definition
 Show_cues: False    # if False, the rest of this block has no effect
@@ -38,6 +38,7 @@ Feedback_font: "DejaVu Sans Mono"
 Feedback_size: 200
 
 # * times
+Empty_screen_between_trials: [0.600, 0.800]
 # Cue_show_time: [1.000, 1.000]       # this has no effect if Show_cues is False
 # Empty_screen_1_show_time: [0.100, 0.100]    # this has no effect if Show_cues is False
 Fixation_show_time: [0.600, 0.800]
@@ -45,7 +46,7 @@ Flanker_show_time: [0.080, 0.080]   # this one is optional
 Target_show_time: [0.030, 0.030]
 Response_time_window: [0.600, 0.600]
 Empty_screen_after_response_show_time: [1.000, 1.000]
-Feedback_show_time: [0.600, 0.600]  # this one is needed only if Show_feedback is True
+Feedback_show_time: [0.800, 0.800]  # this one is needed only if Show_feedback is True
 
 # if this is False, we will end response time windw immediately after response, and carry on
 # if True, we will wait until the whole window ends even after the response, like in Hajcak2005
@@ -61,7 +62,7 @@ Keys: [lshift, rshift]
 # * experiment structure
 Experiment_blocks: [
     # {type: break, file_name: instruction.txt},
-    {type: training, number_of_trials: 16, ratio_of_congruent: 0.5, ratio_of_first_cue: 0.5},
+    {type: training, number_of_trials: 20, ratio_of_congruent: 0.8, ratio_of_first_cue: 0.5},
     {type: break, file_name: end_training.txt},
-    {type: experiment, number_of_trials: 32, ratio_of_congruent: 0.5, ratio_of_first_cue: 0.5},
+    {type: experiment, number_of_trials: 60, ratio_of_congruent: 0.8, ratio_of_first_cue: 0.5},
     {type: break, file_name: end.txt}]
