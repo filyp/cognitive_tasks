@@ -27,12 +27,14 @@ def run():
     # Load config
     config_path = sys.argv[1]
     config = load_config(config_path)
+    experiment_name = os.path.split(config_path)[-1]
+    experiment_name = experiment_name.split(".")[0]
 
     display_eeg_info()
     participant_info = get_participant_info()
     # participant_info = "mock_info"  # TODO reenable after testing
 
-    data_saver = DataSaver(participant_info, beh=[], triggers_list=[])
+    data_saver = DataSaver(participant_info, experiment_name, beh=[], triggers_list=[])
 
     # EEG triggers
     if config["Send_EEG_trigg"]:

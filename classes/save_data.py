@@ -5,22 +5,25 @@ from psychopy import event, logging
 
 
 class DataSaver:
-    def __init__(self, participant_info, beh=[], triggers_list=[]):
+    def __init__(self, participant_info, experiment_name, beh=[], triggers_list=[]):
         self.participant_info = participant_info
+        self.experiment_name = experiment_name
         self.beh = beh
         self.triggers_list = triggers_list
 
     def save_triggers(self):
-        path = os.path.join(
-            "results", "triggers_maps", "triggerMap_{}.txt".format(self.participant_info)
-        )
+        directory = os.path.join("results", self.experiment_name, "triggers_maps")
+        os.makedirs(directory, exist_ok=True)
+        filename = "triggerMap_{}.txt".format(self.participant_info)
+        path = os.path.join(directory, filename)
         with open(path, "w") as map_file:
             map_file.write("\n".join(self.triggers_list))
 
     def save_beh(self):
-        path = os.path.join(
-            "results", "behavioral_data", "beh_{}.csv".format(self.participant_info)
-        )
+        directory = os.path.join("results", self.experiment_name, "behavioral_data")
+        os.makedirs(directory, exist_ok=True)
+        filename = "beh_{}.csv".format(self.participant_info)
+        path = os.path.join(directory, filename)
         with open(path, "w") as csvfile:
             fieldnames = [
                 "block_type",
