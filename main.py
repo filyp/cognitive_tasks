@@ -43,6 +43,7 @@ def run():
 
     # screen
     win, screen_res, frames_per_sec = create_win(screen_color=config["Screen_color"])
+    logging.data(f"frames per second = {frames_per_sec}")
 
     # # Ophthalmic procedure
     # if config["Ophthalmic_procedure"]:
@@ -70,7 +71,6 @@ def run():
         config=config,
         data_saver=data_saver,
         trigger_handler=trigger_handler,
-        frame_time=1.0 / frames_per_sec,
     )
 
     # Save data

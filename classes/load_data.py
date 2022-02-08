@@ -33,11 +33,9 @@ def load_stimuli(win, config, screen_res):
         rotation = 90
     else:
         raise Exception("Wrong orientation")
-    
+
     pos_x, pos_y = config["Flanker_position"]
     abs_flanker_position = (pos_x * config["Flanker_size"], pos_y * config["Flanker_size"])
-    
-    
 
     # ! create fixation
     stimuli = dict()

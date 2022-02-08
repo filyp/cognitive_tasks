@@ -15,7 +15,6 @@ def show(
     config,
     data_saver,
     trigger_handler,
-    frame_time=1 / 60.0,
 ):
     clock = core.Clock()
     mouse = event.Mouse(win=win, visible=False)
@@ -42,9 +41,9 @@ def show(
             )
 
         if config["Show_feedback"]:
-            # if we show cues, we need a separate cutoff for each of them
+            # if we show cues, we need a separate threshold RT for each of them
             feedback_timer = FeedbackTimer(
-                config["Feedback_initial_cutoff"],
+                config["Feedback_initial_threshold_rt"],
                 timer_names=config["Cues"] if config["Show_cues"] else [""],
             )
 
@@ -52,9 +51,10 @@ def show(
             reaction_time = None
             response = None
 
-            # ! show empty screen between trials 
-            empty_show_time = random.uniform(*config["Empty_screen_between_trials"])
-            core.wait(empty_show_time)
+            # ! show empty screen between trials
+            empty_screen_between_trials = random.uniform(*config["Empty_screen_between_trials"])
+            win.flip()
+            core.wait(empty_screen_between_trials)
             data_saver.check_exit()
 
             if config["Show_cues"]:
@@ -79,9 +79,11 @@ def show(
                 win.flip()
 
                 # ! draw empty screen
-                empty_screen_show_time = random.uniform(*config["Empty_screen_1_show_time"])
+                empty_screen_after_cue_show_time = random.uniform(
+                    *config["Empty_screen_after_cue_show_time"]
+                )
                 clock.reset()
-                while clock.getTime() < empty_screen_show_time:
+                while clock.getTime() < empty_screen_after_cue_show_time:
                     data_saver.check_exit()
                     win.flip()
 
@@ -174,8 +176,10 @@ def show(
                     win.flip()
 
             # ! show empty screen after response
-            empty_show_time = random.uniform(*config["Empty_screen_after_response_show_time"])
-            core.wait(empty_show_time)
+            empty_screen_after_response_show_time = random.uniform(
+                *config["Empty_screen_after_response_show_time"]
+            )
+            core.wait(empty_screen_after_response_show_time)
             data_saver.check_exit()
 
             # check if reaction was correct
@@ -193,7 +197,7 @@ def show(
 
             # ! draw feedback
             if config["Show_feedback"]:
-                feedback_timer.update_cutoff(
+                feedback_timer.update_threshold(
                     target_name=trial["target"].name,
                     reaction=reaction,
                     timer_name=trial["cue"].text,
@@ -216,13 +220,13 @@ def show(
                     trigger_handler.send_trigger()
                     core.wait(feedback_show_time)
                     stimulus[feedback_type].setAutoDraw(False)
-                    win.flip()
                     data_saver.check_exit()
                 else:
                     core.wait(feedback_show_time)
                     data_saver.check_exit()
 
             # save beh
+            # fmt: off
             cue_name = trial["cue"].text
             behavioral_data = dict(
                 block_type=block["type"],
@@ -232,8 +236,17 @@ def show(
                 response=response,
                 rt=reaction_time,
                 reaction=reaction,
-                cutoff=feedback_timer.cutoffs[cue_name] if config["Show_feedback"] else None,
+                threshold_rt=feedback_timer.thresholds[cue_name] if config["Show_feedback"] else None,
+                empty_screen_between_trials=empty_screen_between_trials,
+                cue_show_time=cue_show_time if config["Show_cues"] else None,
+                empty_screen_after_cue_show_time=empty_screen_after_cue_show_time if config["Show_cues"] else None,
+                fixation_show_time=fixation_show_time,
+                flanker_show_time=flanker_show_time if "Flanker_show_time" in config else None,
+                target_show_time=target_show_time,
+                empty_screen_after_response_show_time=empty_screen_after_response_show_time,
+                feedback_show_time=feedback_show_time if config["Show_feedback"] else None,
             )
+            # fmt: on
             data_saver.beh.append(behavioral_data)
             logging.data(f"Behavioral data: {behavioral_data}\n")
             logging.flush()

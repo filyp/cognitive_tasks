@@ -30,7 +30,16 @@ class DataSaver:
                 "response",
                 "rt",
                 "reaction",
-                "cutoff",
+                "threshold_rt",
+                "threshold_rt",
+                "empty_screen_between_trials",
+                "cue_show_time",
+                "empty_screen_after_cue_show_time",
+                "fixation_show_time",
+                "flanker_show_time",
+                "target_show_time",
+                "empty_screen_after_response_show_time",
+                "feedback_show_time",
             ]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()

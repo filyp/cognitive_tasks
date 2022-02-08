@@ -33,14 +33,14 @@ Show_feedback: True    # if False, the rest of this block has no effect
 # Feedback_bad: "respond faster"
 Feedback_good: "☺"
 Feedback_bad: "☹"
-Feedback_initial_cutoff: 0.420
+Feedback_initial_threshold_rt: 0.420
 Feedback_font: "DejaVu Sans Mono"
 Feedback_size: 200
 
 # * times
 Empty_screen_between_trials: [0.600, 0.800]
 # Cue_show_time: [1.000, 1.000]       # this has no effect if Show_cues is False
-# Empty_screen_1_show_time: [0.100, 0.100]    # this has no effect if Show_cues is False
+# Empty_screen_after_cue_show_time: [0.100, 0.100]    # this has no effect if Show_cues is False
 Fixation_show_time: [0.600, 0.800]
 Flanker_show_time: [0.080, 0.080]   # this one is optional
 Target_show_time: [0.030, 0.030]
