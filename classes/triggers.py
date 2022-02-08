@@ -12,6 +12,7 @@ class TriggerTypes:
     FLANKER = "FLANKER_"
     FEEDB_GOOD = "F_GOOD__"
     FEEDB_BAD = "F_BAD___"
+    SECOND_REACTION = "SECOND_R"
 
 
 def create_eeg_port():

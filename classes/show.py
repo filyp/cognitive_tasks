@@ -1,11 +1,45 @@
 import random
 
-from psychopy import core, event, logging, visual
+from psychopy import core, event, logging
 
 from classes.prepare_experiment import prepare_trials
 from classes.show_info import show_info
 from classes.triggers import TriggerTypes
 from classes.feedback import FeedbackTimer
+
+
+def check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data):
+    keys = event.getKeys(keyList=config["Keys"])
+    _, mouse_press_times = mouse.getPressed(getTime=True)
+
+    if mouse_press_times[0] != 0.0:
+        keys.append("mouse_left")
+    elif mouse_press_times[1] != 0.0:
+        keys.append("mouse_middle")
+    elif mouse_press_times[2] != 0.0:
+        keys.append("mouse_right")
+
+    if keys:
+        reaction_time = clock.getTime()
+        if response_data == []:
+            trigger_type = TriggerTypes.REACTION
+        else:
+            trigger_type = TriggerTypes.SECOND_REACTION
+        trigger_handler.prepare_trigger(
+            trigger_type=trigger_type,
+            block_type=block["type"],
+            cue_name=trial["cue"].text,
+            target_name=trial["target"].name,
+            response=keys[0],
+        )
+        trigger_handler.send_trigger()
+        response = keys[0]
+        mouse.clickReset()
+        event.clearEvents()
+        logging.flush()  # TODO disable it after testing
+        return response, reaction_time
+    else:
+        return None
 
 
 def show(
@@ -36,9 +70,7 @@ def show(
         elif block["type"] in ["experiment", "training"]:
             block["trials"] = prepare_trials(block, stimulus)
         else:
-            raise Exception(
-                "{} is bad block type in config Experiment_blocks".format(block["type"])
-            )
+            raise Exception("{} is bad block type in config Experiment_blocks".format(block["type"]))
 
         if config["Show_feedback"]:
             # if we show cues, we need a separate threshold RT for each of them
@@ -48,8 +80,7 @@ def show(
             )
 
         for trial in block["trials"]:
-            reaction_time = None
-            response = None
+            response_data = []
 
             # ! show empty screen between trials
             empty_screen_between_trials = random.uniform(*config["Empty_screen_between_trials"])
@@ -79,9 +110,7 @@ def show(
                 win.flip()
 
                 # ! draw empty screen
-                empty_screen_after_cue_show_time = random.uniform(
-                    *config["Empty_screen_after_cue_show_time"]
-                )
+                empty_screen_after_cue_show_time = random.uniform(*config["Empty_screen_after_cue_show_time"])
                 clock.reset()
                 while clock.getTime() < empty_screen_after_cue_show_time:
                     data_saver.check_exit()
@@ -131,6 +160,9 @@ def show(
             win.flip()
             trigger_handler.send_trigger()
             while clock.getTime() < target_show_time:
+                res = check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data)
+                if res is not None:
+                    response_data.append(res)
                 data_saver.check_exit()
                 win.flip()
             trial["target"].setAutoDraw(False)
@@ -139,48 +171,31 @@ def show(
             # ! draw empty screen and await response
             empty_screen_show_time = random.uniform(*config["Response_time_window"])
             while clock.getTime() < target_show_time + empty_screen_show_time:
-                keys = event.getKeys(keyList=config["Keys"])
-                _, mouse_press_times = mouse.getPressed(getTime=True)
-
-                if mouse_press_times[0] != 0.0:
-                    keys.append("mouse_left")
-                elif mouse_press_times[1] != 0.0:
-                    keys.append("mouse_middle")
-                elif mouse_press_times[2] != 0.0:
-                    keys.append("mouse_right")
-
-                if keys:
-                    reaction_time = clock.getTime()
-                    # logging.data(f"mouse_press_times={mouse_press_times}")
-                    # logging.data(f"keys={keys}")
-
-                    trigger_handler.prepare_trigger(
-                        trigger_type=TriggerTypes.REACTION,
-                        block_type=block["type"],
-                        cue_name=trial["cue"].text,
-                        target_name=trial["target"].name,
-                        response=keys[0],
-                    )
-                    trigger_handler.send_trigger()
-                    response = keys[0]
-                    mouse.clickReset()
-                    event.clearEvents()
-                    logging.flush()
-                    break  # if we hot a response, break out of this stage
+                res = check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data)
+                if res is not None:
+                    response_data.append(res)
+                    break  # if we got a response, break out of this stage
                 data_saver.check_exit()
                 win.flip()
 
             if config["Use_whole_response_time_window"]:
+                # even if participant responded, wait out the response time window
                 while clock.getTime() < target_show_time + empty_screen_show_time:
+                    res = check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data)
+                    if res is not None:
+                        response_data.append(res)
                     data_saver.check_exit()
                     win.flip()
 
             # ! show empty screen after response
-            empty_screen_after_response_show_time = random.uniform(
-                *config["Empty_screen_after_response_show_time"]
-            )
-            core.wait(empty_screen_after_response_show_time)
-            data_saver.check_exit()
+            empty_screen_after_response_show_time = random.uniform(*config["Empty_screen_after_response_show_time"])
+            loop_start_time = clock.getTime()
+            while clock.getTime() < loop_start_time + empty_screen_after_response_show_time:
+                res = check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data)
+                if res is not None:
+                    response_data.append(res)
+                data_saver.check_exit()
+                win.flip()
 
             # check if reaction was correct
             if trial["target"].name in ["congruent_lll", "incongruent_rlr"]:
@@ -190,6 +205,7 @@ def show(
                 # right is correct
                 correct_key = config["Keys"][1]
 
+            response, reaction_time = response_data[0] if response_data != [] else (None, None)
             if response == correct_key:
                 reaction = "correct"
             else:
