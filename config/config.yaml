@@ -9,7 +9,6 @@ Text_color: "black"
 Text_size: 60
 Text_font: "Arial"
 
-
 # * flanker parameters
 Flanker_font: "DejaVu Sans Mono"   # FreeMono, Noto Sans Mono, DejaVu Sans Mono
 Flanker_size: 100

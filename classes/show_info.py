@@ -9,8 +9,7 @@ from classes.load_data import read_text_from_file
 def show_info(
     win,
     file_name,
-    text_size,
-    text_color,
+    config,
     screen_width,
     data_saver,
     insert="",
@@ -29,11 +28,11 @@ def show_info(
     hello_msg = visual.TextStim(
         win=win,
         antialias=True,
-        font=u"Arial",
+        font=config["Text_font"],
         text=hello_msg,
-        height=text_size,
+        height=config["Text_size"],
         wrapWidth=screen_width,
-        color=text_color,
+        color=config["Text_color"],
     )
     hello_msg.draw()
     win.flip()

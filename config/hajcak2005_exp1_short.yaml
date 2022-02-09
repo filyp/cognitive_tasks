@@ -1,34 +1,49 @@
-# EEG
+# * EEG
 Ophthalmic_procedure: False
 Send_EEG_trigg: False
 
-# view parameters
+# * view parameters
 Screen_color: "black"
 Text_color: "white"
-Text_size: 40
+Text_size: 60
 Fixation_size: 30
 Flanker_size: 100
-Font: "Noto Mono"
+Text_font: "Arial"
 
-# cue definition
+# * flanker parameters
+Flanker_font: "Noto Sans Mono"   # FreeMono, Noto Sans Mono, DejaVu Sans Mono
+Flanker_size: 100
+Orientation: "horizontal"
+Right_char: ">"
+Left_char: "<"
+Fixation_char: "+"
+Flanker_position: [0, 0] # this is needed to align arrows at the center of the screen
+
+# * cue definition
+Show_cues: True
 Cues: [5, 100]
-# Cues: null    # if left as null, no cues will be shown
 
+# * feedback  definition
+Show_feedback: False
 
-# times
-Cue_show_time: [2.000, 2.000]       # this has no effect of Cues is null
-Empty_screen_1_show_time: [0.100, 0.100]    # this has no effect of Cues is null
+# * times
+Empty_screen_between_trials: [0.0, 0.0]
+Cue_show_time: [2.000, 2.000]
+Empty_screen_after_cue_show_time: [0.100, 0.100]
 Fixation_show_time: [0.600, 0.800]
-# Flanker_show_time: [0.500, 0.500]   # this one is optional
 Target_show_time: [0.200, 0.200]
-Empty_screen_2_show_time: [1.700, 2.300]
+Response_time_window: [1.700, 2.300]
+Empty_screen_after_response_show_time: [0.0, 0.0]
 
-# reaction keys
+# if this is False, we will end response time windw immediately after response, and carry on
+# if True, we will wait until the whole window ends even after the response, like in Hajcak2005
+Use_whole_response_time_window: True
+
+# * reaction keys
 # first one is for left response, second one is for right response
 Keys: [mouse_left, mouse_right]
-# Keys: [lshift, rshift]
 
-# experiment structure
+# * experiment structure
 Experiment_blocks: [
     {type: break, file_name: instruction.txt},
     {type: training, number_of_trials: 8, ratio_of_congruent: 0.5, ratio_of_first_cue: 0.5},

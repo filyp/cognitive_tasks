@@ -61,8 +61,7 @@ def show(
             show_info(
                 win=win,
                 file_name=block["file_name"],
-                text_size=config["Text_size"],
-                text_color=config["Text_color"],
+                config=config,
                 screen_width=screen_res["width"],
                 data_saver=data_saver,
             )
