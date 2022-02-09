@@ -43,6 +43,7 @@ class DataSaver:
                 "target_show_time",
                 "empty_screen_after_response_show_time",
                 "feedback_show_time",
+                "feedback_type",
             ]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()

@@ -5,7 +5,7 @@ from psychopy import core, event, logging
 from classes.prepare_experiment import prepare_trials
 from classes.show_info import show_info
 from classes.triggers import TriggerTypes
-from classes.feedback import FeedbackTimer
+from classes.feedback import FeedbackTimerSteps, FeedbackTimerMovingMedian
 
 
 def check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data):
@@ -73,7 +73,8 @@ def show(
 
         if config["Show_feedback"]:
             # if we show cues, we need a separate threshold RT for each of them
-            feedback_timer = FeedbackTimer(
+            # feedback_timer = FeedbackTimerSteps(
+            feedback_timer = FeedbackTimerMovingMedian(
                 config["Feedback_initial_threshold_rt"],
                 timer_names=config["Cues"] if config["Show_cues"] else [""],
             )
@@ -218,6 +219,7 @@ def show(
                     timer_name=trial["cue"].text,
                 )
                 feedback_show_time = random.uniform(*config["Feedback_show_time"])
+                feedback_type = None
                 if reaction == "correct":
                     feedback_type, trigger_type = feedback_timer.get_feedback(
                         reaction_time=reaction_time,
@@ -260,6 +262,7 @@ def show(
                 target_show_time=target_show_time,
                 empty_screen_after_response_show_time=empty_screen_after_response_show_time,
                 feedback_show_time=feedback_show_time if config["Show_feedback"] else None,
+                feedback_type=feedback_type if config["Show_feedback"] else None,
             )
             # fmt: on
             data_saver.beh.append(behavioral_data)
