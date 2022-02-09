@@ -1,3 +1,4 @@
+from msilib.schema import Error
 import time
 from cmath import log
 
@@ -59,11 +60,12 @@ class TriggerHandler:
                 self.port_eeg.setData(self.trigger_no)
                 time.sleep(0.01)
                 self.port_eeg.setData(0x00)
-            except:
-                # TODO it should at least log the error
+            except Error as err:
+                logging.error(err)
                 pass
         # if self.port_nirs is not None:
         #     try:
         #         self.port_nirs.activate_line(self.trigger_no)
-        #     except:
+        #     except Error as err:
+        #         logging.error(err)
         #         pass
