@@ -49,7 +49,7 @@ class FeedbackTimerMovingMedian:
             self.RTs[name] = [initial_threshold_rt]
             self.thresholds[name] = initial_threshold_rt
         
-        self.percent_of_positive_feedback = 30
+        self.percent_of_positive_feedback = 50
         self.num_of_trials = 20
 
     def update_threshold(self, target_name, reaction, timer_name):

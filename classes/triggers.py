@@ -1,6 +1,4 @@
-from msilib.schema import Error
 import time
-from cmath import log
 
 from psychopy import logging
 
@@ -60,12 +58,12 @@ class TriggerHandler:
                 self.port_eeg.setData(self.trigger_no)
                 time.sleep(0.01)
                 self.port_eeg.setData(0x00)
-            except Error as err:
-                logging.error(err)
+            except Exception as ex:
+                logging.error(ex)
                 pass
         # if self.port_nirs is not None:
         #     try:
         #         self.port_nirs.activate_line(self.trigger_no)
-        #     except Error as err:
-        #         logging.error(err)
+        #     except Exception as ex:
+        #         logging.error(ex)
         #         pass
