@@ -105,6 +105,8 @@ def load_stimuli(win, config, screen_res):
 
     # ! create feedback
     if config["Show_feedback"]:
+        pos_x, pos_y = config["Feedback_position"]
+        abs_feedback_position = (pos_x * config["Feedback_size"], pos_y * config["Feedback_size"])
         stimuli["feedback_good"] = visual.TextStim(
             win,
             color=config["Text_color"],
@@ -112,6 +114,7 @@ def load_stimuli(win, config, screen_res):
             font=config["Feedback_font"],
             height=config["Feedback_size"],
             name="feedback_good",
+            pos=abs_feedback_position,
         )
         stimuli["feedback_bad"] = visual.TextStim(
             win,
@@ -120,6 +123,7 @@ def load_stimuli(win, config, screen_res):
             font=config["Feedback_font"],
             height=config["Feedback_size"],
             name="feedback_bad",
+            pos=abs_feedback_position,
         )
 
     return stimuli

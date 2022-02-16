@@ -35,6 +35,7 @@ Feedback_bad: "☹"
 Feedback_initial_threshold_rt: 0.420
 Feedback_font: "DejaVu Sans Mono"
 Feedback_size: 200
+Feedback_position: [0, 0.04]
 
 # * times
 Empty_screen_between_trials: [0.600, 0.800]
