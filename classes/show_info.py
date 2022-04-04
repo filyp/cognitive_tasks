@@ -50,5 +50,5 @@ def show_info(
     trigger_handler.prepare_trigger(
         trigger_type=TriggerTypes.BLOCK_START,
     )
-    win.flip()
     trigger_handler.send_trigger()
+    win.flip()
