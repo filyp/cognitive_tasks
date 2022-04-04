@@ -14,11 +14,11 @@ from classes.experiment_info import display_eeg_info, get_participant_info
 
 # from classes.prepare_experiment import prepare_trials, create_stops_times_dict, randomize_buttons
 from classes.load_data import load_config, load_stimuli
-from classes.ophthalmic_procedure import ophthalmic_procedure
 from classes.save_data import DataSaver
 from classes.screen import create_win
-from classes.show import show
-from classes.triggers import TriggerHandler, create_eeg_port
+
+# from classes.procedures.ophthalmic_procedure import ophthalmic_procedure
+from classes.procedures.flanker_task.flanker_task import flanker_task
 
 __author__ = ["ociepkam", "filyp"]
 
@@ -35,13 +35,6 @@ def run():
     # participant_info = "mock_info"  # TODO reenable after testing
 
     data_saver = DataSaver(participant_info, experiment_name, beh=[], triggers_list=[])
-
-    # EEG triggers
-    if config["Send_EEG_trigg"]:
-        port_eeg = create_eeg_port()
-    else:
-        port_eeg = None
-    trigger_handler = TriggerHandler(port_eeg, data_saver=data_saver)
 
     # screen
     win, screen_res, frames_per_sec = create_win(screen_color=config["Screen_color"])
@@ -65,14 +58,18 @@ def run():
     # load stimulus
     stimulus = load_stimuli(win=win, config=config, screen_res=screen_res)
 
+    # choose which procedure to run
+    procedure = {
+        "Flanker task": flanker_task,
+    }[config["Procedure"]]
+
     # Experiment
-    show(
+    procedure(
         win=win,
         screen_res=screen_res,
         stimulus=stimulus,
         config=config,
         data_saver=data_saver,
-        trigger_handler=trigger_handler,
     )
 
     # Save data

@@ -24,27 +24,9 @@ class DataSaver:
         os.makedirs(directory, exist_ok=True)
         filename = "beh_{}.csv".format(self.participant_info)
         path = os.path.join(directory, filename)
+        # assumes that the first row already contains all the fields (there are no fields left out)
+        fieldnames = list(self.beh[0].keys())
         with open(path, "w") as csvfile:
-            fieldnames = [
-                "block_type",
-                "trial_type",
-                "cue_name",
-                "target_name",
-                "response",
-                "rt",
-                "reaction",
-                "threshold_rt",
-                "threshold_rt",
-                "empty_screen_between_trials",
-                "cue_show_time",
-                "empty_screen_after_cue_show_time",
-                "fixation_show_time",
-                "flanker_show_time",
-                "target_show_time",
-                "empty_screen_after_response_show_time",
-                "feedback_show_time",
-                "feedback_type",
-            ]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             for row in self.beh:

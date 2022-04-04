@@ -1,9 +1,12 @@
 import os
-import time
 
 from psychopy import event, logging, visual
 
 from classes.load_data import read_text_from_file
+
+
+class TriggerTypes:
+    BLOCK_START = "BLOCK_ST"
 
 
 def show_info(
@@ -12,6 +15,7 @@ def show_info(
     config,
     screen_width,
     data_saver,
+    trigger_handler,
     insert="",
 ):
     """
@@ -42,4 +46,9 @@ def show_info(
         data_saver.save_triggers()
         logging.critical("Experiment finished by user! {} pressed.".format(key))
         exit(1)
+
+    trigger_handler.prepare_trigger(
+        trigger_type=TriggerTypes.BLOCK_START,
+    )
     win.flip()
+    trigger_handler.send_trigger()

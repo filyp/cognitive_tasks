@@ -54,7 +54,7 @@ def ophthalmic_procedure(
 
     ophthalmic_info = visual.TextStim(
         win=win,
-        font=u"Arial",
+        font="Arial",
         text=ophthalmic_info,
         height=text_size,
         wrapWidth=screen_res["width"],
@@ -62,7 +62,7 @@ def ophthalmic_procedure(
     )
     corners_info = visual.TextStim(
         win=win,
-        font=u"Arial",
+        font="Arial",
         text=corners_info,
         height=text_size,
         wrapWidth=screen_res["width"],
@@ -81,7 +81,7 @@ def ophthalmic_procedure(
         ]
     ]
     crosses = [
-        visual.TextStim(win=win, text=u"+", height=3 * text_size, color=text_color, pos=pos)
+        visual.TextStim(win=win, text="+", height=3 * text_size, color=text_color, pos=pos)
         for pos in crosses
     ]
 

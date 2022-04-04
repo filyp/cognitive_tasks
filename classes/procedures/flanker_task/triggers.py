@@ -12,6 +12,7 @@ class TriggerTypes:
     FEEDB_GOOD = "F_GOOD__"
     FEEDB_BAD = "F_BAD___"
     SECOND_REACTION = "SECOND_R"
+    BLOCK_START = "BLOCK_ST"
 
 
 def create_eeg_port():
@@ -42,7 +43,9 @@ class TriggerHandler:
         self.data_saver = data_saver
         self.trigger_no = 0
 
-    def prepare_trigger(self, trigger_type, block_type, cue_name, target_name, response=None):
+    def prepare_trigger(
+        self, trigger_type, block_type="--", cue_name="-", target_name="---", response=None
+    ):
         self.trigger_no += 1
         if self.trigger_no == 9:
             self.trigger_no = 1

@@ -1,11 +1,12 @@
 import random
+from collections import OrderedDict
 
 from psychopy import core, event, logging
 
 from classes.prepare_experiment import prepare_trials
 from classes.show_info import show_info
-from classes.triggers import TriggerTypes
-from classes.feedback import FeedbackTimerSteps, FeedbackTimerMovingMedian
+from classes.procedures.flanker_task.triggers import TriggerHandler, TriggerTypes, create_eeg_port
+from classes.procedures.flanker_task.feedback import FeedbackTimerSteps, FeedbackTimerMovingMedian
 
 
 def check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data):
@@ -42,16 +43,22 @@ def check_response(config, event, mouse, clock, trigger_handler, block, trial, r
         return None
 
 
-def show(
+def flanker_task(
     win,
     screen_res,
     stimulus,
     config,
     data_saver,
-    trigger_handler,
 ):
     clock = core.Clock()
     mouse = event.Mouse(win=win, visible=False)
+
+    # EEG triggers
+    if config["Send_EEG_trigg"]:
+        port_eeg = create_eeg_port()
+    else:
+        port_eeg = None
+    trigger_handler = TriggerHandler(port_eeg, data_saver=data_saver)
 
     for block in config["Experiment_blocks"]:
         logging.data(f"Entering block: {block}")
@@ -64,12 +71,15 @@ def show(
                 config=config,
                 screen_width=screen_res["width"],
                 data_saver=data_saver,
+                trigger_handler=trigger_handler,
             )
             continue
         elif block["type"] in ["experiment", "training"]:
             block["trials"] = prepare_trials(block, stimulus)
         else:
-            raise Exception("{} is bad block type in config Experiment_blocks".format(block["type"]))
+            raise Exception(
+                "{} is bad block type in config Experiment_blocks".format(block["type"])
+            )
 
         if config["Show_feedback"]:
             # if we show cues, we need a separate threshold RT for each of them
@@ -110,7 +120,9 @@ def show(
                 win.flip()
 
                 # ! draw empty screen
-                empty_screen_after_cue_show_time = random.uniform(*config["Empty_screen_after_cue_show_time"])
+                empty_screen_after_cue_show_time = random.uniform(
+                    *config["Empty_screen_after_cue_show_time"]
+                )
                 clock.reset()
                 while clock.getTime() < empty_screen_after_cue_show_time:
                     data_saver.check_exit()
@@ -160,7 +172,9 @@ def show(
             win.flip()
             trigger_handler.send_trigger()
             while clock.getTime() < target_show_time:
-                res = check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data)
+                res = check_response(
+                    config, event, mouse, clock, trigger_handler, block, trial, response_data
+                )
                 if res is not None:
                     response_data.append(res)
                 data_saver.check_exit()
@@ -171,7 +185,9 @@ def show(
             # ! draw empty screen and await response
             empty_screen_show_time = random.uniform(*config["Response_time_window"])
             while clock.getTime() < target_show_time + empty_screen_show_time:
-                res = check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data)
+                res = check_response(
+                    config, event, mouse, clock, trigger_handler, block, trial, response_data
+                )
                 if res is not None:
                     response_data.append(res)
                     break  # if we got a response, break out of this stage
@@ -181,17 +197,23 @@ def show(
             if config["Use_whole_response_time_window"]:
                 # even if participant responded, wait out the response time window
                 while clock.getTime() < target_show_time + empty_screen_show_time:
-                    res = check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data)
+                    res = check_response(
+                        config, event, mouse, clock, trigger_handler, block, trial, response_data
+                    )
                     if res is not None:
                         response_data.append(res)
                     data_saver.check_exit()
                     win.flip()
 
             # ! show empty screen after response
-            empty_screen_after_response_show_time = random.uniform(*config["Empty_screen_after_response_show_time"])
+            empty_screen_after_response_show_time = random.uniform(
+                *config["Empty_screen_after_response_show_time"]
+            )
             loop_start_time = clock.getTime()
             while clock.getTime() < loop_start_time + empty_screen_after_response_show_time:
-                res = check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data)
+                res = check_response(
+                    config, event, mouse, clock, trigger_handler, block, trial, response_data
+                )
                 if res is not None:
                     response_data.append(res)
                 data_saver.check_exit()
@@ -245,7 +267,7 @@ def show(
             # save beh
             # fmt: off
             cue_name = trial["cue"].text
-            behavioral_data = dict(
+            behavioral_data = OrderedDict(
                 block_type=block["type"],
                 trial_type=trial["type"],
                 cue_name=cue_name,

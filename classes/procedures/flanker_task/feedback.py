@@ -1,7 +1,7 @@
 import numpy as np
 from psychopy import logging
 
-from classes.triggers import TriggerTypes
+from classes.procedures.flanker_task.triggers import TriggerTypes
 
 
 class FeedbackTimerSteps:
@@ -13,6 +13,7 @@ class FeedbackTimerSteps:
     Note that people often ignore positive feedback, focusing on accuracy,
     so the thresholds can get large.
     """
+
     def __init__(self, initial_threshold_rt, timer_names):
         self.thresholds = dict()
         for name in timer_names:
@@ -48,7 +49,7 @@ class FeedbackTimerMovingMedian:
             name = str(name)
             self.RTs[name] = [initial_threshold_rt]
             self.thresholds[name] = initial_threshold_rt
-        
+
         self.percent_of_positive_feedback = 50
         self.num_of_trials = 20
 
@@ -59,7 +60,7 @@ class FeedbackTimerMovingMedian:
 
     def get_feedback(self, reaction_time, timer_name):
         # use only RTs for this cue
-        latest_RTs = self.RTs[timer_name][-self.num_of_trials:]
+        latest_RTs = self.RTs[timer_name][-self.num_of_trials :]
 
         # update RTs
         self.RTs[timer_name].append(reaction_time)
