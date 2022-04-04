@@ -6,7 +6,7 @@ from classes.load_data import read_text_from_file
 
 
 class TriggerTypes:
-    BLOCK_START = "BLOCK_ST"
+    BLOCK_START = "BLOCK_START"
 
 
 def show_info(
