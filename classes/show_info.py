@@ -47,8 +47,6 @@ def show_info(
         logging.critical("Experiment finished by user! {} pressed.".format(key))
         exit(1)
 
-    trigger_handler.prepare_trigger(
-        trigger_type=TriggerTypes.BLOCK_START,
-    )
+    trigger_handler.prepare_trigger(trigger_type=TriggerTypes.BLOCK_START)
     trigger_handler.send_trigger()
     win.flip()
