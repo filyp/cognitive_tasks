@@ -5,17 +5,12 @@ from psychopy import event, logging, visual
 from classes.load_data import read_text_from_file
 
 
-class TriggerTypes:
-    BLOCK_START = "BLOCK_START"
-
-
 def show_info(
     win,
     file_name,
     config,
     screen_width,
     data_saver,
-    trigger_handler,
     insert="",
 ):
     """
@@ -47,6 +42,4 @@ def show_info(
         logging.critical("Experiment finished by user! {} pressed.".format(key))
         exit(1)
 
-    trigger_handler.prepare_trigger(trigger_type=TriggerTypes.BLOCK_START)
-    trigger_handler.send_trigger()
     win.flip()

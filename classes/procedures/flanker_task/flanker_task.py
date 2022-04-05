@@ -61,6 +61,11 @@ def flanker_task(
     trigger_handler = TriggerHandler(port_eeg, data_saver=data_saver)
 
     for block in config["Experiment_blocks"]:
+        trigger_handler.prepare_trigger(
+            trigger_type=TriggerTypes.BLOCK_START,
+            block_type=block["type"],
+        )
+        trigger_handler.send_trigger()
         logging.data(f"Entering block: {block}")
         logging.flush()
 
@@ -71,7 +76,6 @@ def flanker_task(
                 config=config,
                 screen_width=screen_res["width"],
                 data_saver=data_saver,
-                trigger_handler=trigger_handler,
             )
             continue
         elif block["type"] in ["experiment", "training"]:
