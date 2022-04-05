@@ -2,7 +2,7 @@ Procedure: "Flanker task"
 
 # * EEG
 Ophthalmic_procedure: False     # this is currently not supported
-Send_EEG_trigg: False
+Send_EEG_trigg: True
 
 
 # * view parameters
@@ -58,13 +58,19 @@ Use_whole_response_time_window: False
 # * reaction keys
 # first one is for left response, second one is for right response
 # Keys: [mouse_left, mouse_right]
-Keys: [lshift, rshift]
+# Keys: [lshift, rshift]
+Keys: [lctrl, num_delete]
+
 
 
 # * experiment structure
 Experiment_blocks: [
-    # {type: break, file_name: instruction.txt},
+    {type: break, file_name: instruction.txt},
     {type: training, number_of_trials: 20, ratio_of_congruent: 0.8, ratio_of_first_cue: 0.5},
     {type: break, file_name: end_training.txt},
-    {type: experiment, number_of_trials: 60, ratio_of_congruent: 0.8, ratio_of_first_cue: 0.5},
+    {type: experiment, number_of_trials: 100, ratio_of_congruent: 0.8, ratio_of_first_cue: 0.5},
+    {type: break, file_name: break1.txt},
+    {type: experiment, number_of_trials: 100, ratio_of_congruent: 0.8, ratio_of_first_cue: 0.5},
+    {type: break, file_name: break2.txt},
+    {type: experiment, number_of_trials: 100, ratio_of_congruent: 0.8, ratio_of_first_cue: 0.5},
     {type: break, file_name: end.txt}]
