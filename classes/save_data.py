@@ -16,8 +16,9 @@ class DataSaver:
         os.makedirs(directory, exist_ok=True)
         filename = "triggerMap_{}.txt".format(self.participant_info)
         path = os.path.join(directory, filename)
-        with open(path, "w") as map_file:
-            map_file.write("\n".join(self.triggers_list))
+        with open(path, "wb") as map_file:
+            text = "\n".join(self.triggers_list)
+            map_file.write(bytes(text, "UTF-8"))
 
     def save_beh(self):
         directory = os.path.join("results", self.experiment_name, "behavioral_data")
