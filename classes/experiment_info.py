@@ -11,7 +11,7 @@ def get_participant_info():
     now = datetime.datetime.now()
     date = now.strftime("%Y-%m-%d %H:%M")
 
-    my_dlg = gui.Dlg(title="Go No-Go 2")
+    my_dlg = gui.Dlg(title="Participant info")
     my_dlg.addText("Informacje:")
     my_dlg.addField("ID:")
     my_dlg.addField("Wiek:")
@@ -37,7 +37,7 @@ def display_eeg_info():
     Dialog info shows at the beginning of the experiment.
     """
 
-    my_dlg = gui.Dlg(title="Flanker task")
+    my_dlg = gui.Dlg(title="Reminder")
     my_dlg.addText("\n\tUruchom ActiView zanim zaczniesz zadanie.")
     my_dlg.addText("")
 

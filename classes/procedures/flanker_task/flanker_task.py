@@ -3,10 +3,11 @@ from collections import OrderedDict
 
 from psychopy import core, event, logging
 
-from classes.prepare_experiment import prepare_trials
 from classes.show_info import show_info
 from classes.procedures.flanker_task.triggers import TriggerHandler, TriggerTypes, create_eeg_port
+from classes.procedures.flanker_task.prepare_experiment import prepare_trials
 from classes.procedures.flanker_task.feedback import FeedbackTimerSteps, FeedbackTimerMovingMedian
+from classes.procedures.flanker_task.load_data import load_stimuli
 
 
 def check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data):
@@ -46,12 +47,14 @@ def check_response(config, event, mouse, clock, trigger_handler, block, trial, r
 def flanker_task(
     win,
     screen_res,
-    stimulus,
     config,
     data_saver,
 ):
     clock = core.Clock()
     mouse = event.Mouse(win=win, visible=False)
+
+    # load stimulus
+    stimulus = load_stimuli(win=win, config=config, screen_res=screen_res)
 
     # EEG triggers
     if config["Send_EEG_trigg"]:

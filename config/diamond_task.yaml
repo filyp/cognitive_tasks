@@ -1,0 +1,76 @@
+Procedure: "Diamond task"
+
+# * EEG
+Ophthalmic_procedure: False     # this is currently not supported
+Send_EEG_trigg: False
+
+
+# * view parameters
+Screen_color: -0.3
+Text_color: "black"
+Text_size: 60
+Text_font: "Arial"
+
+# * flanker parameters
+Flanker_font: "DejaVu Sans Mono"   # FreeMono, Noto Sans Mono, DejaVu Sans Mono
+Flanker_size: 100
+# Orientation: "horizontal"
+# Right_char: ">"
+# Left_char: "<"
+# Fixation_char: "+"
+Orientation: "vertical"    # note that for vertical, arrows are rotated 90 degrees clockwise
+Right_char: "↑"
+Left_char: "↓"
+Fixation_char: "↕"
+Flanker_position: [0.14, 0] # this is needed to align arrows at the center of the screen
+
+# * cue definition
+Show_cues: False    # if False, the rest of this block has no effect
+# Cues: [5, 100]
+
+# * feedback  definition
+Show_feedback: True    # if False, the rest of this block has no effect
+# Feedback_good: "OK"
+# Feedback_bad: "respond faster"
+Feedback_good: "☺"
+Feedback_bad: "☹"
+Feedback_initial_threshold_rt: 0.420
+Feedback_font: "DejaVu Sans Mono"
+Feedback_size: 200
+Feedback_position: [0, 0.04]
+
+# * times
+Empty_screen_between_trials: [0.600, 0.800]
+# Cue_show_time: [1.000, 1.000]       # this has no effect if Show_cues is False
+# Empty_screen_after_cue_show_time: [0.100, 0.100]    # this has no effect if Show_cues is False
+Fixation_show_time: [0.600, 0.800]
+Flanker_show_time: [0.080, 0.080]   # this one is optional
+Target_show_time: [0.030, 0.030]
+Response_time_window: [0.600, 0.600]
+Empty_screen_after_response_show_time: [1.000, 1.000]
+Feedback_show_time: [0.800, 0.800]  # this one is needed only if Show_feedback is True
+
+# if this is False, we will end response time windw immediately after response, and carry on
+# if True, we will wait until the whole window ends even after the response, like in Hajcak2005
+Use_whole_response_time_window: False
+
+
+# * reaction keys
+# first one is for left response, second one is for right response
+# Keys: [mouse_left, mouse_right]
+# Keys: [lshift, rshift]
+Keys: [lctrl, num_delete]
+
+
+
+# * experiment structure
+Experiment_blocks: [
+    {type: break, file_name: instruction.txt},
+    {type: training, number_of_trials: 20, ratio_of_congruent: 0.8, ratio_of_first_cue: 0.5},
+    {type: break, file_name: end_training.txt},
+    {type: experiment, number_of_trials: 100, ratio_of_congruent: 0.8, ratio_of_first_cue: 0.5},
+    {type: break, file_name: break1.txt},
+    {type: experiment, number_of_trials: 100, ratio_of_congruent: 0.8, ratio_of_first_cue: 0.5},
+    {type: break, file_name: break2.txt},
+    {type: experiment, number_of_trials: 100, ratio_of_congruent: 0.8, ratio_of_first_cue: 0.5},
+    {type: break, file_name: end.txt}]

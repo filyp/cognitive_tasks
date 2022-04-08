@@ -1,20 +1,7 @@
-import codecs
-import os
-
-import yaml
 from psychopy import visual
 
 possible_images_format = ("bmp", "jpg", "png", "gif")
 possible_audio_format = ("mp3", "au", "mp2", "wav", "wma", "ogg")
-
-
-def load_config(config_path):
-    try:
-        with open(config_path) as yaml_file:
-            doc = yaml.safe_load(yaml_file)
-        return doc
-    except:
-        raise Exception("Can't load config file")
 
 
 def load_stimuli(win, config, screen_res):
@@ -127,25 +114,3 @@ def load_stimuli(win, config, screen_res):
         )
 
     return stimuli
-
-
-def read_text_from_file(file_name, insert=""):
-    """
-    Method that read message from text file, and optionally add some
-    dynamically generated info.
-    :param file_name: Name of file to read
-    :param insert: dynamically generated info
-    :return: message
-    """
-    if not isinstance(file_name, str):
-        raise TypeError("file_name must be a string")
-    msg = list()
-    with codecs.open(file_name, encoding="utf-8", mode="r") as data_file:
-        for line in data_file:
-            if not line.startswith("#"):  # if not commented line
-                if line.startswith("<--insert-->"):
-                    if insert:
-                        msg.append(insert)
-                else:
-                    msg.append(line)
-    return "".join(msg)

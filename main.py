@@ -6,21 +6,30 @@ import os
 import random
 import sys
 
+import yaml
 from psychopy import logging
 
 logging.console.setLevel(logging.DATA)
 
 from classes.experiment_info import display_eeg_info, get_participant_info
 
-# from classes.prepare_experiment import prepare_trials, create_stops_times_dict, randomize_buttons
-from classes.load_data import load_config, load_stimuli
 from classes.save_data import DataSaver
 from classes.screen import create_win
 
 # from classes.procedures.ophthalmic_procedure import ophthalmic_procedure
 from classes.procedures.flanker_task.flanker_task import flanker_task
+from classes.procedures.diamond_task.diamond_task import diamond_task
 
 __author__ = ["ociepkam", "filyp"]
+
+
+def load_config(config_path):
+    try:
+        with open(config_path) as yaml_file:
+            doc = yaml.safe_load(yaml_file)
+        return doc
+    except:
+        raise Exception("Can't load config file")
 
 
 def run():
@@ -55,19 +64,16 @@ def run():
     #         data_saver=data_saver,
     #     )
 
-    # load stimulus
-    stimulus = load_stimuli(win=win, config=config, screen_res=screen_res)
-
     # choose which procedure to run
     procedure = {
         "Flanker task": flanker_task,
+        "Diamond task": diamond_task,
     }[config["Procedure"]]
 
     # Experiment
     procedure(
         win=win,
         screen_res=screen_res,
-        stimulus=stimulus,
         config=config,
         data_saver=data_saver,
     )
