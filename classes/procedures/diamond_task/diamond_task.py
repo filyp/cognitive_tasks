@@ -1,12 +1,20 @@
 import random
 from collections import OrderedDict
 
-from psychopy import core, event, logging
+import numpy as np
+from psychopy import core, event, logging, visual
 
 from classes.show_info import show_info
-from classes.procedures.diamond_task.triggers import TriggerHandler, TriggerTypes, create_eeg_port
+from classes.procedures.diamond_task.triggers import (
+    TriggerHandler,
+    TriggerTypes,
+    create_eeg_port,
+)
 from classes.procedures.diamond_task.prepare_experiment import prepare_trials
 from classes.procedures.diamond_task.load_data import load_stimuli
+
+
+trait_names = ["rozmiar", "przejrzystość", "kształt", "kolor", "blask", "proporcje"]
 
 
 def diamond_task(
@@ -15,8 +23,46 @@ def diamond_task(
     config,
     data_saver,
 ):
-    clock = core.Clock()
     mouse = event.Mouse(win=win, visible=False)
+    total_decision_clock = core.Clock()
+    cue_decision_clock = core.Clock()
+    slider_params = dict(
+        win=win,
+        size=(screen_res["width"] * 0.3, screen_res["height"] * 0.03),
+        ticks=[0, 100],
+        borderColor=config["Text_color"],
+    )
+    slider_arousal = visual.Slider(name="arousal", **slider_params)
+    slider_valence = visual.Slider(name="valence", **slider_params)
+    slider_confidence = visual.Slider(name="confidence", **slider_params)
+
+    slider_button = visual.Rect(
+        win,
+        size=(screen_res["width"] * 0.1, screen_res["height"] * 0.05),
+        pos=(0, -screen_res["height"] * 0.1),
+        lineColor=config["Text_color"],
+        lineWidth=7,
+        name="slider_button",
+    )
+    slider_button_text = visual.TextStim(
+        win,
+        text="WYBIERZ",
+        color=config["Text_color"],
+        font=config["Text_font"],
+        height=screen_res["height"] * 0.03,
+        pos=(0, -screen_res["height"] * 0.1),
+        name="slider_button_text",
+    )
+    top_text = visual.TextStim(
+        win,
+        text="",
+        pos=(0, screen_res["height"] * 0.2),
+        color=config["Text_color"],
+        font=config["Text_font"],
+        height=config["Text_size"],
+        name="top_text",
+        wrapWidth=screen_res["width"],
+    )
 
     # load stimulus
     stimulus = load_stimuli(win=win, config=config, screen_res=screen_res)
@@ -54,49 +100,197 @@ def diamond_task(
             )
 
         for trial in block["trials"]:
-            response_data = []
-
-            # # ! show empty screen between trials
-            # empty_screen_between_trials = random.uniform(*config["Empty_screen_between_trials"])
-            # win.flip()
-            # core.wait(empty_screen_between_trials)
-            # data_saver.check_exit()
-
-
-
-
-
-
-
-
-
-
-
-
-
-            # save beh
-            # fmt: off
-            cue_name = trial["cue"].text
             behavioral_data = OrderedDict(
                 block_type=block["type"],
-                trial_type=trial["type"],
-                cue_name=cue_name,
-                target_name=trial["target"].name,
-                response=response,
-                rt=reaction_time,
-                reaction=reaction,
-                threshold_rt=feedback_timer.thresholds[cue_name] if config["Show_feedback"] else None,
-                empty_screen_between_trials=empty_screen_between_trials,
-                cue_show_time=cue_show_time if config["Show_cues"] else None,
-                empty_screen_after_cue_show_time=empty_screen_after_cue_show_time if config["Show_cues"] else None,
-                fixation_show_time=fixation_show_time,
-                flanker_show_time=flanker_show_time if "Flanker_show_time" in config else None,
-                target_show_time=target_show_time,
-                empty_screen_after_response_show_time=empty_screen_after_response_show_time,
-                feedback_show_time=feedback_show_time if config["Show_feedback"] else None,
-                feedback_type=feedback_type if config["Show_feedback"] else None,
+                choice=None,
+                choice_correct=None,
+                arousal=None,
+                valence=None,
+                confidence=None,
+                total_decision_time=None,
+                cues_decision_time=[],
+                number_of_cues=None,
             )
-            # fmt: on
+
+            # ! show empty screen between trials
+            min_time, max_time, step = config["Empty_screen_between_trials"]
+            possible_times = np.arange(min_time, max_time + step, step)
+            empty_screen_between_trials = random.choice(possible_times)
+            win.flip()
+            core.wait(empty_screen_between_trials)
+            data_saver.check_exit()
+
+            # ! show fixation
+            fixation_show_time = random.uniform(*config["Fixation_show_time"])
+            stimulus["fixation"].setAutoDraw(True)
+            win.flip()
+            core.wait(fixation_show_time)
+            stimulus["fixation"].setAutoDraw(False)
+            data_saver.check_exit()
+
+            if config["Show_photo"]:
+                # ! show photo
+                # ...
+                pass
+
+            if config["Rate_arousal"]:
+                # ! rate arousal
+                slider_arousal.reset()
+                slider_button.setAutoDraw(True)
+                slider_button_text.setAutoDraw(True)
+                top_text.setAutoDraw(True)
+                top_text.text = "Pobudzenie"
+                win.flip()
+                while not (slider_arousal.getRating() and mouse.isPressedIn(slider_button)):
+                    slider_arousal.draw()
+                    win.flip()
+                    data_saver.check_exit()
+                slider_button.setAutoDraw(False)
+                slider_button_text.setAutoDraw(False)
+                top_text.setAutoDraw(False)
+                behavioral_data["arousal"] = slider_arousal.getRating()
+
+            if config["Rate_valence"]:
+                # ! rate valence
+                slider_valence.reset()
+                slider_button.setAutoDraw(True)
+                slider_button_text.setAutoDraw(True)
+                top_text.setAutoDraw(True)
+                top_text.text = "Nastrój"
+                win.flip()
+                while not (slider_valence.getRating() and mouse.isPressedIn(slider_button)):
+                    slider_valence.draw()
+                    win.flip()
+                    data_saver.check_exit()
+                slider_button.setAutoDraw(False)
+                slider_button_text.setAutoDraw(False)
+                top_text.setAutoDraw(False)
+                win.flip()
+                behavioral_data["valence"] = slider_valence.getRating()
+
+            # ! decision
+            total_decision_clock.reset()
+            cue_decision_clock.reset()
+            for trait_name, info_pair in zip(trait_names, trial["diamond_data"]):
+                # ! choice prompt
+                stimulus["right_arrow"].setAutoDraw(True)
+                stimulus["left_arrow"].setAutoDraw(True)
+                stimulus["down_arrow"].setAutoDraw(True)
+
+                stimulus["left_square"].setAutoDraw(False)
+                stimulus["right_square"].setAutoDraw(False)
+                stimulus["middle_text"].setAutoDraw(False)
+                stimulus["left_text"].setAutoDraw(False)
+                stimulus["right_text"].setAutoDraw(False)
+
+                key_list = ["down", "left", "right"]
+                if trait_name == trait_names[0]:
+                    stimulus["left_square"].setAutoDraw(True)
+                    stimulus["right_square"].setAutoDraw(True)
+                    stimulus["middle_text"].setAutoDraw(True)
+                    stimulus["left_text"].setAutoDraw(True)
+                    stimulus["right_text"].setAutoDraw(True)
+                    stimulus["middle_text"].text = ""
+                    stimulus["left_text"].text = "A"
+                    stimulus["right_text"].text = "B"
+                elif trait_name == trait_names[-1]:
+                    stimulus["down_arrow"].setAutoDraw(False)
+                    key_list = ["left", "right"]
+                win.flip()
+
+                # ! wait for response
+                event.clearEvents()
+                while True:
+                    keys = event.getKeys(keyList=key_list)
+                    if keys:
+                        behavioral_data["cues_decision_time"].append(cue_decision_clock.getTime())
+                        break
+                    data_saver.check_exit()
+                    win.flip()
+                if "down" in keys:
+                    pass
+                elif "left" in keys:
+                    behavioral_data["choice"] = "A"
+                    break
+                elif "right" in keys:
+                    behavioral_data["choice"] = "B"
+                    break
+
+                # ! show diamond info
+                stimulus["right_arrow"].setAutoDraw(False)
+                stimulus["left_arrow"].setAutoDraw(False)
+                stimulus["down_arrow"].setAutoDraw(False)
+                stimulus["left_square"].setAutoDraw(True)
+                stimulus["right_square"].setAutoDraw(True)
+                stimulus["middle_text"].setAutoDraw(True)
+                stimulus["left_text"].setAutoDraw(True)
+                stimulus["right_text"].setAutoDraw(True)
+                stimulus["middle_text"].text = trait_name
+                stimulus["left_text"].text = info_pair[0]
+                stimulus["right_text"].text = info_pair[1]
+                win.flip()
+                cue_decision_clock.reset()
+                info_show_time = random.uniform(*config["Diamond_info_show_time"])
+                core.wait(info_show_time)
+                data_saver.check_exit()
+            behavioral_data["total_decision_time"] = total_decision_clock.getTime()
+            behavioral_data["number_of_cues"] = len(behavioral_data["cues_decision_time"])
+
+            # ! clear
+            stimulus["right_arrow"].setAutoDraw(False)
+            stimulus["left_arrow"].setAutoDraw(False)
+            stimulus["down_arrow"].setAutoDraw(False)
+            stimulus["left_square"].setAutoDraw(False)
+            stimulus["right_square"].setAutoDraw(False)
+            stimulus["middle_text"].setAutoDraw(False)
+            stimulus["left_text"].setAutoDraw(False)
+            stimulus["right_text"].setAutoDraw(False)
+            win.flip()
+
+            # ! rate confidence
+            slider_confidence.reset()
+            slider_button.setAutoDraw(True)
+            slider_button_text.setAutoDraw(True)
+            top_text.setAutoDraw(True)
+            top_text.text = "Pewność"
+            win.flip()
+            while not (slider_confidence.getRating() and mouse.isPressedIn(slider_button)):
+                slider_confidence.draw()
+                win.flip()
+                data_saver.check_exit()
+            slider_button.setAutoDraw(False)
+            slider_button_text.setAutoDraw(False)
+            top_text.setAutoDraw(False)
+            win.flip()
+            behavioral_data["confidence"] = slider_confidence.getRating()
+
+            # check if choice is correct
+            if behavioral_data["choice"] == trial["correct"]:
+                behavioral_data["choice_correct"] = True
+            else:
+                behavioral_data["choice_correct"] = False
+
+            if config["Show_feedback"]:
+                # ! give feedback
+                # ...
+                pass
+
+            # ! save behavioral data
+            # behavioral_data = OrderedDict(
+            #     block_type=block["type"],
+            #     trial_type=trial["type"],
+            #     cue_name=cue_name,
+            #     target_name=trial["target"].name,
+            #     response=response,
+            #     rt=reaction_time,
+            #     reaction=reaction,
+            #     threshold_rt=feedback_timer.thresholds[cue_name] if config["Show_feedback"] else None,
+            #     empty_screen_between_trials=empty_screen_between_trials,
+            #     cue_show_time=cue_show_time if config["Show_cues"] else None,
+            #     empty_screen_after_cue_show_time=empty_screen_after_cue_show_time if config["Show_cues"] else None,
+            #     fixation_show_time=fixation_show_time,
+            # )
             data_saver.beh.append(behavioral_data)
             logging.data(f"Behavioral data: {behavioral_data}\n")
+            logging.data(f"Trial data: {trial}\n")
             logging.flush()

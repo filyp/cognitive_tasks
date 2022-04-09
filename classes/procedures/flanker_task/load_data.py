@@ -22,7 +22,10 @@ def load_stimuli(win, config, screen_res):
         raise Exception("Wrong orientation")
 
     pos_x, pos_y = config["Flanker_position"]
-    abs_flanker_position = (pos_x * config["Flanker_size"], pos_y * config["Flanker_size"])
+    abs_flanker_position = (
+        pos_x * config["Flanker_size"],
+        pos_y * config["Flanker_size"],
+    )
 
     # ! create fixation
     stimuli = dict()
@@ -93,7 +96,10 @@ def load_stimuli(win, config, screen_res):
     # ! create feedback
     if config["Show_feedback"]:
         pos_x, pos_y = config["Feedback_position"]
-        abs_feedback_position = (pos_x * config["Feedback_size"], pos_y * config["Feedback_size"])
+        abs_feedback_position = (
+            pos_x * config["Feedback_size"],
+            pos_y * config["Feedback_size"],
+        )
         stimuli["feedback_good"] = visual.TextStim(
             win,
             color=config["Text_color"],

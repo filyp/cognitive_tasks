@@ -4,9 +4,18 @@ from collections import OrderedDict
 from psychopy import core, event, logging
 
 from classes.show_info import show_info
-from classes.procedures.flanker_task.triggers import TriggerHandler, TriggerTypes, create_eeg_port
+from classes.experiment_info import display_eeg_info
+
+from classes.procedures.flanker_task.triggers import (
+    TriggerHandler,
+    TriggerTypes,
+    create_eeg_port,
+)
 from classes.procedures.flanker_task.prepare_experiment import prepare_trials
-from classes.procedures.flanker_task.feedback import FeedbackTimerSteps, FeedbackTimerMovingMedian
+from classes.procedures.flanker_task.feedback import (
+    FeedbackTimerSteps,
+    FeedbackTimerMovingMedian,
+)
 from classes.procedures.flanker_task.load_data import load_stimuli
 
 
@@ -50,6 +59,8 @@ def flanker_task(
     config,
     data_saver,
 ):
+    display_eeg_info()
+
     clock = core.Clock()
     mouse = event.Mouse(win=win, visible=False)
 
@@ -180,7 +191,14 @@ def flanker_task(
             trigger_handler.send_trigger()
             while clock.getTime() < target_show_time:
                 res = check_response(
-                    config, event, mouse, clock, trigger_handler, block, trial, response_data
+                    config,
+                    event,
+                    mouse,
+                    clock,
+                    trigger_handler,
+                    block,
+                    trial,
+                    response_data,
                 )
                 if res is not None:
                     response_data.append(res)
@@ -193,7 +211,14 @@ def flanker_task(
             empty_screen_show_time = random.uniform(*config["Response_time_window"])
             while clock.getTime() < target_show_time + empty_screen_show_time:
                 res = check_response(
-                    config, event, mouse, clock, trigger_handler, block, trial, response_data
+                    config,
+                    event,
+                    mouse,
+                    clock,
+                    trigger_handler,
+                    block,
+                    trial,
+                    response_data,
                 )
                 if res is not None:
                     response_data.append(res)
@@ -205,7 +230,14 @@ def flanker_task(
                 # even if participant responded, wait out the response time window
                 while clock.getTime() < target_show_time + empty_screen_show_time:
                     res = check_response(
-                        config, event, mouse, clock, trigger_handler, block, trial, response_data
+                        config,
+                        event,
+                        mouse,
+                        clock,
+                        trigger_handler,
+                        block,
+                        trial,
+                        response_data,
                     )
                     if res is not None:
                         response_data.append(res)
@@ -219,7 +251,14 @@ def flanker_task(
             loop_start_time = clock.getTime()
             while clock.getTime() < loop_start_time + empty_screen_after_response_show_time:
                 res = check_response(
-                    config, event, mouse, clock, trigger_handler, block, trial, response_data
+                    config,
+                    event,
+                    mouse,
+                    clock,
+                    trigger_handler,
+                    block,
+                    trial,
+                    response_data,
                 )
                 if res is not None:
                     response_data.append(res)

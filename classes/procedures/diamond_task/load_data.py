@@ -1,6 +1,7 @@
+import os
 from psychopy import visual
 
-possible_images_format = ("bmp", "jpg", "png", "gif")
+possible_images_format = ("bmp", "jpg", "png", "gif", "webp")
 possible_audio_format = ("mp3", "au", "mp2", "wav", "wma", "ogg")
 
 
@@ -13,104 +14,91 @@ def load_stimuli(win, config, screen_res):
     :param folder_name: nazwa folderu z ktorego beda ladowane pliki
     """
 
-    orientation = config.get("Orientation", "horizontal")
-    if orientation == "horizontal":
-        rotation = 0
-    elif orientation == "vertical":
-        rotation = 90
-    else:
-        raise Exception("Wrong orientation")
-
-    pos_x, pos_y = config["Flanker_position"]
-    abs_flanker_position = (pos_x * config["Flanker_size"], pos_y * config["Flanker_size"])
+    stimuli = dict()
 
     # ! create fixation
-    stimuli = dict()
     stimuli["fixation"] = visual.TextStim(
         win,
+        text="+",
         color=config["Text_color"],
-        text=config["Fixation_char"],
-        font=config["Flanker_font"],
-        height=config["Flanker_size"],
-        ori=rotation,
+        font=config["Text_font"],
+        height=config["Text_size"],
         name="fixation",
-        pos=abs_flanker_position,
     )
 
-    # ! create targets and flankers
-    r = config["Right_char"]
-    l = config["Left_char"]
-    stimuli_to_create = dict(
-        congruent_rrr=r + r + r + r + r,
-        congruent_lll=l + l + l + l + l,
-        incongruent_rlr=r + r + l + r + r,
-        incongruent_lrl=l + l + r + l + l,
-        flankers_r=r + r + " " + r + r,
-        flankers_l=l + l + " " + l + l,
+    size = config["Arrows_size"]
+    arrow_offset = size * 0.7
+
+    # ! create arrows
+    stimuli["right_arrow"] = visual.ImageStim(
+        win,
+        image=os.path.join("input_data", "diamond_task", "right_arrow.png"),
+        size=size,
+        ori=0,
+        pos=(arrow_offset, 0),
+        name="right_arrow",
     )
-    for stimulus_name, text in stimuli_to_create.items():
-        stimuli[stimulus_name] = visual.TextStim(
-            win=win,
-            antialias=True,
-            font=config["Flanker_font"],
-            text=text,
-            height=config["Flanker_size"],
-            wrapWidth=screen_res["width"],
-            color=config["Text_color"],
-            ori=rotation,
-            name=stimulus_name,
-            pos=abs_flanker_position,
-        )
+    stimuli["left_arrow"] = visual.ImageStim(
+        win,
+        image=os.path.join("input_data", "diamond_task", "right_arrow.png"),
+        size=size,
+        ori=180,
+        pos=(-arrow_offset, 0),
+        name="left_arrow",
+    )
+    stimuli["down_arrow"] = visual.ImageStim(
+        win,
+        image=os.path.join("input_data", "diamond_task", "right_arrow.png"),
+        size=size,
+        ori=90,
+        pos=(0, -arrow_offset),
+        name="down_arrow",
+    )
 
-    # ! create cues
-    if config["Show_cues"]:
-        cue1_text, cue2_text = config["Cues"]
-        stimuli["cue1"] = visual.TextStim(
-            win=win,
-            antialias=True,
-            font=config["Text_font"],
-            text=cue1_text,
-            height=config["Text_size"],
-            wrapWidth=screen_res["width"],
-            color=config["Text_color"],
-            name="cue1",
-        )
-        stimuli["cue2"] = visual.TextStim(
-            win=win,
-            antialias=True,
-            font=config["Text_font"],
-            text=cue2_text,
-            height=config["Text_size"],
-            wrapWidth=screen_res["width"],
-            color=config["Text_color"],
-            name="cue2",
-        )
-    else:
-        # create mock cue stimuli
-        stimuli["cue1"] = visual.TextStim(win, text=None)
-        stimuli["cue2"] = visual.TextStim(win, text=None)
+    square_offset_x = size * 0.7
+    square_offset_y = size * 0.8
 
-    # ! create feedback
-    if config["Show_feedback"]:
-        pos_x, pos_y = config["Feedback_position"]
-        abs_feedback_position = (pos_x * config["Feedback_size"], pos_y * config["Feedback_size"])
-        stimuli["feedback_good"] = visual.TextStim(
-            win,
-            color=config["Text_color"],
-            text=config["Feedback_good"],
-            font=config["Feedback_font"],
-            height=config["Feedback_size"],
-            name="feedback_good",
-            pos=abs_feedback_position,
-        )
-        stimuli["feedback_bad"] = visual.TextStim(
-            win,
-            color=config["Text_color"],
-            text=config["Feedback_bad"],
-            font=config["Feedback_font"],
-            height=config["Feedback_size"],
-            name="feedback_bad",
-            pos=abs_feedback_position,
-        )
+    stimuli["left_square"] = visual.ImageStim(
+        win,
+        image=os.path.join("input_data", "diamond_task", "square.webp"),
+        size=size * 0.8,
+        pos=(-square_offset_x, square_offset_y),
+        name="left_square",
+    )
+    stimuli["right_square"] = visual.ImageStim(
+        win,
+        image=os.path.join("input_data", "diamond_task", "square.webp"),
+        size=size * 0.8,
+        pos=(square_offset_x, square_offset_y),
+        name="right_square",
+    )
+
+    stimuli["left_text"] = visual.TextStim(
+        win,
+        text="A",
+        color=config["Text_color"],
+        font=config["Text_font"],
+        height=config["Info_size"],
+        pos=(-square_offset_x, square_offset_y),
+        name="left_text",
+    )
+    stimuli["right_text"] = visual.TextStim(
+        win,
+        text="B",
+        color=config["Text_color"],
+        font=config["Text_font"],
+        height=config["Info_size"],
+        pos=(square_offset_x, square_offset_y),
+        name="right_text",
+    )
+    stimuli["middle_text"] = visual.TextStim(
+        win,
+        text="",
+        color=config["Text_color"],
+        font=config["Text_font"],
+        height=config["Info_size"],
+        name="middle_text",
+        wrapWidth=screen_res["width"],
+    )
 
     return stimuli

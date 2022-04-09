@@ -1,109 +1,31 @@
+import os
 import random
 
+import pandas as pd
 from psychopy import logging
 
 
 def prepare_trials(block, stimulus):
     all_trials = []
 
-    number_of_trials = block.get("number_of_trials", 0)  # if not given, assume it's a break block
-    ratio_of_congruent = block.get("ratio_of_congruent", 0.5)
-    ratio_of_first_cue = block.get("ratio_of_first_cue", 0.5)
+    filename = os.path.join("input_data", "diamond_task", block["info_file"])
+    trials_info = pd.read_excel(filename)
 
-    number_of_congruent_trials = number_of_trials * ratio_of_congruent
-    number_of_incongruent_trials = number_of_trials - number_of_congruent_trials
-
-    num_of_congruent_first_cue = number_of_congruent_trials * ratio_of_first_cue
-    num_of_congruent_second_cue = number_of_congruent_trials - num_of_congruent_first_cue
-    num_of_incongruent_first_cue = number_of_incongruent_trials * ratio_of_first_cue
-    num_of_incongruent_second_cue = number_of_incongruent_trials - num_of_incongruent_first_cue
-
-    logging.data(
-        f"""
-    Preparing trials:
-        block={block}
-        num_of_congruent_first_cue={num_of_congruent_first_cue}
-        num_of_congruent_second_cue={num_of_congruent_second_cue}
-        num_of_incongruent_first_cue={num_of_incongruent_first_cue}
-        num_of_incongruent_second_cue={num_of_incongruent_second_cue}
-    """
-    )
-
-    assert num_of_congruent_first_cue % 2 == 0  # it must be even
-    for _ in range(int(num_of_congruent_first_cue // 2)):
+    for row in trials_info.itertuples():
         all_trials.append(
             dict(
-                type="congruent",
-                cue=stimulus["cue1"],
-                flankers=stimulus["flankers_l"],
-                target=stimulus["congruent_lll"],
-            )
-        )
-        all_trials.append(
-            dict(
-                type="congruent",
-                cue=stimulus["cue1"],
-                flankers=stimulus["flankers_r"],
-                target=stimulus["congruent_rrr"],
+                correct=row.Correct,
+                IAPSslide=row.IAPSslide,
+                diamond_data=[
+                    [row.Ac1, row.Bc1],
+                    [row.Ac2, row.Bc2],
+                    [row.Ac3, row.Bc3],
+                    [row.Ac4, row.Bc4],
+                    [row.Ac5, row.Bc5],
+                    [row.Ac6, row.Bc6],
+                ],
             )
         )
 
-    assert num_of_congruent_second_cue % 2 == 0  # it must be even
-    for _ in range(int(num_of_congruent_second_cue // 2)):
-        all_trials.append(
-            dict(
-                type="congruent",
-                cue=stimulus["cue2"],
-                flankers=stimulus["flankers_l"],
-                target=stimulus["congruent_lll"],
-            )
-        )
-        all_trials.append(
-            dict(
-                type="congruent",
-                cue=stimulus["cue2"],
-                flankers=stimulus["flankers_r"],
-                target=stimulus["congruent_rrr"],
-            )
-        )
-
-    assert num_of_incongruent_first_cue % 2 == 0  # it must be even
-    for _ in range(int(num_of_incongruent_first_cue // 2)):
-        all_trials.append(
-            dict(
-                type="incongruent",
-                cue=stimulus["cue1"],
-                flankers=stimulus["flankers_l"],
-                target=stimulus["incongruent_lrl"],
-            )
-        )
-        all_trials.append(
-            dict(
-                type="incongruent",
-                cue=stimulus["cue1"],
-                flankers=stimulus["flankers_r"],
-                target=stimulus["incongruent_rlr"],
-            )
-        )
-
-    assert num_of_incongruent_second_cue % 2 == 0  # it must be even
-    for _ in range(int(num_of_incongruent_second_cue // 2)):
-        all_trials.append(
-            dict(
-                type="incongruent",
-                cue=stimulus["cue2"],
-                flankers=stimulus["flankers_l"],
-                target=stimulus["incongruent_lrl"],
-            )
-        )
-        all_trials.append(
-            dict(
-                type="incongruent",
-                cue=stimulus["cue2"],
-                flankers=stimulus["flankers_r"],
-                target=stimulus["incongruent_rlr"],
-            )
-        )
-
-    random.shuffle(all_trials)
+    # random.shuffle(all_trials)
     return all_trials

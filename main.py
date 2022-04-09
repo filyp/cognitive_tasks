@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 # how to run:
-# venv/bin/python main.py docs/config.yaml
+# venv/bin/python main.py config/some_task.yaml
 
 import os
-import random
 import sys
 
 import yaml
@@ -11,7 +10,7 @@ from psychopy import logging
 
 logging.console.setLevel(logging.DATA)
 
-from classes.experiment_info import display_eeg_info, get_participant_info
+from classes.experiment_info import get_participant_info
 
 from classes.save_data import DataSaver
 from classes.screen import create_win
@@ -39,7 +38,6 @@ def run():
     experiment_name = os.path.split(config_path)[-1]
     experiment_name = experiment_name.split(".")[0]
 
-    display_eeg_info()
     participant_info = get_participant_info()
     # participant_info = "mock_info"  # TODO reenable after testing
 

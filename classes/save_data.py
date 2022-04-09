@@ -26,6 +26,8 @@ class DataSaver:
         filename = "beh_{}.csv".format(self.participant_info)
         path = os.path.join(directory, filename)
         # assumes that the first row already contains all the fields (there are no fields left out)
+        if self.beh == []:
+            return  # nothing to save
         fieldnames = list(self.beh[0].keys())
         with open(path, "w") as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
