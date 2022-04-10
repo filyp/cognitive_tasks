@@ -3,6 +3,7 @@ from collections import OrderedDict
 
 import numpy as np
 from psychopy import core, event, logging, visual
+from psychopy.hardware import joystick
 
 from classes.show_info import show_info
 from classes.procedures.diamond_task.triggers import (
@@ -17,15 +18,82 @@ from classes.procedures.diamond_task.load_data import load_stimuli
 trait_names = ["rozmiar", "przejrzystość", "kształt", "kolor", "blask", "proporcje"]
 
 
+def get_joystick_input(joy):
+    x = joy.getX()
+    y = joy.getY()
+    responses = []
+    if x == -1:
+        responses.append("left")
+    elif x == 1:
+        responses.append("right")
+    if y == 1:  # y axis is inverted
+        responses.append("down")
+    elif y == -1:
+        responses.append("up")
+    return responses
+
+
+def get_value_from_slider(slider, text, win, mouse, data_saver, stimulus, speed=1, joy=None):
+    if joy is None:
+        slider.reset()
+        stimulus["slider_button"].setAutoDraw(True)
+        stimulus["slider_button_text"].setAutoDraw(True)
+    else:
+        slider.markerPos = 50
+    stimulus["top_text"].setAutoDraw(True)
+    stimulus["top_text"].text = text
+    win.flip()
+
+    if joy is None:
+        while not (slider.getRating() and mouse.isPressedIn(stimulus["slider_button"])):
+            slider.draw()
+            win.flip()
+            data_saver.check_exit()
+    else:
+        # joystick is connected, so use it to move marker
+        while True:
+            pressed = get_joystick_input(joy)
+            if "left" in pressed:
+                slider.markerPos -= speed
+            if "right" in pressed:
+                slider.markerPos += speed
+            if "down" in pressed:
+                break
+            slider.draw()
+            win.flip()
+            data_saver.check_exit()
+        while "down" in get_joystick_input(joy):
+            win.flip()
+
+    stimulus["slider_button"].setAutoDraw(False)
+    stimulus["slider_button_text"].setAutoDraw(False)
+    stimulus["top_text"].setAutoDraw(False)
+    win.flip()
+    return slider.getRating()
+
+
 def diamond_task(
     win,
     screen_res,
     config,
     data_saver,
 ):
+    if config["Keys"] == "joystick":
+        if joystick.getNumJoysticks() == 0:
+            raise RuntimeError(
+                "No joystick found. On linux you need to run this command first: modprobe joydev"
+            )
+        joy = joystick.Joystick(0)
+    else:
+        joy = None
+
     mouse = event.Mouse(win=win, visible=False)
     total_decision_clock = core.Clock()
     cue_decision_clock = core.Clock()
+
+    # load stimulus
+    stimulus = load_stimuli(win=win, config=config, screen_res=screen_res)
+
     slider_params = dict(
         win=win,
         size=(screen_res["width"] * 0.3, screen_res["height"] * 0.03),
@@ -35,37 +103,6 @@ def diamond_task(
     slider_arousal = visual.Slider(name="arousal", **slider_params)
     slider_valence = visual.Slider(name="valence", **slider_params)
     slider_confidence = visual.Slider(name="confidence", **slider_params)
-
-    slider_button = visual.Rect(
-        win,
-        size=(screen_res["width"] * 0.1, screen_res["height"] * 0.05),
-        pos=(0, -screen_res["height"] * 0.1),
-        lineColor=config["Text_color"],
-        lineWidth=7,
-        name="slider_button",
-    )
-    slider_button_text = visual.TextStim(
-        win,
-        text="WYBIERZ",
-        color=config["Text_color"],
-        font=config["Text_font"],
-        height=screen_res["height"] * 0.03,
-        pos=(0, -screen_res["height"] * 0.1),
-        name="slider_button_text",
-    )
-    top_text = visual.TextStim(
-        win,
-        text="",
-        pos=(0, screen_res["height"] * 0.2),
-        color=config["Text_color"],
-        font=config["Text_font"],
-        height=config["Text_size"],
-        name="top_text",
-        wrapWidth=screen_res["width"],
-    )
-
-    # load stimulus
-    stimulus = load_stimuli(win=win, config=config, screen_res=screen_res)
 
     # EEG triggers
     if config["Send_EEG_trigg"]:
@@ -135,38 +172,29 @@ def diamond_task(
 
             if config["Rate_arousal"]:
                 # ! rate arousal
-                slider_arousal.reset()
-                slider_button.setAutoDraw(True)
-                slider_button_text.setAutoDraw(True)
-                top_text.setAutoDraw(True)
-                top_text.text = "Pobudzenie"
-                win.flip()
-                while not (slider_arousal.getRating() and mouse.isPressedIn(slider_button)):
-                    slider_arousal.draw()
-                    win.flip()
-                    data_saver.check_exit()
-                slider_button.setAutoDraw(False)
-                slider_button_text.setAutoDraw(False)
-                top_text.setAutoDraw(False)
-                behavioral_data["arousal"] = slider_arousal.getRating()
+                behavioral_data["arousal"] = get_value_from_slider(
+                    slider_arousal,
+                    "Pobudzenie",
+                    win,
+                    mouse,
+                    data_saver,
+                    stimulus,
+                    config["Slider_speed"],
+                    joy,
+                )
 
             if config["Rate_valence"]:
                 # ! rate valence
-                slider_valence.reset()
-                slider_button.setAutoDraw(True)
-                slider_button_text.setAutoDraw(True)
-                top_text.setAutoDraw(True)
-                top_text.text = "Nastrój"
-                win.flip()
-                while not (slider_valence.getRating() and mouse.isPressedIn(slider_button)):
-                    slider_valence.draw()
-                    win.flip()
-                    data_saver.check_exit()
-                slider_button.setAutoDraw(False)
-                slider_button_text.setAutoDraw(False)
-                top_text.setAutoDraw(False)
-                win.flip()
-                behavioral_data["valence"] = slider_valence.getRating()
+                behavioral_data["valence"] = get_value_from_slider(
+                    slider_valence,
+                    "Nastrój",
+                    win,
+                    mouse,
+                    data_saver,
+                    stimulus,
+                    config["Slider_speed"],
+                    joy,
+                )
 
             # ! decision
             total_decision_clock.reset()
@@ -183,7 +211,6 @@ def diamond_task(
                 stimulus["left_text"].setAutoDraw(False)
                 stimulus["right_text"].setAutoDraw(False)
 
-                key_list = ["down", "left", "right"]
                 if trait_name == trait_names[0]:
                     stimulus["left_square"].setAutoDraw(True)
                     stimulus["right_square"].setAutoDraw(True)
@@ -195,14 +222,21 @@ def diamond_task(
                     stimulus["right_text"].text = "B"
                 elif trait_name == trait_names[-1]:
                     stimulus["down_arrow"].setAutoDraw(False)
-                    key_list = ["left", "right"]
                 win.flip()
 
                 # ! wait for response
                 event.clearEvents()
                 while True:
-                    keys = event.getKeys(keyList=key_list)
+                    if config["Keys"] == "arrows":
+                        keys = event.getKeys(keyList=["down", "left", "right"])
+                    elif config["Keys"] == "joystick":
+                        keys = get_joystick_input(joy)
+
                     if keys:
+                        if trait_name == trait_names[-1] and keys == ["down"]:
+                            # at the last cue you cannot press down
+                            win.flip()
+                            continue
                         behavioral_data["cues_decision_time"].append(cue_decision_clock.getTime())
                         break
                     data_saver.check_exit()
@@ -248,21 +282,20 @@ def diamond_task(
             win.flip()
 
             # ! rate confidence
-            slider_confidence.reset()
-            slider_button.setAutoDraw(True)
-            slider_button_text.setAutoDraw(True)
-            top_text.setAutoDraw(True)
-            top_text.text = "Pewność"
-            win.flip()
-            while not (slider_confidence.getRating() and mouse.isPressedIn(slider_button)):
-                slider_confidence.draw()
-                win.flip()
-                data_saver.check_exit()
-            slider_button.setAutoDraw(False)
-            slider_button_text.setAutoDraw(False)
-            top_text.setAutoDraw(False)
-            win.flip()
-            behavioral_data["confidence"] = slider_confidence.getRating()
+            if config["Keys"] == "joystick":
+                # make sure joystick is unpressed
+                while get_joystick_input(joy) != []:
+                    win.flip()
+            behavioral_data["confidence"] = get_value_from_slider(
+                slider_confidence,
+                "Pewność",
+                win,
+                mouse,
+                data_saver,
+                stimulus,
+                config["Slider_speed"],
+                joy,
+            )
 
             # check if choice is correct
             if behavioral_data["choice"] == trial["correct"]:
