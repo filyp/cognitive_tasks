@@ -7,13 +7,13 @@ Send_EEG_trigg: False
 # * view parameters
 Screen_color: "black"
 Text_color: "white"
-Text_size: 60
-Flanker_size: 100
+Text_size: 0.055
+Flanker_size: 0.092
 Text_font: "Arial"
 
 # * flanker parameters
 Flanker_font: "Noto Sans Mono"   # FreeMono, Noto Sans Mono, DejaVu Sans Mono
-Flanker_size: 100
+Flanker_size: 0.092
 Orientation: "horizontal"
 Right_char: ">"
 Left_char: "<"

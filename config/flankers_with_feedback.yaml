@@ -8,12 +8,12 @@ Send_EEG_trigg: True
 # * view parameters
 Screen_color: -0.3
 Text_color: "black"
-Text_size: 60
+Text_size: 0.055
 Text_font: "Arial"
 
 # * flanker parameters
 Flanker_font: "DejaVu Sans Mono"   # FreeMono, Noto Sans Mono, DejaVu Sans Mono
-Flanker_size: 100
+Flanker_size: 0.092
 # Orientation: "horizontal"
 # Right_char: ">"
 # Left_char: "<"
@@ -36,7 +36,7 @@ Feedback_good: "☺"
 Feedback_bad: "☹"
 Feedback_initial_threshold_rt: 0.420
 Feedback_font: "DejaVu Sans Mono"
-Feedback_size: 200
+Feedback_size: 0.185
 Feedback_position: [0, 0.04]
 
 # * times

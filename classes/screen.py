@@ -71,7 +71,7 @@ def create_win(screen_color):
         screen_res_list,
         fullscr=True,
         monitor="TestMonitor",  # todo? this may be invalid argument value
-        units="pix",  # TODO height -0.5..0.5
+        units="height",
         screen=0,
         color=screen_color,
     )

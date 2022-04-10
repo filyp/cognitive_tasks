@@ -6,10 +6,10 @@ Send_EEG_trigg: False
 # * view parameters
 Screen_color: -0.25    # -1 is black, 1 is white, -0.25 corresponds to RGB 96
 Text_color: "black"
-Text_size: 60
+Text_size: 0.04
 Text_font: "Arial"
-Info_size: 108    # 180
-Arrows_size: 300  # 500
+Info_size: 0.075       # size of text cues
+Arrows_size: 0.2
 
 # * times
 # Empty_screen_between_trials: [0.900, 1.500, 0.100]   # min, max, step
