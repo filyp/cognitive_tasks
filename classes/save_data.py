@@ -19,6 +19,7 @@ class DataSaver:
         path = os.path.join(trigger_directory, filename)
         with open(path, "wb") as map_file:
             text = "\n".join(self.triggers_list)
+            # this must be done in such an awkward way, to prevent OS specific EOL
             map_file.write(bytes(text, "UTF-8"))
 
     def save_beh(self):
