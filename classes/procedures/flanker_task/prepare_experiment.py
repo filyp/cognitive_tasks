@@ -8,7 +8,7 @@ def prepare_trials(block, stimulus):
 
     number_of_trials = block.get("number_of_trials", 0)  # if not given, assume it's a break block
     ratio_of_congruent = block.get("ratio_of_congruent", 0.5)
-    ratio_of_first_cue = block.get("ratio_of_first_cue", 0.5)
+    ratio_of_first_cue = block.get("ratio_of_first_cue", 0)   # if not given, assume cues are not needed
 
     number_of_congruent_trials = number_of_trials * ratio_of_congruent
     number_of_incongruent_trials = number_of_trials - number_of_congruent_trials

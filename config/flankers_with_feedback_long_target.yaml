@@ -44,9 +44,9 @@ Empty_screen_between_trials: [0.600, 0.800]
 # Cue_show_time: [1.000, 1.000]       # this has no effect if Show_cues is False
 # Empty_screen_after_cue_show_time: [0.100, 0.100]    # this has no effect if Show_cues is False
 Fixation_show_time: [0.600, 0.800]
-Flanker_show_time: [0.080, 0.080]   # this one is optional
-Target_show_time: [0.030, 0.030]
-Blank_screen_for_response_show_time: [0.600, 0.600]
+# Flanker_show_time: [0.000, 0.000]   # this one is optional
+Target_show_time: [0.600, 0.600]
+Blank_screen_for_response_show_time: [0.000, 0.000]
 Empty_screen_after_response_show_time: [1.000, 1.000]
 Feedback_show_time: [0.800, 0.800]  # this one is needed only if Show_feedback is True
 

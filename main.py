@@ -4,6 +4,8 @@
 
 import os
 import sys
+import json
+import shutil
 
 import yaml
 from psychopy import logging
@@ -25,23 +27,33 @@ __author__ = ["ociepkam", "filyp"]
 def load_config(config_path):
     try:
         with open(config_path) as yaml_file:
-            doc = yaml.safe_load(yaml_file)
-        return doc
+            config = yaml.safe_load(yaml_file)
     except:
         raise Exception("Can't load config file")
+
+    # compute hash of config file to know for sure which config version was used
+    unique_config_string = json.dumps(config, sort_keys=True, ensure_ascii=True)
+    short_hash = hex(hash(unique_config_string) % (2 ** 24))[2:]
+
+    return config, short_hash
 
 
 def run():
     # Load config
     config_path = sys.argv[1]
-    config = load_config(config_path)
+    config, config_hash = load_config(config_path)
     experiment_name = os.path.split(config_path)[-1]
     experiment_name = experiment_name.split(".")[0]
+    experiment_name = experiment_name + "_" + config_hash
 
     participant_info = get_participant_info()
     # participant_info = "mock_info"  # TODO reenable after testing
 
     data_saver = DataSaver(participant_info, experiment_name, beh=[], triggers_list=[])
+    # copy config file to results folder
+    os.makedirs(data_saver.directory, exist_ok=True)
+    shutil.copy2(config_path, data_saver.directory)
+    logging.data(f"Experiment name: {experiment_name}")
 
     # screen
     win, screen_res, frames_per_sec = create_win(screen_color=config["Screen_color"])

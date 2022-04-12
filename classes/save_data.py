@@ -10,21 +10,22 @@ class DataSaver:
         self.experiment_name = experiment_name
         self.beh = beh
         self.triggers_list = triggers_list
+        self.directory = os.path.join("results", self.experiment_name)
 
     def save_triggers(self):
-        directory = os.path.join("results", self.experiment_name, "triggers_maps")
-        os.makedirs(directory, exist_ok=True)
+        trigger_directory = os.path.join(self.directory, "triggers_maps")
+        os.makedirs(trigger_directory, exist_ok=True)
         filename = "triggerMap_{}.txt".format(self.participant_info)
-        path = os.path.join(directory, filename)
+        path = os.path.join(trigger_directory, filename)
         with open(path, "wb") as map_file:
             text = "\n".join(self.triggers_list)
             map_file.write(bytes(text, "UTF-8"))
 
     def save_beh(self):
-        directory = os.path.join("results", self.experiment_name, "behavioral_data")
-        os.makedirs(directory, exist_ok=True)
+        behavioral_directory = os.path.join(self.directory, "behavioral_data")
+        os.makedirs(behavioral_directory, exist_ok=True)
         filename = "beh_{}.csv".format(self.participant_info)
-        path = os.path.join(directory, filename)
+        path = os.path.join(behavioral_directory, filename)
         # assumes that the first row already contains all the fields (there are no fields left out)
         if self.beh == []:
             return  # nothing to save

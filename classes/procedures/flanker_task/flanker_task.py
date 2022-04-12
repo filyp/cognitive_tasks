@@ -208,7 +208,7 @@ def flanker_task(
             win.flip()
 
             # ! draw empty screen and await response
-            empty_screen_show_time = random.uniform(*config["Response_time_window"])
+            empty_screen_show_time = random.uniform(*config["Blank_screen_for_response_show_time"])
             while clock.getTime() < target_show_time + empty_screen_show_time:
                 res = check_response(
                     config,

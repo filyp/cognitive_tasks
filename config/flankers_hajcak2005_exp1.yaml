@@ -33,7 +33,7 @@ Cue_show_time: [2.000, 2.000]
 Empty_screen_after_cue_show_time: [0.100, 0.100]
 Fixation_show_time: [0.600, 0.800]
 Target_show_time: [0.200, 0.200]
-Response_time_window: [1.700, 2.300]
+Blank_screen_for_response_show_time: [1.700, 2.300]
 Empty_screen_after_response_show_time: [0.0, 0.0]
 
 # if this is False, we will end response time windw immediately after response, and carry on
