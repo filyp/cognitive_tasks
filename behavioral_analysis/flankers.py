@@ -29,7 +29,7 @@ for previous_row, current_row in zip([dict()] + rows[:-1], rows):
     blocks[-1][1].append(current_row)
 
 
-experiment_block = blocks[-1][1]    # TODO make it general
+experiment_block = blocks[-1][1]  # TODO make it general
 
 congruent_correct_rts = []
 incongruent_correct_rts = []
@@ -73,7 +73,8 @@ def print_len(data):
     return f"{len(data):8d}     "
 
 
-print(f"""
+print(
+    f"""
 REACTION TIMES:
              |     CORRECT     |      ERROR      |       ALL       |
 CONGRUENT    |  {stats(congruent_correct_rts)}  |  {stats(congruent_error_rts)}  |  {stats(congruent_correct_rts + congruent_error_rts)}  |
@@ -86,7 +87,8 @@ NUMBER OF TRIALS:
 CONGRUENT    |  {print_len(congruent_correct_rts)}  |  {print_len(congruent_error_rts)}  |  {print_len(congruent_correct_rts + congruent_error_rts)}  |
 INCONGRUENT  |  {print_len(incongruent_correct_rts)}  |  {print_len(incongruent_error_rts)}  |  {print_len(incongruent_correct_rts + incongruent_error_rts)}  |
 ALL          |  {print_len(congruent_correct_rts + incongruent_correct_rts)}  |  {print_len(congruent_error_rts + incongruent_error_rts)}  |  {print_len(congruent_correct_rts + congruent_error_rts + incongruent_correct_rts + incongruent_error_rts)}  |
-""")
+"""
+)
 
 
 from collections import Counter

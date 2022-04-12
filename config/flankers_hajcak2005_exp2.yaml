@@ -7,7 +7,7 @@ Send_EEG_trigg: False
 # * view parameters
 Screen_color: "black"
 Text_color: "white"
-Text_size: 0.055
+Text_size: 0.04
 Flanker_size: 0.092
 Text_font: "Arial"
 
@@ -18,7 +18,6 @@ Orientation: "horizontal"
 Right_char: ">"
 Left_char: "<"
 Fixation_char: "+"
-Flanker_position: [0, 0] # this is needed to align arrows at the center of the screen
 
 # * cue definition
 Show_cues: False

@@ -8,25 +8,15 @@ Send_EEG_trigg: False
 # * view parameters
 Screen_color: -0.3
 Text_color: "black"
-Text_size: 0.055
+Text_size: 0.04
 Text_font: "Arial"
 
 # * flanker parameters
-Flanker_font: "DejaVu Sans Mono"   # FreeMono, Noto Sans Mono, DejaVu Sans Mono
-Flanker_size: 0.092
-# Orientation: "horizontal"
-# Right_char: ">"
-# Left_char: "<"
-# Fixation_char: "+"
-Orientation: "vertical"    # note that for vertical, arrows are rotated 90 degrees clockwise
-Right_char: "↑"
-Left_char: "↓"
-Fixation_char: "↕"
-Flanker_position: [0.14, 0] # this is needed to align arrows at the center of the screen
+Flanker_size: [0.07, 0.02830625]  # arrow dimensions are 1600x647
+Flanker_spacing: 0.06
 
 # * cue definition
 Show_cues: False    # if False, the rest of this block has no effect
-# Cues: [5, 100]
 
 # * feedback  definition
 Show_feedback: True    # if False, the rest of this block has no effect
@@ -41,8 +31,6 @@ Feedback_position: [0, 0.04]
 
 # * times
 Empty_screen_between_trials: [0.600, 0.800]
-# Cue_show_time: [1.000, 1.000]       # this has no effect if Show_cues is False
-# Empty_screen_after_cue_show_time: [0.100, 0.100]    # this has no effect if Show_cues is False
 Fixation_show_time: [0.600, 0.800]
 # Flanker_show_time: [0.000, 0.000]   # this one is optional
 Target_show_time: [0.600, 0.600]

@@ -40,7 +40,7 @@ def check_response(config, event, mouse, clock, trigger_handler, block, trial, r
             trigger_type=trigger_type,
             block_type=block["type"],
             cue_name=trial["cue"].text,
-            target_name=trial["target"].name,
+            target_name=trial["target_name"],
             response=keys[0],
         )
         trigger_handler.send_trigger()
@@ -125,7 +125,7 @@ def flanker_task(
                     trigger_type=TriggerTypes.CUE,
                     block_type=block["type"],
                     cue_name=trial["cue"].text,
-                    target_name=trial["target"].name,
+                    target_name=trial["target_name"],
                 )
 
                 cue.setAutoDraw(True)
@@ -161,15 +161,17 @@ def flanker_task(
                     trigger_type=TriggerTypes.FLANKER,
                     block_type=block["type"],
                     cue_name=trial["cue"].text,
-                    target_name=trial["target"].name,
+                    target_name=trial["target_name"],
                 )
                 flanker_show_time = random.uniform(*config["Flanker_show_time"])
-                trial["flankers"].setAutoDraw(True)
+                for flanker in trial["flankers"]:
+                    flanker.setAutoDraw(True)
 
                 win.flip()
                 trigger_handler.send_trigger()
                 core.wait(flanker_show_time)
-                trial["flankers"].setAutoDraw(False)
+                for flanker in trial["flankers"]:
+                    flanker.setAutoDraw(False)
 
             # ! draw target
             # we assume no one will respond correctly during target
@@ -179,10 +181,11 @@ def flanker_task(
                 trigger_type=TriggerTypes.TARGET,
                 block_type=block["type"],
                 cue_name=trial["cue"].text,
-                target_name=trial["target"].name,
+                target_name=trial["target_name"],
             )
             target_show_time = random.uniform(*config["Target_show_time"])
-            trial["target"].setAutoDraw(True)
+            for target in trial["target"]:
+                target.setAutoDraw(True)
             event.clearEvents()
             win.callOnFlip(clock.reset)
             win.callOnFlip(mouse.clickReset)
@@ -202,29 +205,32 @@ def flanker_task(
                 )
                 if res is not None:
                     response_data.append(res)
+                    break  # if we got a response, break out of this stage
                 data_saver.check_exit()
                 win.flip()
-            trial["target"].setAutoDraw(False)
+            for target in trial["target"]:
+                target.setAutoDraw(False)
             win.flip()
 
             # ! draw empty screen and await response
             empty_screen_show_time = random.uniform(*config["Blank_screen_for_response_show_time"])
-            while clock.getTime() < target_show_time + empty_screen_show_time:
-                res = check_response(
-                    config,
-                    event,
-                    mouse,
-                    clock,
-                    trigger_handler,
-                    block,
-                    trial,
-                    response_data,
-                )
-                if res is not None:
-                    response_data.append(res)
-                    break  # if we got a response, break out of this stage
-                data_saver.check_exit()
-                win.flip()
+            if response_data == []:
+                while clock.getTime() < target_show_time + empty_screen_show_time:
+                    res = check_response(
+                        config,
+                        event,
+                        mouse,
+                        clock,
+                        trigger_handler,
+                        block,
+                        trial,
+                        response_data,
+                    )
+                    if res is not None:
+                        response_data.append(res)
+                        break  # if we got a response, break out of this stage
+                    data_saver.check_exit()
+                    win.flip()
 
             if config["Use_whole_response_time_window"]:
                 # even if participant responded, wait out the response time window
@@ -266,10 +272,10 @@ def flanker_task(
                 win.flip()
 
             # check if reaction was correct
-            if trial["target"].name in ["congruent_lll", "incongruent_rlr"]:
+            if trial["target_name"] in ["congruent_lll", "incongruent_rlr"]:
                 # left is correct
                 correct_key = config["Keys"][0]
-            elif trial["target"].name in ["congruent_rrr", "incongruent_lrl"]:
+            elif trial["target_name"] in ["congruent_rrr", "incongruent_lrl"]:
                 # right is correct
                 correct_key = config["Keys"][1]
 
@@ -282,7 +288,7 @@ def flanker_task(
             # ! draw feedback
             if config["Show_feedback"]:
                 feedback_timer.update_threshold(
-                    target_name=trial["target"].name,
+                    target_name=trial["target_name"],
                     reaction=reaction,
                     timer_name=trial["cue"].text,
                 )
@@ -297,7 +303,7 @@ def flanker_task(
                         trigger_type=trigger_type,
                         block_type=block["type"],
                         cue_name=trial["cue"].text,
-                        target_name=trial["target"].name,
+                        target_name=trial["target_name"],
                     )
                     stimulus[feedback_type].setAutoDraw(True)
 
@@ -317,7 +323,7 @@ def flanker_task(
                 block_type=block["type"],
                 trial_type=trial["type"],
                 cue_name=cue_name,
-                target_name=trial["target"].name,
+                target_name=trial["target_name"],
                 response=response,
                 rt=reaction_time,
                 reaction=reaction,
