@@ -26,7 +26,7 @@ __author__ = ["ociepkam", "filyp"]
 
 def load_config(config_path):
     try:
-        with open(config_path) as yaml_file:
+        with open(config_path, encoding="utf8") as yaml_file:
             config = yaml.safe_load(yaml_file)
     except:
         raise Exception("Can't load config file")
