@@ -59,7 +59,7 @@ def flanker_task(
     config,
     data_saver,
 ):
-    display_eeg_info()
+    # display_eeg_info()
 
     clock = core.Clock()
     mouse = event.Mouse(win=win, visible=False)

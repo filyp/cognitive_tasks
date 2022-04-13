@@ -6,7 +6,7 @@ Send_EEG_trigg: False
 
 
 # * view parameters
-Screen_color: -0.3
+Screen_color: -0.2
 Text_color: "black"
 Text_size: 0.04
 Text_font: "Arial"
