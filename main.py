@@ -33,7 +33,7 @@ def load_config(config_path):
 
     # compute hash of config file to know for sure which config version was used
     unique_config_string = json.dumps(config, sort_keys=True, ensure_ascii=True)
-    short_hash = hex(hash(unique_config_string) % (2 ** 24))[2:]
+    short_hash = hex(hash(unique_config_string) % (2**24))[2:]
 
     return config, short_hash
 

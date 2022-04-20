@@ -101,24 +101,6 @@ def load_stimuli(win, config, screen_res):
         wrapWidth=screen_res["width"],
     )
 
-    stimuli["slider_button"] = visual.Rect(
-        win,
-        size=(0.17, 0.05),
-        pos=(0, -0.1),
-        fillColor=config["Screen_color"],
-        lineColor=config["Text_color"],
-        lineWidth=7,
-        name="slider_button",
-    )
-    stimuli["slider_button_text"] = visual.TextStim(
-        win,
-        text="WYBIERZ",
-        color=config["Text_color"],
-        font=config["Text_font"],
-        height=0.03,
-        pos=(0, -0.1),
-        name="slider_button_text",
-    )
     stimuli["top_text"] = visual.TextStim(
         win,
         text="",
@@ -127,6 +109,25 @@ def load_stimuli(win, config, screen_res):
         font=config["Text_font"],
         height=config["Text_size"],
         name="top_text",
+        wrapWidth=screen_res["width"],
+    )
+
+    stimuli["feedback_good"] = visual.TextStim(
+        win,
+        text=config["Feedback_good"],
+        color=config["Text_color"],
+        font=config["Text_font"],
+        height=config["Text_size"],
+        name="feedback_good",
+        wrapWidth=screen_res["width"],
+    )
+    stimuli["feedback_bad"] = visual.TextStim(
+        win,
+        text=config["Feedback_bad"],
+        color=config["Text_color"],
+        font=config["Text_font"],
+        height=config["Text_size"],
+        name="feedback_bad",
         wrapWidth=screen_res["width"],
     )
 

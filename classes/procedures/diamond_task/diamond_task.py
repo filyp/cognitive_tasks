@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 import numpy as np
 from psychopy import core, event, logging, visual
-from psychopy.hardware import joystick
+from psychopy.hardware import joystick, keyboard
 
 from classes.show_info import show_info
 from classes.procedures.diamond_task.triggers import (
@@ -33,40 +33,42 @@ def get_joystick_input(joy):
     return responses
 
 
-def get_value_from_slider(slider, text, win, mouse, data_saver, stimulus, speed=1, joy=None):
+def get_keypresses(joy=None, keyboard=None):
     if joy is None:
-        slider.reset()
-        stimulus["slider_button"].setAutoDraw(True)
-        stimulus["slider_button_text"].setAutoDraw(True)
+        keys = keyboard.getKeys(keyList=["down", "left", "right"], waitRelease=False, clear=False)
+        for key in keys:
+            if key.duration is not None:
+                # it means that some key was unpressed, so remove keypresses from buffer
+                keyboard.clearEvents()
+        return keys
     else:
-        slider.markerPos = 50
+        # joystick is connected, so use it instead of keyboard
+        return get_joystick_input(joy)
+
+
+def get_value_from_slider(
+    slider, text, win, data_saver, stimulus, speed=1, joy=None, keyboard=None
+):
+    slider.markerPos = 50
+    slider.setAutoDraw(True)
     stimulus["top_text"].setAutoDraw(True)
     stimulus["top_text"].text = text
     win.flip()
 
-    if joy is None:
-        while not (slider.getRating() and mouse.isPressedIn(stimulus["slider_button"])):
-            slider.draw()
-            win.flip()
-            data_saver.check_exit()
-    else:
-        # joystick is connected, so use it to move marker
-        while True:
-            pressed = get_joystick_input(joy)
-            if "left" in pressed:
-                slider.markerPos -= speed
-            if "right" in pressed:
-                slider.markerPos += speed
-            if "down" in pressed:
-                break
-            slider.draw()
-            win.flip()
-            data_saver.check_exit()
-        while "down" in get_joystick_input(joy):
-            win.flip()
+    while True:
+        pressed = get_keypresses(joy, keyboard)
+        if "left" in pressed:
+            slider.markerPos -= speed
+        if "right" in pressed:
+            slider.markerPos += speed
+        if "down" in pressed:
+            break
+        win.flip()
+        data_saver.check_exit()
+    while "down" in get_keypresses(joy, keyboard):
+        win.flip()
 
-    stimulus["slider_button"].setAutoDraw(False)
-    stimulus["slider_button_text"].setAutoDraw(False)
+    slider.setAutoDraw(False)
     stimulus["top_text"].setAutoDraw(False)
     win.flip()
     return slider.getRating()
@@ -84,10 +86,11 @@ def diamond_task(
                 "No joystick found. On linux you need to run this command first: modprobe joydev"
             )
         joy = joystick.Joystick(0)
+        keyboard_ = None
     else:
         joy = None
+        keyboard_ = keyboard.Keyboard()
 
-    mouse = event.Mouse(win=win, visible=False)
     total_decision_clock = core.Clock()
     cue_decision_clock = core.Clock()
 
@@ -131,7 +134,7 @@ def diamond_task(
             )
             continue
         elif block["type"] in ["experiment", "training"]:
-            block["trials"] = prepare_trials(block, stimulus)
+            block["trials"] = prepare_trials(block, config, win)
         else:
             raise Exception(
                 "{} is bad block type in config Experiment_blocks".format(block["type"])
@@ -148,6 +151,8 @@ def diamond_task(
                 total_decision_time=None,
                 cues_decision_time=[],
                 number_of_cues=None,
+                image=None,
+                empty_screen_between_trials_time=None,
             )
 
             # ! show empty screen between trials
@@ -157,6 +162,7 @@ def diamond_task(
             win.flip()
             core.wait(empty_screen_between_trials)
             data_saver.check_exit()
+            behavioral_data["empty_screen_between_trials_time"] = empty_screen_between_trials
 
             # ! show fixation
             fixation_show_time = random.uniform(*config["Fixation_show_time"])
@@ -164,12 +170,19 @@ def diamond_task(
             win.flip()
             core.wait(fixation_show_time)
             stimulus["fixation"].setAutoDraw(False)
+            win.flip()
             data_saver.check_exit()
 
             if config["Show_photo"]:
                 # ! show photo
-                # ...
-                pass
+                behavioral_data["image"] = trial["image"].name
+                photo_show_time = random.uniform(*config["Photo_show_time"])
+                trial["image"].setAutoDraw(True)
+                win.flip()
+                core.wait(photo_show_time)
+                trial["image"].setAutoDraw(False)
+                win.flip()
+                data_saver.check_exit()
 
             if config["Rate_arousal"]:
                 # ! rate arousal
@@ -177,11 +190,11 @@ def diamond_task(
                     slider_arousal,
                     "Pobudzenie",
                     win,
-                    mouse,
                     data_saver,
                     stimulus,
                     config["Slider_speed"],
                     joy,
+                    keyboard_,
                 )
 
             if config["Rate_valence"]:
@@ -190,11 +203,11 @@ def diamond_task(
                     slider_valence,
                     "Nastrój",
                     win,
-                    mouse,
                     data_saver,
                     stimulus,
                     config["Slider_speed"],
                     joy,
+                    keyboard_,
                 )
 
             # ! decision
@@ -226,13 +239,8 @@ def diamond_task(
                 win.flip()
 
                 # ! wait for response
-                event.clearEvents()
                 while True:
-                    if config["Keys"] == "arrows":
-                        keys = event.getKeys(keyList=["down", "left", "right"])
-                    elif config["Keys"] == "joystick":
-                        keys = get_joystick_input(joy)
-
+                    keys = get_keypresses(joy, keyboard_)
                     if keys:
                         if trait_name == trait_names[-1] and keys == ["down"]:
                             # at the last cue you cannot press down
@@ -268,6 +276,12 @@ def diamond_task(
                 info_show_time = random.uniform(*config["Diamond_info_show_time"])
                 core.wait(info_show_time)
                 data_saver.check_exit()
+
+                # make sure joystick or keyboard is unpressed
+                # it also removes the finished keypresses from the buffer
+                while get_keypresses(joy, keyboard_) != []:
+                    win.flip()
+
             behavioral_data["total_decision_time"] = total_decision_clock.getTime()
             behavioral_data["number_of_cues"] = len(behavioral_data["cues_decision_time"])
 
@@ -283,19 +297,19 @@ def diamond_task(
             win.flip()
 
             # ! rate confidence
-            if config["Keys"] == "joystick":
-                # make sure joystick is unpressed
-                while get_joystick_input(joy) != []:
-                    win.flip()
+            # make sure joystick or keyboard is unpressed
+            # it also removes the finished keypresses from the buffer
+            while get_keypresses(joy, keyboard_) != []:
+                win.flip()
             behavioral_data["confidence"] = get_value_from_slider(
                 slider_confidence,
                 "Pewność",
                 win,
-                mouse,
                 data_saver,
                 stimulus,
                 config["Slider_speed"],
                 joy,
+                keyboard_,
             )
 
             # check if choice is correct
@@ -306,24 +320,19 @@ def diamond_task(
 
             if config["Show_feedback"]:
                 # ! give feedback
-                # ...
-                pass
+                if behavioral_data["choice_correct"]:
+                    feedback = stimulus["feedback_good"]
+                else:
+                    feedback = stimulus["feedback_bad"]
+                feedback_show_time = random.uniform(*config["Feedback_show_time"])
+                feedback.setAutoDraw(True)
+                win.flip()
+                core.wait(feedback_show_time)
+                feedback.setAutoDraw(False)
+                win.flip()
+                data_saver.check_exit()
 
             # ! save behavioral data
-            # behavioral_data = OrderedDict(
-            #     block_type=block["type"],
-            #     trial_type=trial["type"],
-            #     cue_name=cue_name,
-            #     target_name=trial["target"].name,
-            #     response=response,
-            #     rt=reaction_time,
-            #     reaction=reaction,
-            #     threshold_rt=feedback_timer.thresholds[cue_name] if config["Show_feedback"] else None,
-            #     empty_screen_between_trials=empty_screen_between_trials,
-            #     cue_show_time=cue_show_time if config["Show_cues"] else None,
-            #     empty_screen_after_cue_show_time=empty_screen_after_cue_show_time if config["Show_cues"] else None,
-            #     fixation_show_time=fixation_show_time,
-            # )
             data_saver.beh.append(behavioral_data)
             logging.data(f"Behavioral data: {behavioral_data}\n")
             logging.data(f"Trial data: {trial}\n")
