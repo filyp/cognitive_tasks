@@ -12,7 +12,7 @@ def prepare_trials(block, config, win):
     trials_info = pd.read_excel(filename)
 
     for row in trials_info.itertuples():
-        image_path = os.path.join(config["Photos_directory"], row.IAPSslide)
+        image_path = os.path.join(config["Images_directory"], row.IAPSslide)
         image = visual.ImageStim(
             win=win,
             image=image_path,

@@ -18,19 +18,19 @@ Arrows_size: 0.2
 # Diamond_info_show_time: [2.000, 2.000]
 # Feedback_show_time: [1.500, 1.500]
 Empty_screen_between_trials: [1.000, 1.000, 0.100]   # min, max, step
-Fixation_show_time: [0.000, 0.000]                   # min, max
+Fixation_show_time: [0.200, 0.200]                   # min, max
 Photo_show_time: [0.500, 0.500]   # note that actually this will be much more than 5 ms, because of larger monitor refresh rate
 Diamond_info_show_time: [1.000, 1.000]
 Feedback_show_time: [1.500, 1.500]
 
 # * optional steps
-Show_photo: True
+Show_image: True
 Rate_arousal: True
 Rate_valence: True
 Show_feedback: True
 #################################
-# Photos_directory: "input_data/diamond_task/IAPS"   # this is only needed if Show_photo is True
-Photos_directory: "input_data/diamond_task/testImages_artphoto"    # from https://www.imageemotion.org/
+# Images_directory: "input_data/diamond_task/IAPS"   # this is only needed if Show_image is True
+Images_directory: "input_data/diamond_task/testImages_artphoto"    # from https://www.imageemotion.org/
 #################################
 Feedback_good: "dobry wybór"   # this is only needed if Show_feedback is True
 Feedback_bad: "zły wybór"

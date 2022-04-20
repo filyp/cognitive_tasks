@@ -4,15 +4,18 @@ from psychopy import logging
 
 
 class TriggerTypes:
-    BLINK = "BLINK"
-    CUE = "CUE_____"
-    TARGET = "TARGET__"
-    REACTION = "REACTION"
-    FLANKER = "FLANKER_"
+    BLOCK_START = "BLOCK_START"
+    IMAGE = "IMAGE___"
+    CUES = [
+        "CUE_1___",
+        "CUE_2___",
+        "CUE_3___",
+        "CUE_4___",
+        "CUE_5___",
+        "CUE_6___",
+    ]
     FEEDB_GOOD = "F_GOOD__"
     FEEDB_BAD = "F_BAD___"
-    SECOND_REACTION = "SECOND_R"
-    BLOCK_START = "BLOCK_START"
 
 
 def create_eeg_port():
@@ -47,15 +50,12 @@ class TriggerHandler:
         self,
         trigger_type,
         block_type="--",
-        cue_name="-",
-        target_name="---",
-        response=None,
     ):
         self.trigger_no += 1
         if self.trigger_no == 9:
             self.trigger_no = 1
 
-        trigger_name = f"{self.trigger_no}:{trigger_type}*{block_type[:2]}*{cue_name}*{target_name[-3:]}*{response}"
+        trigger_name = f"{self.trigger_no}:{trigger_type}*{block_type[:2]}"
         self.data_saver.triggers_list.append(trigger_name)
 
     def send_trigger(self):

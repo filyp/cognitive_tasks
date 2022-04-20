@@ -71,7 +71,7 @@ def get_value_from_slider(
     slider.setAutoDraw(False)
     stimulus["top_text"].setAutoDraw(False)
     win.flip()
-    return slider.getRating()
+    return slider.markerPos
 
 
 def diamond_task(
@@ -173,12 +173,17 @@ def diamond_task(
             win.flip()
             data_saver.check_exit()
 
-            if config["Show_photo"]:
-                # ! show photo
+            if config["Show_image"]:
+                # ! show image
                 behavioral_data["image"] = trial["image"].name
                 photo_show_time = random.uniform(*config["Photo_show_time"])
                 trial["image"].setAutoDraw(True)
+                trigger_handler.prepare_trigger(
+                    trigger_type=TriggerTypes.IMAGE,
+                    block_type=block["type"],
+                )
                 win.flip()
+                trigger_handler.send_trigger()
                 core.wait(photo_show_time)
                 trial["image"].setAutoDraw(False)
                 win.flip()
@@ -213,7 +218,10 @@ def diamond_task(
             # ! decision
             total_decision_clock.reset()
             cue_decision_clock.reset()
-            for trait_name, info_pair in zip(trait_names, trial["diamond_data"]):
+            num_of_cues = len(trait_names)
+            for i, trait_name, info_pair in zip(
+                range(num_of_cues), trait_names, trial["diamond_data"]
+            ):
                 # ! choice prompt
                 stimulus["right_arrow"].setAutoDraw(True)
                 stimulus["left_arrow"].setAutoDraw(True)
@@ -225,7 +233,7 @@ def diamond_task(
                 stimulus["left_text"].setAutoDraw(False)
                 stimulus["right_text"].setAutoDraw(False)
 
-                if trait_name == trait_names[0]:
+                if i == 0:
                     stimulus["left_square"].setAutoDraw(True)
                     stimulus["right_square"].setAutoDraw(True)
                     stimulus["middle_text"].setAutoDraw(True)
@@ -234,7 +242,7 @@ def diamond_task(
                     stimulus["middle_text"].text = ""
                     stimulus["left_text"].text = "A"
                     stimulus["right_text"].text = "B"
-                elif trait_name == trait_names[-1]:
+                elif i == num_of_cues - 1:
                     stimulus["down_arrow"].setAutoDraw(False)
                 win.flip()
 
@@ -242,7 +250,7 @@ def diamond_task(
                 while True:
                     keys = get_keypresses(joy, keyboard_)
                     if keys:
-                        if trait_name == trait_names[-1] and keys == ["down"]:
+                        if i == num_of_cues - 1 and keys == ["down"]:
                             # at the last cue you cannot press down
                             win.flip()
                             continue
@@ -271,7 +279,13 @@ def diamond_task(
                 stimulus["middle_text"].text = trait_name
                 stimulus["left_text"].text = info_pair[0]
                 stimulus["right_text"].text = info_pair[1]
+                trigger_handler.prepare_trigger(
+                    trigger_type=TriggerTypes.CUES[i],
+                    block_type=block["type"],
+                )
                 win.flip()
+                trigger_handler.send_trigger()
+
                 cue_decision_clock.reset()
                 info_show_time = random.uniform(*config["Diamond_info_show_time"])
                 core.wait(info_show_time)
@@ -322,11 +336,21 @@ def diamond_task(
                 # ! give feedback
                 if behavioral_data["choice_correct"]:
                     feedback = stimulus["feedback_good"]
+                    trigger_type = TriggerTypes.FEEDB_GOOD
                 else:
                     feedback = stimulus["feedback_bad"]
+                    trigger_type = TriggerTypes.FEEDB_BAD
+
                 feedback_show_time = random.uniform(*config["Feedback_show_time"])
                 feedback.setAutoDraw(True)
+
+                trigger_handler.prepare_trigger(
+                    trigger_type=trigger_type,
+                    block_type=block["type"],
+                )
                 win.flip()
+                trigger_handler.send_trigger()
+
                 core.wait(feedback_show_time)
                 feedback.setAutoDraw(False)
                 win.flip()
