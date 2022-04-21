@@ -6,6 +6,7 @@ from psychopy import logging
 class TriggerTypes:
     BLOCK_START = "BLOCK_START"
     IMAGE = "IMAGE___"
+    CHOICE_PROMPT = "CHOICE_P"
     CUES = [
         "CUE_1___",
         "CUE_2___",

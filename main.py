@@ -6,6 +6,7 @@ import os
 import sys
 import json
 import shutil
+import hashlib
 
 import yaml
 from psychopy import logging
@@ -33,7 +34,7 @@ def load_config(config_path):
 
     # compute hash of config file to know for sure which config version was used
     unique_config_string = json.dumps(config, sort_keys=True, ensure_ascii=True)
-    short_hash = hex(hash(unique_config_string) % (2**24))[2:]
+    short_hash = hashlib.sha1(unique_config_string.encode("utf-8")).hexdigest()[:6]
 
     return config, short_hash
 

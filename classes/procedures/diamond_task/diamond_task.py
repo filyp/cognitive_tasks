@@ -33,6 +33,13 @@ def get_joystick_input(joy):
     return responses
 
 
+def wait_for_no_keys_pressed(win, joy=None, keyboard_=None):
+    # make sure joystick or keyboard is unpressed
+    # it also removes the finished keypresses from the buffer
+    while get_keypresses(joy, keyboard_) != []:
+        win.flip()
+
+
 def get_keypresses(joy=None, keyboard=None):
     if joy is None:
         keys = keyboard.getKeys(keyList=["down", "left", "right"], waitRelease=False, clear=False)
@@ -149,8 +156,14 @@ def diamond_task(
                 valence=None,
                 confidence=None,
                 total_decision_time=None,
-                cues_decision_time=[],
-                number_of_cues=None,
+                choice_prompt_decision_time=None,
+                cue1_decision_time=None,
+                cue2_decision_time=None,
+                cue3_decision_time=None,
+                cue4_decision_time=None,
+                cue5_decision_time=None,
+                cue6_decision_time=None,
+                cues_taken=None,
                 image=None,
                 empty_screen_between_trials_time=None,
             )
@@ -215,59 +228,50 @@ def diamond_task(
                     keyboard_,
                 )
 
-            # ! decision
-            total_decision_clock.reset()
-            cue_decision_clock.reset()
+            # ! show choice prompt
+            stimulus["left_square"].setAutoDraw(True)
+            stimulus["right_square"].setAutoDraw(True)
+            stimulus["middle_text"].setAutoDraw(True)
+            stimulus["left_text"].setAutoDraw(True)
+            stimulus["right_text"].setAutoDraw(True)
+            stimulus["middle_text"].text = ""
+            stimulus["left_text"].text = "A"
+            stimulus["right_text"].text = "B"
+            stimulus["right_arrow"].setAutoDraw(True)
+            stimulus["left_arrow"].setAutoDraw(True)
+            stimulus["down_arrow"].setAutoDraw(True)
+            win.callOnFlip(total_decision_clock.reset)
+            win.callOnFlip(cue_decision_clock.reset)
+            trigger_handler.prepare_trigger(
+                trigger_type=TriggerTypes.CHOICE_PROMPT,
+                block_type=block["type"],
+            )
+            win.flip()
+            trigger_handler.send_trigger()
+
+            # ! wait for response
+            while True:
+                keys = get_keypresses(joy, keyboard_)
+                if keys:
+                    behavioral_data["choice_prompt_decision_time"] = cue_decision_clock.getTime()
+                    break
+                data_saver.check_exit()
+                win.flip()
+            if "left" in keys:
+                behavioral_data["choice"] = "A"
+            if "right" in keys:
+                behavioral_data["choice"] = "B"
+            wait_for_no_keys_pressed(win, joy, keyboard_)
+
+            cues_taken = 1
             num_of_cues = len(trait_names)
             for i, trait_name, info_pair in zip(
                 range(num_of_cues), trait_names, trial["diamond_data"]
             ):
-                # ! choice prompt
-                stimulus["right_arrow"].setAutoDraw(True)
-                stimulus["left_arrow"].setAutoDraw(True)
-                stimulus["down_arrow"].setAutoDraw(True)
-
-                stimulus["left_square"].setAutoDraw(False)
-                stimulus["right_square"].setAutoDraw(False)
-                stimulus["middle_text"].setAutoDraw(False)
-                stimulus["left_text"].setAutoDraw(False)
-                stimulus["right_text"].setAutoDraw(False)
-
-                if i == 0:
-                    stimulus["left_square"].setAutoDraw(True)
-                    stimulus["right_square"].setAutoDraw(True)
-                    stimulus["middle_text"].setAutoDraw(True)
-                    stimulus["left_text"].setAutoDraw(True)
-                    stimulus["right_text"].setAutoDraw(True)
-                    stimulus["middle_text"].text = ""
-                    stimulus["left_text"].text = "A"
-                    stimulus["right_text"].text = "B"
-                elif i == num_of_cues - 1:
-                    stimulus["down_arrow"].setAutoDraw(False)
-                win.flip()
-
-                # ! wait for response
-                while True:
-                    keys = get_keypresses(joy, keyboard_)
-                    if keys:
-                        if i == num_of_cues - 1 and keys == ["down"]:
-                            # at the last cue you cannot press down
-                            win.flip()
-                            continue
-                        behavioral_data["cues_decision_time"].append(cue_decision_clock.getTime())
-                        break
-                    data_saver.check_exit()
-                    win.flip()
-                if "down" in keys:
-                    pass
-                elif "left" in keys:
-                    behavioral_data["choice"] = "A"
-                    break
-                elif "right" in keys:
-                    behavioral_data["choice"] = "B"
+                if behavioral_data["choice"] is not None:
                     break
 
-                # ! show diamond info
+                # ! cue display
                 stimulus["right_arrow"].setAutoDraw(False)
                 stimulus["left_arrow"].setAutoDraw(False)
                 stimulus["down_arrow"].setAutoDraw(False)
@@ -279,6 +283,7 @@ def diamond_task(
                 stimulus["middle_text"].text = trait_name
                 stimulus["left_text"].text = info_pair[0]
                 stimulus["right_text"].text = info_pair[1]
+                win.callOnFlip(cue_decision_clock.reset)
                 trigger_handler.prepare_trigger(
                     trigger_type=TriggerTypes.CUES[i],
                     block_type=block["type"],
@@ -286,18 +291,48 @@ def diamond_task(
                 win.flip()
                 trigger_handler.send_trigger()
 
-                cue_decision_clock.reset()
                 info_show_time = random.uniform(*config["Diamond_info_show_time"])
                 core.wait(info_show_time)
                 data_saver.check_exit()
 
-                # make sure joystick or keyboard is unpressed
-                # it also removes the finished keypresses from the buffer
-                while get_keypresses(joy, keyboard_) != []:
+                # ! cue prompt
+                stimulus["right_arrow"].setAutoDraw(True)
+                stimulus["left_arrow"].setAutoDraw(True)
+                stimulus["down_arrow"].setAutoDraw(True)
+                stimulus["left_square"].setAutoDraw(False)
+                stimulus["right_square"].setAutoDraw(False)
+                stimulus["middle_text"].setAutoDraw(False)
+                stimulus["left_text"].setAutoDraw(False)
+                stimulus["right_text"].setAutoDraw(False)
+                if i == num_of_cues - 1:
+                    stimulus["down_arrow"].setAutoDraw(False)
+                win.flip()
+                wait_for_no_keys_pressed(win, joy, keyboard_)
+
+                # ! wait for response
+                while True:
+                    keys = get_keypresses(joy, keyboard_)
+                    if keys:
+                        decision_time = cue_decision_clock.getTime()
+                        if i == num_of_cues - 1 and keys == ["down"]:
+                            # at the last cue you cannot press down
+                            win.flip()
+                            continue
+                        behavioral_data[f"cue{i+1}_decision_time"] = decision_time
+                        break
+                    data_saver.check_exit()
                     win.flip()
+                if "down" in keys:
+                    cues_taken += 1
+                elif "left" in keys:
+                    behavioral_data["choice"] = "A"
+                    break
+                elif "right" in keys:
+                    behavioral_data["choice"] = "B"
+                    break
 
             behavioral_data["total_decision_time"] = total_decision_clock.getTime()
-            behavioral_data["number_of_cues"] = len(behavioral_data["cues_decision_time"])
+            behavioral_data["cues_taken"] = cues_taken
 
             # ! clear
             stimulus["right_arrow"].setAutoDraw(False)
@@ -311,10 +346,8 @@ def diamond_task(
             win.flip()
 
             # ! rate confidence
-            # make sure joystick or keyboard is unpressed
-            # it also removes the finished keypresses from the buffer
-            while get_keypresses(joy, keyboard_) != []:
-                win.flip()
+
+            wait_for_no_keys_pressed(win, joy, keyboard_)
             behavioral_data["confidence"] = get_value_from_slider(
                 slider_confidence,
                 "Pewność",
