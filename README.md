@@ -1,10 +1,16 @@
-# Flanker task
+# Cognitive tasks
+
+This repository contains procedures for multiple cognitive psychology experiments:
+- flanker task
+- diamond decision task
 
 ## Running
 
 ```bash
-python main.py config/config.yaml
+python main.py config/<task you want to run>.yaml
 ```
+
+See the folder `config` for all the available tasks and their versions.
 
 ## Behavioral analysis
 
