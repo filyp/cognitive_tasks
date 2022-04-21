@@ -12,13 +12,9 @@ Info_size: 0.075       # size of text cues
 Arrows_size: 0.2
 
 # * times
-# Empty_screen_between_trials: [0.900, 1.500, 0.100]   # min, max, step
-# Fixation_show_time: [2.000, 2.000]                   # min, max
-# Diamond_info_show_time: [2.000, 2.000]
-# Feedback_show_time: [1.500, 1.500]
-Empty_screen_between_trials: [1.000, 1.000, 0.100]   # min, max, step
-Fixation_show_time: [0.200, 0.200]                   # min, max
-Diamond_info_show_time: [1.000, 1.000]
+Empty_screen_between_trials: [0.900, 1.500, 0.100]   # min, max, step
+Fixation_show_time: [2.000, 2.000]                   # min, max
+Diamond_info_show_time: [2.000, 2.000]
 Feedback_show_time: [1.500, 1.500]
 
 # * optional steps
@@ -32,7 +28,7 @@ Feedback_bad: "zły wybór"
 
 
 # * reaction keys
-Keys: "arrows"     # "joystick" or "arrows"
+Keys: "joystick"     # "joystick" or "arrows"
 Slider_speed: 2      # if joystick is used to move the slider, chosse slider speed here
 
 # * experiment structure

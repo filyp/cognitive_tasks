@@ -167,6 +167,7 @@ def diamond_task(
                 image=None,
                 empty_screen_between_trials_time=None,
             )
+            wait_for_no_keys_pressed(win, joy, keyboard_)
 
             # ! show empty screen between trials
             min_time, max_time, step = config["Empty_screen_between_trials"]

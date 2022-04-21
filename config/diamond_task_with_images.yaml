@@ -32,7 +32,7 @@ Feedback_bad: "zły wybór"
 
 
 # * reaction keys
-Keys: "arrows"     # "joystick" or "arrows"
+Keys: "joystick"     # "joystick" or "arrows"
 Slider_speed: 2      # if joystick is used to move the slider, chosse slider speed here
 
 # * experiment structure
