@@ -186,7 +186,7 @@ def diamond_task(
             win.flip()
             data_saver.check_exit()
 
-            if config["Show_image"]:
+            if config["Show_images"]:
                 # ! show image
                 behavioral_data["image"] = trial["image"].name
                 photo_show_time = random.uniform(*config["Photo_show_time"])

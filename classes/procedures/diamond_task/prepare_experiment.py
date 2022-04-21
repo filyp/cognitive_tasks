@@ -12,13 +12,17 @@ def prepare_trials(block, config, win):
     trials_info = pd.read_excel(filename)
 
     for row in trials_info.itertuples():
-        image_path = os.path.join(config["Images_directory"], row.IAPSslide)
-        image = visual.ImageStim(
-            win=win,
-            image=image_path,
-            # size=config["Image_size"],
-            name=row.IAPSslide,
-        )
+        if config["Show_images"]:
+            image_path = os.path.join(config["Images_directory"], row.IAPSslide)
+            image = visual.ImageStim(
+                win=win,
+                image=image_path,
+                # size=config["Image_size"],
+                name=row.IAPSslide,
+            )
+        else:
+            image = None
+
         all_trials.append(
             dict(
                 correct=row.Correct,

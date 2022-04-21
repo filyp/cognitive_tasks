@@ -12,20 +12,20 @@ Info_size: 0.075       # size of text cues
 Arrows_size: 0.2
 
 # * times
-# Empty_screen_between_trials: [0.900, 1.500, 0.100]   # min, max, step
-# Fixation_show_time: [2.000, 2.000]                   # min, max
-# Diamond_info_show_time: [2.000, 2.000]
-# Feedback_show_time: [1.500, 1.500]
-Empty_screen_between_trials: [1.000, 1.000, 0.100]   # min, max, step
-Fixation_show_time: [0.200, 0.200]                   # min, max
-Diamond_info_show_time: [1.000, 1.000]
+Empty_screen_between_trials: [0.900, 1.500, 0.100]   # min, max, step
+Fixation_show_time: [2.000, 2.000]                   # min, max
+Photo_show_time: [0.005, 0.005]   # note that actually this will be much more than 5 ms, because of larger monitor refresh rate
+Diamond_info_show_time: [2.000, 2.000]
 Feedback_show_time: [1.500, 1.500]
 
 # * optional steps
-Show_images: False
+Show_images: True
 Rate_arousal: True
 Rate_valence: True
 Show_feedback: True
+#################################
+# Images_directory: "input_data/diamond_task/IAPS"   # this is only needed if Show_images is True
+Images_directory: "input_data/diamond_task/testImages_artphoto"    # from https://www.imageemotion.org/
 #################################
 Feedback_good: "dobry wybór"   # this is only needed if Show_feedback is True
 Feedback_bad: "zły wybór"
@@ -38,10 +38,6 @@ Slider_speed: 2      # if joystick is used to move the slider, chosse slider spe
 # * experiment structure
 Experiment_blocks: [
     {type: break, file_name: instruction.txt},
-    {type: training, info_file: "trial_list_S1_C_training.xlsx"},
-    {type: break, file_name: end_training.txt},
-    {type: experiment, info_file: "trial_list_S1_C.xlsx"},
+    {type: experiment, info_file: "trial_list_S1_C_with_images.xlsx"},   # from https://www.imageemotion.org/
     {type: break, file_name: break1.txt},
-    {type: experiment, info_file: "trial_list_S1_NC.xlsx"},
-    {type: break, file_name: end.txt}
 ]
