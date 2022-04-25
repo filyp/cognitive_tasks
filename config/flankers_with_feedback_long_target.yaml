@@ -12,8 +12,13 @@ Text_size: 0.04
 Text_font: "Arial"
 
 # * flanker parameters
+Fixation: "fixation.png"
+Arrow_left: "arrow_left.png"
+Arrow_right: "arrow_right.png"
+Fixation_size: [0.07, 0.02830625]  # arrow dimensions are 1600x647
 Flanker_size: [0.07, 0.02830625]  # arrow dimensions are 1600x647
 Flanker_spacing: 0.06
+Orientation: "vertical"
 
 # * cue definition
 Show_cues: False    # if False, the rest of this block has no effect

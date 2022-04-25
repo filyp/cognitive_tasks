@@ -12,12 +12,13 @@ Flanker_size: 0.092
 Text_font: "Arial"
 
 # * flanker parameters
-Flanker_font: "Noto Sans Mono"   # FreeMono, Noto Sans Mono, DejaVu Sans Mono
-Flanker_size: 0.092
+Fixation: "+.png"
+Arrow_left: "<.png"
+Arrow_right: ">.png"
+Fixation_size: 0.04
+Flanker_size: [0.05, 0.05]
+Flanker_spacing: 0.04
 Orientation: "horizontal"
-Right_char: ">"
-Left_char: "<"
-Fixation_char: "+"
 
 # * cue definition
 Show_cues: True

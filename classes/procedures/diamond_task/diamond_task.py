@@ -106,10 +106,11 @@ def diamond_task(
 
     slider_params = dict(
         win=win,
-        size=(0.5, 0.03),
+        size=(0.9, 0.03),
         ticks=[0, 100],
         borderColor=config["Text_color"],
         markerColor=config["Text_color"],
+        # labels=["0", "100"],
     )
     slider_arousal = visual.Slider(name="arousal", **slider_params)
     slider_valence = visual.Slider(name="valence", **slider_params)
