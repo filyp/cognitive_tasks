@@ -25,14 +25,10 @@ Show_cues: False    # if False, the rest of this block has no effect
 
 # * feedback  definition
 Show_feedback: True    # if False, the rest of this block has no effect
-# Feedback_good: "OK"
-# Feedback_bad: "respond faster"
-Feedback_good: "☺"
-Feedback_bad: "☹"
+Feedback_good: "smiley_face.png"
+Feedback_bad: "sad_face.png"
 Feedback_initial_threshold_rt: 0.420
-Feedback_font: "DejaVu Sans Mono"
-Feedback_size: 0.185
-Feedback_position: [0, 0.04]
+Feedback_size: 0.12
 
 # * times
 Empty_screen_between_trials: [0.600, 0.800]

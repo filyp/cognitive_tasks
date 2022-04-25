@@ -102,28 +102,20 @@ def load_stimuli(win, config, screen_res):
 
     # ! create feedback
     if config["Show_feedback"]:
-        pos_x, pos_y = config["Feedback_position"]
-        abs_feedback_position = (
-            pos_x * config["Feedback_size"],
-            pos_y * config["Feedback_size"],
-        )
-        stimuli["feedback_good"] = visual.TextStim(
-            win,
-            color=config["Text_color"],
-            text=config["Feedback_good"],
-            font=config["Feedback_font"],
-            height=config["Feedback_size"],
+
+        stimuli["feedback_good"] = visual.ImageStim(
+            win=win,
+            image=os.path.join("input_data", "flanker_task", config["Feedback_good"]),
+            size=config["Feedback_size"],
             name="feedback_good",
-            pos=abs_feedback_position,
+            interpolate=True,
         )
-        stimuli["feedback_bad"] = visual.TextStim(
-            win,
-            color=config["Text_color"],
-            text=config["Feedback_bad"],
-            font=config["Feedback_font"],
-            height=config["Feedback_size"],
+        stimuli["feedback_bad"] = visual.ImageStim(
+            win=win,
+            image=os.path.join("input_data", "flanker_task", config["Feedback_bad"]),
+            size=config["Feedback_size"],
             name="feedback_bad",
-            pos=abs_feedback_position,
+            interpolate=True,
         )
 
     return stimuli
