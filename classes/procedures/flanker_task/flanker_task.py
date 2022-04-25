@@ -4,8 +4,7 @@ from collections import OrderedDict
 from psychopy import core, event, logging
 
 from classes.show_info import show_info
-from classes.experiment_info import display_eeg_info
-
+from classes.procedures.flanker_task.load_data import load_stimuli
 from classes.procedures.flanker_task.triggers import (
     TriggerHandler,
     TriggerTypes,
@@ -16,7 +15,6 @@ from classes.procedures.flanker_task.feedback import (
     FeedbackTimerSteps,
     FeedbackTimerMovingMedian,
 )
-from classes.procedures.flanker_task.load_data import load_stimuli
 
 
 def check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data):
@@ -59,8 +57,6 @@ def flanker_task(
     config,
     data_saver,
 ):
-    # display_eeg_info()
-
     clock = core.Clock()
     mouse = event.Mouse(win=win, visible=False)
 

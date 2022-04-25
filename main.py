@@ -17,6 +17,7 @@ from classes.experiment_info import get_participant_info
 
 from classes.save_data import DataSaver
 from classes.screen import create_win
+from classes.experiment_info import display_eeg_info
 
 # from classes.procedures.ophthalmic_procedure import ophthalmic_procedure
 from classes.procedures.flanker_task.flanker_task import flanker_task
@@ -47,6 +48,9 @@ def run():
     experiment_name = experiment_name.split(".")[0]
     experiment_name = experiment_name + "_" + config_hash
 
+
+    if config.get("Actiview_reminder", False):
+        display_eeg_info()
     participant_info = get_participant_info()
     # participant_info = "mock_info"  # TODO reenable after testing
 

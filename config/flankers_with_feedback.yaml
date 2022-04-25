@@ -3,7 +3,7 @@ Procedure: "Flanker task"
 # * EEG
 Ophthalmic_procedure: False     # this is currently not supported
 Send_EEG_trigg: False
-
+Actiview_reminder: True
 
 # * view parameters
 Screen_color: -0.2
