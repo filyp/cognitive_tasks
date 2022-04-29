@@ -17,7 +17,7 @@ def prepare_trials(block, config, win):
             image = visual.ImageStim(
                 win=win,
                 image=image_path,
-                # size=config["Image_size"],
+                size=config["Image_size"],
                 name=row.IAPSslide,
             )
         else:

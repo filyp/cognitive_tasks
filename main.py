@@ -48,7 +48,6 @@ def run():
     experiment_name = experiment_name.split(".")[0]
     experiment_name = experiment_name + "_" + config_hash
 
-
     if config.get("Actiview_reminder", False):
         display_eeg_info()
     participant_info = get_participant_info()

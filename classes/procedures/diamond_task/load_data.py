@@ -131,4 +131,27 @@ def load_stimuli(win, config, screen_res):
         wrapWidth=screen_res["width"],
     )
 
+    # ! load self assesment manikin
+    for i in [1, 2, 3, 4, 5]:
+        manikin_size = config["Self_assessment_manikin_size"]
+        manikin_spacing = config["Self_assessment_manikin_spacing"]
+        stimuli[f"valence{i}"] = visual.ImageStim(
+            win,
+            image=os.path.join(
+                "input_data", "diamond_task", "self_assessment_manikin", f"valence{i}.png"
+            ),
+            size=manikin_size,
+            pos=(manikin_spacing * (i - 3), -0.12),
+            name=f"valence{i}",
+        )
+        stimuli[f"arousal{i}"] = visual.ImageStim(
+            win,
+            image=os.path.join(
+                "input_data", "diamond_task", "self_assessment_manikin", f"arousal{i}.png"
+            ),
+            size=manikin_size,
+            pos=(manikin_spacing * (i - 3), -0.12),
+            name=f"arousal{i}",
+        )
+
     return stimuli

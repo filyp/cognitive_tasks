@@ -16,18 +16,14 @@ Self_assessment_manikin_spacing: 0.225
 # * times
 Empty_screen_between_trials: [0.900, 1.500, 0.100]   # min, max, step
 Fixation_show_time: [2.000, 2.000]                   # min, max
-Photo_show_time: [0.005, 0.005]   # note that actually this will be much more than 5 ms, because of larger monitor refresh rate
 Diamond_info_show_time: [2.000, 2.000]
 Feedback_show_time: [1.500, 1.500]
 
 # * optional steps
-Show_images: True
+Show_images: False
 Rate_arousal: True
 Rate_valence: True
 Show_feedback: True
-#################################
-Images_directory: "input_data/diamond_task/IAPS/IMAGES"   # this is only needed if Show_images is True
-Image_size: [1.333333, 1]    # width, height
 #################################
 Feedback_good: "dobry wybór"   # this is only needed if Show_feedback is True
 Feedback_bad: "zły wybór"
@@ -35,11 +31,10 @@ Feedback_bad: "zły wybór"
 
 # * reaction keys
 Keys: "arrows"     # "joystick" or "arrows"
-Slider_speed: 2      # if joystick is used to move the slider, chosse slider speed here
+Slider_speed: 2
 
 # * experiment structure
 Experiment_blocks: [
-    {type: break, file_name: instruction.txt},
-    {type: experiment, info_file: "trial_list_S1_C_with_images.xlsx"},   # from https://www.imageemotion.org/
-    {type: break, file_name: break1.txt},
+    {type: experiment, info_file: "trial_list_S1_C.xlsx"},
+    {type: break, file_name: end.txt}
 ]

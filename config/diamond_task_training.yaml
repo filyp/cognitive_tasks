@@ -10,6 +10,8 @@ Text_size: 0.04
 Text_font: "Arial"
 Info_size: 0.075       # size of text cues
 Arrows_size: 0.2
+Self_assessment_manikin_size: [0.1449, 0.1561]  # size of the manikins is 207x223 pixels
+Self_assessment_manikin_spacing: 0.225
 
 # * times
 Empty_screen_between_trials: [0.900, 1.500, 0.100]   # min, max, step
@@ -29,15 +31,11 @@ Feedback_bad: "zły wybór"
 
 # * reaction keys
 Keys: "arrows"     # "joystick" or "arrows"
-Slider_speed: 2      # if joystick is used to move the slider, chosse slider speed here
+Slider_speed: 2
 
 # * experiment structure
 Experiment_blocks: [
     {type: break, file_name: instruction.txt},
     {type: training, info_file: "trial_list_S1_C_training.xlsx"},
     {type: break, file_name: end_training.txt},
-    {type: experiment, info_file: "trial_list_S1_C.xlsx"},
-    {type: break, file_name: break1.txt},
-    {type: experiment, info_file: "trial_list_S1_NC.xlsx"},
-    {type: break, file_name: end.txt}
 ]

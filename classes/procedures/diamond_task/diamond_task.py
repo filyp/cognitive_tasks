@@ -54,9 +54,11 @@ def get_keypresses(joy=None, keyboard=None):
 
 
 def get_value_from_slider(
-    slider, text, win, data_saver, stimulus, speed=1, joy=None, keyboard=None
+    slider, text, win, data_saver, stimulus, speed=1, joy=None, keyboard=None, manikins=[]
 ):
     slider.markerPos = 50
+    for manikin in manikins:
+        manikin.setAutoDraw(True)
     slider.setAutoDraw(True)
     stimulus["top_text"].setAutoDraw(True)
     stimulus["top_text"].text = text
@@ -75,6 +77,8 @@ def get_value_from_slider(
     while "down" in get_keypresses(joy, keyboard):
         win.flip()
 
+    for manikin in manikins:
+        manikin.setAutoDraw(False)
     slider.setAutoDraw(False)
     stimulus["top_text"].setAutoDraw(False)
     win.flip()
@@ -206,6 +210,13 @@ def diamond_task(
 
             if config["Rate_arousal"]:
                 # ! rate arousal
+                arousal_manikins = [
+                    stimulus["arousal1"],
+                    stimulus["arousal2"],
+                    stimulus["arousal3"],
+                    stimulus["arousal4"],
+                    stimulus["arousal5"],
+                ]
                 behavioral_data["arousal"] = get_value_from_slider(
                     slider_arousal,
                     "Pobudzenie",
@@ -215,10 +226,18 @@ def diamond_task(
                     config["Slider_speed"],
                     joy,
                     keyboard_,
+                    arousal_manikins,
                 )
 
             if config["Rate_valence"]:
                 # ! rate valence
+                valence_manikins = [
+                    stimulus["valence1"],
+                    stimulus["valence2"],
+                    stimulus["valence3"],
+                    stimulus["valence4"],
+                    stimulus["valence5"],
+                ]
                 behavioral_data["valence"] = get_value_from_slider(
                     slider_valence,
                     "Nastrój",
@@ -228,6 +247,7 @@ def diamond_task(
                     config["Slider_speed"],
                     joy,
                     keyboard_,
+                    valence_manikins,
                 )
 
             # ! show choice prompt
@@ -301,11 +321,13 @@ def diamond_task(
                 stimulus["right_arrow"].setAutoDraw(True)
                 stimulus["left_arrow"].setAutoDraw(True)
                 stimulus["down_arrow"].setAutoDraw(True)
-                stimulus["left_square"].setAutoDraw(False)
-                stimulus["right_square"].setAutoDraw(False)
+                stimulus["left_square"].setAutoDraw(True)
+                stimulus["right_square"].setAutoDraw(True)
+                stimulus["left_text"].setAutoDraw(True)
+                stimulus["right_text"].setAutoDraw(True)
                 stimulus["middle_text"].setAutoDraw(False)
-                stimulus["left_text"].setAutoDraw(False)
-                stimulus["right_text"].setAutoDraw(False)
+                stimulus["left_text"].text = "A"
+                stimulus["right_text"].text = "B"
                 if i == num_of_cues - 1:
                     stimulus["down_arrow"].setAutoDraw(False)
                 win.flip()
