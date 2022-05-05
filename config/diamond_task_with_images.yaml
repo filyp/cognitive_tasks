@@ -6,7 +6,8 @@ Send_EEG_trigg: False
 # * view parameters
 Screen_color: -0.25    # -1 is black, 1 is white, -0.25 corresponds to RGB 96
 Text_color: "black"
-Text_size: 0.04
+Text_size: 0.03        # this is size of the text in the instructions
+Procedure_text_size: 0.04    # this is size of the text in the procedure
 Text_font: "Arial"
 Info_size: 0.075       # size of text cues
 Arrows_size: 0.2
@@ -15,10 +16,12 @@ Self_assessment_manikin_spacing: 0.225
 
 # * times
 Empty_screen_between_trials: [0.900, 1.500, 0.100]   # min, max, step
-Fixation_show_time: [2.000, 2.000]                   # min, max
-Photo_show_time: [0.005, 0.005]   # note that actually this will be much more than 5 ms, because of larger monitor refresh rate
-Diamond_info_show_time: [2.000, 2.000]
-Feedback_show_time: [1.500, 1.500]
+Fixation_show_time: [2.000, 2.000, 0.001]
+Photo_show_time: [0.005, 0.005, 0.001]   # note that actually this will be much more than 5 ms, because of larger monitor refresh rate
+Diamond_info_show_time: [2.000, 2.000, 0.001]
+Blank_between_choice_and_confidence_rating: [0.500, 0.500, 0.100]
+Blank_between_confidence_rating_and_feedback: [0.500, 0.500, 0.100]
+Feedback_show_time: [1.500, 1.500, 0.001]
 
 # * optional steps
 Show_images: True
@@ -39,7 +42,7 @@ Slider_speed: 2      # if joystick is used to move the slider, chosse slider spe
 
 # * experiment structure
 Experiment_blocks: [
-    {type: break, file_name: instruction.txt},
+    {type: break, file_name: "diamond_task/instruction1.txt"},
     {type: experiment, info_file: "trial_list_S1_C_with_images.xlsx"},   # from https://www.imageemotion.org/
     {type: break, file_name: break1.txt},
 ]

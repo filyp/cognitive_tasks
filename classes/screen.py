@@ -51,13 +51,6 @@ def get_screen_res():
     return OrderedDict(width=width, height=height)
 
 
-def get_frame_rate(win, legal_frame_rates=(60, 30)):
-    frame_rate = 30  # int(round(win.getActualFrameRate(nIdentical=30, nMaxFrames=200)))
-    logging.info("Detected framerate: {} frames per sec.".format(frame_rate))
-    assert frame_rate in legal_frame_rates, "Illegal frame rate."
-    return frame_rate
-
-
 def create_win(screen_color):
     """
     zwraca ekran na ktorym bedzie wszystko wyswietlane
@@ -77,5 +70,4 @@ def create_win(screen_color):
     )
     event.Mouse(visible=False, newPos=None, win=win)
     win.flip()
-    frames_per_sec = get_frame_rate(win=win)
-    return win, screen_res, frames_per_sec
+    return win, screen_res

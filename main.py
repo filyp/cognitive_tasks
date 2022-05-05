@@ -60,8 +60,7 @@ def run():
     logging.data(f"Experiment name: {experiment_name}")
 
     # screen
-    win, screen_res, frames_per_sec = create_win(screen_color=config["Screen_color"])
-    logging.data(f"frames per second = {frames_per_sec}")
+    win, screen_res = create_win(screen_color=config["Screen_color"])
 
     # # Ophthalmic procedure
     # if config["Ophthalmic_procedure"]:

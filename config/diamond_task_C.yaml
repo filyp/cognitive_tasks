@@ -40,10 +40,10 @@ Slider_speed: 2
 Experiment_blocks: [
     {type: break, file_name: "diamond_task/instruction1.txt"},
     {type: break, file_name: "diamond_task/instruction2_C.txt"},
-    {type: break, file_name: "diamond_task/instruction3.txt"},
-    {type: break, file_name: "diamond_task/instruction4_C.txt"},
-    {type: break, file_name: "diamond_task/instruction5.txt"},
-    {type: resting_state, length: 120},
+    {type: break, file_name: "diamond_task/instruction3.txt", image: "choice_prompt.png"},
+    {type: break, file_name: "diamond_task/instruction4_C.txt", image: "cue.png"},
+    # {type: break, file_name: "diamond_task/instruction5.txt"},
+    # {type: resting_state, seconds: 120},
     {type: break, file_name: "diamond_task/instruction6.txt"},
     {type: training, info_file: "trial_list_S1_C_training.xlsx"},
 

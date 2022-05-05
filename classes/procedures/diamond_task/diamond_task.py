@@ -1,3 +1,4 @@
+import os
 import random
 from collections import OrderedDict
 
@@ -5,7 +6,7 @@ import numpy as np
 from psychopy import core, event, logging, visual
 from psychopy.hardware import joystick, keyboard
 
-from classes.show_info import show_info
+from classes.show_info import show_info, read_text_from_file
 from classes.procedures.diamond_task.triggers import (
     TriggerHandler,
     TriggerTypes,
@@ -96,6 +97,9 @@ def diamond_task(
     config,
     data_saver,
 ):
+    frame_rate = win.getActualFrameRate()
+    logging.info(f"Frame rate: {frame_rate}")
+
     if config["Keys"] == "joystick":
         if joystick.getNumJoysticks() == 0:
             raise RuntimeError(
@@ -150,17 +154,51 @@ def diamond_task(
         logging.flush()
 
         if block["type"] == "break":
-            show_info(
-                win=win,
-                file_name=block["file_name"],
-                config=config,
-                screen_width=1.3,
-                data_saver=data_saver,
-                alignText="left",
-            )
-            continue
+            text = read_text_from_file(os.path.join("messages", block["file_name"]))
+            if len(text) < 50:
+                alignText = "center"
+            else:
+                alignText = "left"
+
+            if "image" not in block:
+                show_info(
+                    win=win,
+                    file_name=block["file_name"],
+                    config=config,
+                    screen_width=1.3,
+                    data_saver=data_saver,
+                    alignText=alignText,
+                )
+                continue
+            elif "image" in block:
+                image = visual.ImageStim(
+                    win=win,
+                    image=os.path.join("input_data", "diamond_task", block["image"]),
+                    size=(0.557, 1),
+                    pos=(-0.5, 0),
+                )
+                image.setAutoDraw(True)
+                show_info(
+                    win=win,
+                    file_name=block["file_name"],
+                    config=config,
+                    screen_width=0.8,
+                    data_saver=data_saver,
+                    alignText=alignText,
+                    pos=(0.3, 0),
+                )
+                image.setAutoDraw(False)
+                win.flip()
+                continue
         elif block["type"] in ["experiment", "training"]:
             block["trials"] = prepare_trials(block, config, win)
+        elif block["type"] == "resting_state":
+            stimulus["fixation"].setAutoDraw(True)
+            win.flip()
+            core.wait(block["seconds"])
+            stimulus["fixation"].setAutoDraw(False)
+            win.flip()
+            data_saver.check_exit()
         else:
             raise Exception(
                 "{} is bad block type in config Experiment_blocks".format(block["type"])
