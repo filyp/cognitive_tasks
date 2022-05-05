@@ -30,9 +30,11 @@ def show_info(
     win,
     file_name,
     config,
-    screen_width,
-    data_saver,
+    screen_width=None,
+    data_saver=None,
     insert="",
+    alignText="center",
+    pos=(0, 0),
 ):
     """
     Clear way to show info message into screen.
@@ -53,6 +55,8 @@ def show_info(
         height=config["Text_size"],
         wrapWidth=screen_width,
         color=config["Text_color"],
+        alignText=alignText,
+        pos=pos,
     )
     hello_msg.draw()
     win.flip()

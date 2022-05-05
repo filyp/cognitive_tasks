@@ -1,0 +1,10 @@
+Witamy w Diamentowym Zadaniu Decyzyjnym.
+
+W tym zadaniu wcielisz się w rolę właściciela firmy handlującej diamentami. Twoim zadaniem jest zakup jak największej liczby diamentów wysokiej jakości. Przy każdej próbie handlarz zaoferuje ci dwa diamenty, a Ty musisz wybrać lepszy z nich. W sumie będziesz musiał podjąć 36 takich decyzji, za każdym razem w celu wybrania lepszego diamentu spośród dwóch. Jak to zrobić?
+
+Każdy diament jest opisany za pomocą sześciu wskazówek:
+Rozmiar, Przejrzystość, Kształt, Kolor, Blask, Proporcje
+
+Za każdym razem będziesz miał możliwość zdobycia informacji o diamentach, aby podjąć świadomą decyzję. Będziesz mógł przeglądać wskazówki w kolejności ich ważności, zaczynając od najważniejszej (Rozmiar) i kończąc na najmniej ważnej pamięci (Proporcje).
+
+Naciśnij spację, aby kontynuować czytanie instrukcji.

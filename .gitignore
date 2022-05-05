@@ -5,5 +5,4 @@ results
 venv
 junk
 behavioral_analysis.ipynb
-input_data/diamond_task/testImages*
 input_data/diamond_task/*

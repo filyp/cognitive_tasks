@@ -22,7 +22,7 @@ def load_stimuli(win, config, screen_res):
         text="+",
         color=config["Text_color"],
         font=config["Text_font"],
-        height=config["Text_size"],
+        height=config["Procedure_text_size"],
         name="fixation",
     )
 
@@ -107,7 +107,7 @@ def load_stimuli(win, config, screen_res):
         pos=(0, 0.2),
         color=config["Text_color"],
         font=config["Text_font"],
-        height=config["Text_size"],
+        height=config["Procedure_text_size"],
         name="top_text",
         wrapWidth=screen_res["width"],
     )
@@ -117,7 +117,7 @@ def load_stimuli(win, config, screen_res):
         text=config["Feedback_good"],
         color=config["Text_color"],
         font=config["Text_font"],
-        height=config["Text_size"],
+        height=config["Procedure_text_size"],
         name="feedback_good",
         wrapWidth=screen_res["width"],
     )
@@ -126,7 +126,7 @@ def load_stimuli(win, config, screen_res):
         text=config["Feedback_bad"],
         color=config["Text_color"],
         font=config["Text_font"],
-        height=config["Text_size"],
+        height=config["Procedure_text_size"],
         name="feedback_bad",
         wrapWidth=screen_res["width"],
     )

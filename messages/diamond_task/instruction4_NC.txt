@@ -1,0 +1,5 @@
+Ekran, który widzisz powyżej, będzie wyświetlany przez 2 sekundy w odpowiedzi na Twoją decyzję o wyświetleniu następnej wskazówki. W tym przykładzie wskazówka informuje, że Diament B ma lepszy Rozmiar niż Diament A. Z prawdopodobieństwem 93 %, diament wybrany na podstawie tej wskazówki będzie lepszej jakości niż drugi diament.
+
+Podczas prezentacji wskazówki nie podejmuj żadnego wyboru, poczekaj na powrót głównego panelu decyzyjnego. 
+
+Naciśnij spację.

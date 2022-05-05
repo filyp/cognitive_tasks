@@ -85,6 +85,11 @@ def get_value_from_slider(
     return slider.markerPos
 
 
+def random_time(min_time, max_time, step):
+    possible_times = np.arange(min_time, max_time + step, step)
+    return random.choice(possible_times)
+
+
 def diamond_task(
     win,
     screen_res,
@@ -104,6 +109,7 @@ def diamond_task(
 
     total_decision_clock = core.Clock()
     cue_decision_clock = core.Clock()
+    global_clock = core.Clock()
 
     # load stimulus
     stimulus = load_stimuli(win=win, config=config, screen_res=screen_res)
@@ -127,6 +133,13 @@ def diamond_task(
         port_eeg = None
     trigger_handler = TriggerHandler(port_eeg, data_saver=data_saver)
 
+    # ! mark the start of the experiment
+    trigger_handler.prepare_trigger(
+        trigger_type=TriggerTypes.EXPERIMENT_START,
+    )
+    trigger_handler.send_trigger()
+    global_clock.reset()
+
     for block in config["Experiment_blocks"]:
         trigger_handler.prepare_trigger(
             trigger_type=TriggerTypes.BLOCK_START,
@@ -141,8 +154,9 @@ def diamond_task(
                 win=win,
                 file_name=block["file_name"],
                 config=config,
-                screen_width=screen_res["width"],
+                screen_width=1.3,
                 data_saver=data_saver,
+                alignText="left",
             )
             continue
         elif block["type"] in ["experiment", "training"]:
@@ -155,8 +169,8 @@ def diamond_task(
         for trial in block["trials"]:
             behavioral_data = OrderedDict(
                 block_type=block["type"],
-                choice=None,
-                choice_correct=None,
+                correct_choice=trial["correct"],
+                is_choice_correct=None,
                 arousal=None,
                 valence=None,
                 confidence=None,
@@ -170,21 +184,32 @@ def diamond_task(
                 cue6_decision_time=None,
                 cues_taken=None,
                 image=None,
-                empty_screen_between_trials_time=None,
+
+                image_abs_time=None,
+                arousal_slider_abs_time=None,
+                valence_slider_abs_time=None,
+                choice_prompt_abs_time=None,
+                cue1_abs_time=None,
+                cue2_abs_time=None,
+                cue3_abs_time=None,
+                cue4_abs_time=None,
+                cue5_abs_time=None,
+                cue6_abs_time=None,
+                confidence_slider_abs_time=None,
+                feedback_abs_time=None,
+
+
             )
             wait_for_no_keys_pressed(win, joy, keyboard_)
 
             # ! show empty screen between trials
-            min_time, max_time, step = config["Empty_screen_between_trials"]
-            possible_times = np.arange(min_time, max_time + step, step)
-            empty_screen_between_trials = random.choice(possible_times)
+            blank_screen_time = random_time(*config["Empty_screen_between_trials"])
             win.flip()
-            core.wait(empty_screen_between_trials)
+            core.wait(blank_screen_time)
             data_saver.check_exit()
-            behavioral_data["empty_screen_between_trials_time"] = empty_screen_between_trials
 
             # ! show fixation
-            fixation_show_time = random.uniform(*config["Fixation_show_time"])
+            fixation_show_time = random_time(*config["Fixation_show_time"])
             stimulus["fixation"].setAutoDraw(True)
             win.flip()
             core.wait(fixation_show_time)
@@ -195,7 +220,7 @@ def diamond_task(
             if config["Show_images"]:
                 # ! show image
                 behavioral_data["image"] = trial["image"].name
-                photo_show_time = random.uniform(*config["Photo_show_time"])
+                photo_show_time = random_time(*config["Photo_show_time"])
                 trial["image"].setAutoDraw(True)
                 trigger_handler.prepare_trigger(
                     trigger_type=TriggerTypes.IMAGE,
@@ -203,6 +228,7 @@ def diamond_task(
                 )
                 win.flip()
                 trigger_handler.send_trigger()
+                behavioral_data["image_abs_time"] = global_clock.getTime()
                 core.wait(photo_show_time)
                 trial["image"].setAutoDraw(False)
                 win.flip()
@@ -217,6 +243,7 @@ def diamond_task(
                     stimulus["arousal4"],
                     stimulus["arousal5"],
                 ]
+                behavioral_data["arousal_slider_abs_time"] = global_clock.getTime()
                 behavioral_data["arousal"] = get_value_from_slider(
                     slider_arousal,
                     "Pobudzenie",
@@ -238,6 +265,7 @@ def diamond_task(
                     stimulus["valence4"],
                     stimulus["valence5"],
                 ]
+                behavioral_data["valence_slider_abs_time"] = global_clock.getTime()
                 behavioral_data["valence"] = get_value_from_slider(
                     slider_valence,
                     "Nastrój",
@@ -270,6 +298,9 @@ def diamond_task(
             )
             win.flip()
             trigger_handler.send_trigger()
+            behavioral_data["choice_prompt_abs_time"] = global_clock.getTime()
+
+            participants_choice = None
 
             # ! wait for response
             while True:
@@ -280,9 +311,9 @@ def diamond_task(
                 data_saver.check_exit()
                 win.flip()
             if "left" in keys:
-                behavioral_data["choice"] = "A"
+                participants_choice = "A"
             if "right" in keys:
-                behavioral_data["choice"] = "B"
+                participants_choice = "B"
             wait_for_no_keys_pressed(win, joy, keyboard_)
 
             cues_taken = 1
@@ -290,7 +321,7 @@ def diamond_task(
             for i, trait_name, info_pair in zip(
                 range(num_of_cues), trait_names, trial["diamond_data"]
             ):
-                if behavioral_data["choice"] is not None:
+                if participants_choice is not None:
                     break
 
                 # ! cue display
@@ -312,8 +343,9 @@ def diamond_task(
                 )
                 win.flip()
                 trigger_handler.send_trigger()
+                behavioral_data[f"cue{i+1}_abs_time"] = global_clock.getTime()
 
-                info_show_time = random.uniform(*config["Diamond_info_show_time"])
+                info_show_time = random_time(*config["Diamond_info_show_time"])
                 core.wait(info_show_time)
                 data_saver.check_exit()
 
@@ -349,10 +381,10 @@ def diamond_task(
                 if "down" in keys:
                     cues_taken += 1
                 elif "left" in keys:
-                    behavioral_data["choice"] = "A"
+                    participants_choice = "A"
                     break
                 elif "right" in keys:
-                    behavioral_data["choice"] = "B"
+                    participants_choice = "B"
                     break
 
             behavioral_data["total_decision_time"] = total_decision_clock.getTime()
@@ -369,9 +401,15 @@ def diamond_task(
             stimulus["right_text"].setAutoDraw(False)
             win.flip()
 
-            # ! rate confidence
+            # ! show empty screen between choice and confidence rating
+            blank_screen_time = random_time(*config["Blank_between_choice_and_confidence_rating"])
+            win.flip()
+            core.wait(blank_screen_time)
+            data_saver.check_exit()
 
+            # ! rate confidence
             wait_for_no_keys_pressed(win, joy, keyboard_)
+            behavioral_data["confidence_slider_abs_time"] = global_clock.getTime()
             behavioral_data["confidence"] = get_value_from_slider(
                 slider_confidence,
                 "Pewność",
@@ -384,21 +422,27 @@ def diamond_task(
             )
 
             # check if choice is correct
-            if behavioral_data["choice"] == trial["correct"]:
-                behavioral_data["choice_correct"] = True
+            if participants_choice == trial["correct"]:
+                behavioral_data["is_choice_correct"] = True
             else:
-                behavioral_data["choice_correct"] = False
+                behavioral_data["is_choice_correct"] = False
 
             if config["Show_feedback"]:
+                # ! show empty screen between confidence rating and feedback
+                blank_screen_time = random_time(*config["Blank_between_confidence_rating_and_feedback"])
+                win.flip()
+                core.wait(blank_screen_time)
+                data_saver.check_exit()
+
                 # ! give feedback
-                if behavioral_data["choice_correct"]:
+                if behavioral_data["is_choice_correct"]:
                     feedback = stimulus["feedback_good"]
                     trigger_type = TriggerTypes.FEEDB_GOOD
                 else:
                     feedback = stimulus["feedback_bad"]
                     trigger_type = TriggerTypes.FEEDB_BAD
 
-                feedback_show_time = random.uniform(*config["Feedback_show_time"])
+                feedback_show_time = random_time(*config["Feedback_show_time"])
                 feedback.setAutoDraw(True)
 
                 trigger_handler.prepare_trigger(
@@ -407,6 +451,7 @@ def diamond_task(
                 )
                 win.flip()
                 trigger_handler.send_trigger()
+                behavioral_data["feedback_abs_time"] = global_clock.getTime()
 
                 core.wait(feedback_show_time)
                 feedback.setAutoDraw(False)

@@ -1,0 +1,5 @@
+Ekran, który aktualnie przeglądasz, służy do obsługi Zadania Diamentowego. Kwadrat po lewej to Diament A, kwadrat po prawej to Diament B. Za pomocą przycisku „strzałka w dół” możesz wyświetlić więcej wskazówek. Naciśnięcie klawisza „strzałka w lewo” wybiera Diament A, a klawisz „strzałka w prawo” wybiera Diament B.
+
+Będziesz odpowiadać prawą i lewą ręką, naprzemiennie po każdej próbie. Mała litera nad znakami strzałek na ekranie powie ci, którą ręką odpowiedzieć.
+
+Naciśnij spację

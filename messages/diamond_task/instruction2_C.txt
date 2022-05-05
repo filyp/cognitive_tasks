@@ -1,0 +1,15 @@
+Ważność wskazówki to prawdopodobieństwo dokonania prawidłowego wyboru w oparciu tylko o tę wskazówkę. To prawdopodobieństwo dla każdej wskazówki jest następujące:
+1. Rozmiar - 71%
+2. Przejrzystość - 69%
+3. Kształt - 67%
+4. Kolor - 65%
+5. Blask - 62%
+6. Proporcje – 60%
+
+Jak zinterpretować to prawdopodobieństwo? Wyobraź sobie, że musisz podjąć decyzję na podstawie tylko jednej wskazówki. Gdyby to był Rozmiar, to gdyby Diament A był lepszy pod względem tej wskazówki niż Diament B, to decyzja o wyborze Diamentu A byłaby prawidłowa w 71 przypadkach na 100. Podobnie, gdyby dostępna była tylko wskazówka Kolor, wówczas wybór lepszego diamentu w oparciu o tą wskazówkę byłby trafny z prawdopodobieństwem 65% (65 razy na 100 wyborów).
+
+Oczywiście to, co napisano powyżej, obowiązuje tylko wtedy, gdy diamenty różnią się pod względem danej wskazówki (jeden diament jest lepszy, a drugi gorszy). Jeśli jest remis pomiędzy diamentami na danej wskazówce, nie wiesz, który diament jest lepszy - wybierając jeden z nich na podstawie podanej wskazówki, musisz zgadywać (masz 50% szans na sukces).
+
+Jeśli dokonasz więcej niż 65% prawidłowych wyborów, otrzymasz dodatkowe 15 złotych (dodatkowo do podstawowej kwoty przysługującej Ci za udział w badaniu).
+
+Naciśnij spację
