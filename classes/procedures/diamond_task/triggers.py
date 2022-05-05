@@ -62,7 +62,6 @@ class TriggerHandler:
 
     def send_trigger(self):
         logging.data("TRIGGER: " + self.data_saver.triggers_list[-1])
-        logging.flush()  # TODO after testing delete this to avoid potential delay
         if self.port_eeg is not None:
             try:
                 self.port_eeg.setData(self.trigger_no)

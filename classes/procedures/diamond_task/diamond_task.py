@@ -97,8 +97,8 @@ def diamond_task(
     config,
     data_saver,
 ):
-    frame_rate = win.getActualFrameRate()
-    logging.info(f"Frame rate: {frame_rate}")
+    # frame_rate = win.getActualFrameRate()
+    # logging.info(f"Frame rate: {frame_rate}")
 
     if config["Keys"] == "joystick":
         if joystick.getNumJoysticks() == 0:

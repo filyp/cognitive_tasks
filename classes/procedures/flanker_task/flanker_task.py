@@ -45,7 +45,6 @@ def check_response(config, event, mouse, clock, trigger_handler, block, trial, r
         response = keys[0]
         mouse.clickReset()
         event.clearEvents()
-        logging.flush()  # TODO disable it after testing
         return response, reaction_time
     else:
         return None
