@@ -22,6 +22,9 @@ from classes.experiment_info import display_eeg_info
 # from classes.procedures.ophthalmic_procedure import ophthalmic_procedure
 from classes.procedures.flanker_task.flanker_task import flanker_task
 from classes.procedures.diamond_task.diamond_task import diamond_task
+from classes.procedures.monetary_incentive_delay.monetary_incentive_delay import (
+    monetary_incentive_delay,
+)
 
 __author__ = ["ociepkam", "filyp"]
 
@@ -81,6 +84,7 @@ def run():
     procedure = {
         "Flanker task": flanker_task,
         "Diamond task": diamond_task,
+        "Monetary Incentive Delay": monetary_incentive_delay,
     }[config["Procedure"]]
 
     # Experiment

@@ -1,0 +1,3 @@
+Przerwa nr 1.
+Twój wynik to: <--insert-->
+Naciśnij spację, aby przejść do kolejnego bloku zadania.

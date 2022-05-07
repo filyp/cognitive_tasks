@@ -18,12 +18,10 @@ def read_text_from_file(file_name, insert=""):
     with codecs.open(file_name, encoding="utf-8", mode="r") as data_file:
         for line in data_file:
             if not line.startswith("#"):  # if not commented line
-                if line.startswith("<--insert-->"):
-                    if insert:
-                        msg.append(insert)
-                else:
-                    msg.append(line)
-    return "".join(msg)
+                msg.append(line)
+    whole_message = "".join(msg)
+    final_message = whole_message.replace("<--insert-->", insert)
+    return final_message
 
 
 def show_info(

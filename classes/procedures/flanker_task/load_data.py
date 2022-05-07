@@ -24,7 +24,6 @@ def load_stimuli(win, config, screen_res):
 
     stimuli = dict()
 
-    # create flankers by images
     # ! create fixation
     stimuli["fixation"] = visual.ImageStim(
         win=win,

@@ -3,6 +3,7 @@
 This repository contains procedures for multiple cognitive psychology experiments:
 - flanker task
 - diamond decision task
+- monetary incentive delay
 
 ## Running
 

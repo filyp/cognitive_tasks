@@ -222,7 +222,6 @@ def diamond_task(
                 cue6_decision_time=None,
                 cues_taken=None,
                 image=None,
-
                 image_abs_time=None,
                 arousal_slider_abs_time=None,
                 valence_slider_abs_time=None,
@@ -235,8 +234,6 @@ def diamond_task(
                 cue6_abs_time=None,
                 confidence_slider_abs_time=None,
                 feedback_abs_time=None,
-
-
             )
             wait_for_no_keys_pressed(win, joy, keyboard_)
 
@@ -467,7 +464,9 @@ def diamond_task(
 
             if config["Show_feedback"]:
                 # ! show empty screen between confidence rating and feedback
-                blank_screen_time = random_time(*config["Blank_between_confidence_rating_and_feedback"])
+                blank_screen_time = random_time(
+                    *config["Blank_between_confidence_rating_and_feedback"]
+                )
                 win.flip()
                 core.wait(blank_screen_time)
                 data_saver.check_exit()
