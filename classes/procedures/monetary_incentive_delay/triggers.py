@@ -9,6 +9,7 @@ class TriggerTypes:
     CUE = "CUE______"
     TARGET = "TARGET___"
     REACTION = "REACTION_"
+    PREMATURE_REACTION = "PREM_REAC"
 
     FEEDBACK_GOOD = "F_GOOD___"
     FEEDBACK_BAD = "F_BAD____"

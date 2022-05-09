@@ -68,9 +68,10 @@ def monetary_incentive_delay(
                 target_show_time=round(target_show_time, 3),
                 fast_enough=None,
                 reaction_time=None,
-                did_not_react=False,
+                waiting_for_reaction_timed_out=False,
                 reacted_too_soon=False,
                 target_anticipation_time=None,
+                premature_reaction_time_since_cue_offset=None,
             )
 
             # ! show empty screen between trials
@@ -87,6 +88,7 @@ def monetary_incentive_delay(
             data_saver.check_exit()
 
             # ! draw cue
+            event.clearEvents()
             cue_show_time = random.uniform(*config["Cue_show_time"])
             cue = trial["cue"]
             trigger_handler.prepare_trigger(
@@ -98,24 +100,14 @@ def monetary_incentive_delay(
             stimulus["circle"].setAutoDraw(True)
             win.flip()
             trigger_handler.send_trigger()
-            core.wait(cue_show_time)
-            cue.setAutoDraw(False)
-            stimulus["circle"].setAutoDraw(False)
-            data_saver.check_exit()
-            win.flip()
-
-            # ! target anticipation
-            event.clearEvents()
-            blank_screen_time = random.uniform(*config["Target_anticipation_time"])
-            behavioral_data["target_anticipation_time"] = blank_screen_time
             win.callOnFlip(clock.reset)
             win.flip()
-            while clock.getTime() < blank_screen_time:
+            while clock.getTime() < cue_show_time:
                 keys = event.getKeys(keyList=config["Keys"])
                 if keys:
                     behavioral_data["reacted_too_soon"] = True
                     trigger_handler.prepare_trigger(
-                        trigger_type=TriggerTypes.REACTION,
+                        trigger_type=TriggerTypes.PREMATURE_REACTION,
                         block_type=block["type"],
                         cue_name=cue.name.split("_")[1],
                     )
@@ -123,6 +115,31 @@ def monetary_incentive_delay(
                     break  # if we got a response, break out of this stage
                 win.flip()
                 data_saver.check_exit()
+            cue.setAutoDraw(False)
+            stimulus["circle"].setAutoDraw(False)
+            data_saver.check_exit()
+            win.flip()
+
+            # ! target anticipation
+            if not behavioral_data["reacted_too_soon"]:
+                blank_screen_time = random.uniform(*config["Target_anticipation_time"])
+                behavioral_data["target_anticipation_time"] = blank_screen_time
+                win.callOnFlip(clock.reset)
+                win.flip()
+                while clock.getTime() < blank_screen_time:
+                    keys = event.getKeys(keyList=config["Keys"])
+                    if keys:
+                        behavioral_data["reacted_too_soon"] = True
+                        behavioral_data["premature_reaction_time_since_cue_offset"] = clock.getTime()
+                        trigger_handler.prepare_trigger(
+                            trigger_type=TriggerTypes.PREMATURE_REACTION,
+                            block_type=block["type"],
+                            cue_name=cue.name.split("_")[1],
+                        )
+                        trigger_handler.send_trigger()
+                        break  # if we got a response, break out of this stage
+                    win.flip()
+                    data_saver.check_exit()
 
             # ! draw target
             if not behavioral_data["reacted_too_soon"]:
@@ -170,8 +187,9 @@ def monetary_incentive_delay(
                         break  # if we got a response, break out of this stage
                     win.flip()
                     data_saver.check_exit()
-            if behavioral_data["reaction_time"] is None:
-                behavioral_data["did_not_react"] = True
+                    
+                if behavioral_data["reaction_time"] is None:
+                    behavioral_data["waiting_for_reaction_timed_out"] = True
 
             # ! update target show time
             if trial["cue"].name == "cue_incentive":
@@ -179,13 +197,10 @@ def monetary_incentive_delay(
                 if behavioral_data["fast_enough"]:
                     # shorten the time, only if the target has hit
                     target_show_time -= 0.010
+                    # ! update score
+                    score += 1
                 else:
                     target_show_time += 0.010
-
-            # ! update score
-            if behavioral_data["fast_enough"]:
-                # do it in every cue type
-                score += 1
 
             # ! blank screen between response and feedback
             blank_screen_time = random.uniform(

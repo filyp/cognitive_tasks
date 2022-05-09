@@ -1,3 +1,4 @@
+import math
 import random
 
 from psychopy import logging
@@ -9,8 +10,8 @@ def prepare_trials(block, stimulus):
     number_of_trials = block["number_of_trials"]
     cue_incentive_ratio = block["cue_incentive_ratio"]
 
-    number_of_cue_neutral = int(number_of_trials * (1 - cue_incentive_ratio))
-    number_of_cue_incentive = number_of_trials - number_of_cue_neutral
+    number_of_cue_incentive = math.ceil(number_of_trials * cue_incentive_ratio)
+    number_of_cue_neutral = number_of_trials - number_of_cue_incentive
 
     logging.data(
         f"""

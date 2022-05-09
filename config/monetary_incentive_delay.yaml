@@ -28,7 +28,7 @@ Empty_screen_between_trials: [0.800, 0.800]
 Fixation_show_time: [0.500, 0.500]
 Cue_show_time: [0.400, 0.400]
 Target_anticipation_time: [2.000, 2.500]
-Target_initial_show_time: 0.400
+Target_initial_show_time: 0.200
 Response_timeout: 1.000
 Empty_screen_between_response_and_feedback: [1.300, 1.300]
 Feedback_show_time: [1.000, 1.000]
