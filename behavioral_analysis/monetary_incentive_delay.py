@@ -7,6 +7,7 @@ import sys
 import numpy as np
 
 print("Printng statistics for the most recent behavioral file in the given directory...")
+print("Statistics based on all the trials apart from training trials.")
 
 path = sys.argv[1]
 behavioral_data_glob = os.path.join(path, "behavioral_data", "*.csv")

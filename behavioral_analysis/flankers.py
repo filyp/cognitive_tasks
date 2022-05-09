@@ -6,6 +6,7 @@ import sys
 import numpy as np
 
 print("Printng statistics for the most recent behavioral file in the given directory...")
+print("Statistics based on all the trials apart from training trials.")
 
 path = sys.argv[1]
 behavioral_data_glob = os.path.join(path, "behavioral_data", "*.csv")
@@ -19,24 +20,25 @@ with open(most_recent_file, "r") as file:
     reader = csv.DictReader(file)
     rows = [row for row in reader]
 
-# cluster into blocks
-blocks = []
-for previous_row, current_row in zip([dict()] + rows[:-1], rows):
-    if previous_row.get("block_type") != current_row.get("block_type"):
-        # next_row is in a new block
-        blocks.append((current_row.get("block_type"), []))
-    # append row to the latest block
-    blocks[-1][1].append(current_row)
+# # cluster into blocks
+# blocks = []
+# for previous_row, current_row in zip([dict()] + rows[:-1], rows):
+#     if previous_row.get("block_type") != current_row.get("block_type"):
+#         # next_row is in a new block
+#         blocks.append((current_row.get("block_type"), []))
+#     # append row to the latest block
+#     blocks[-1][1].append(current_row)
 
+# experiment_block = blocks[-1][1]  # TODO make it general
+experiment_rows = [row for row in rows if row["block_type"]=="experiment"]
 
-experiment_block = blocks[-1][1]  # TODO make it general
 
 congruent_correct_rts = []
 incongruent_correct_rts = []
 congruent_error_rts = []
 incongruent_error_rts = []
 
-for row in experiment_block:
+for row in experiment_rows:
     rt = row["rt"]
     if rt == "":
         # no reaction was given
@@ -95,7 +97,7 @@ from collections import Counter
 
 c = Counter()
 
-for trial in experiment_block:
+for trial in experiment_rows:
     rt = trial["rt"]
     feedback_type = trial["feedback_type"]
     threshold_rt = trial["threshold_rt"]
