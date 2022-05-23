@@ -21,8 +21,9 @@ def go_no_go(
     stimulus = load_data(win=win, folder_name=os.path.join("input_data", "go_no_go"), config=config, screen_res=screen_res)
     stimulus_dict = {stim["name"]: stim for stim in stimulus}
 
-    frame_rate = win.getActualFrameRate()
+    frame_rate = int(round(win.getActualFrameRate()))
     logging.data(f"Frame rate: {frame_rate}")
+    assert frame_rate in [24, 25, 30, 50, 60, 75, 100, 120, 144, 200, 240, 360], "Illegal frame rate."
     frame_time = 1 / frame_rate
 
     # EEG triggers
