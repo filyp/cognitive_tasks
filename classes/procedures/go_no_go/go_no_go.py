@@ -2,7 +2,7 @@ import os
 import random
 import time
 
-from psychopy import core, event, visual
+from psychopy import core, event, visual, logging
 
 from classes.show_info import show_info
 from classes.procedures.go_no_go.load_data import load_data
@@ -15,12 +15,15 @@ def go_no_go(
     screen_res,
     config,
     data_saver,
-    frame_time=1 / 60.0,
 
 ):
     # load stimulus
     stimulus = load_data(win=win, folder_name=os.path.join("input_data", "go_no_go"), config=config, screen_res=screen_res)
     stimulus_dict = {stim["name"]: stim for stim in stimulus}
+
+    frame_rate = win.getActualFrameRate()
+    logging.data(f"Frame rate: {frame_rate}")
+    frame_time = 1 / frame_rate
 
     # EEG triggers
     port_eeg = create_eeg_port() if config["Send_EEG_trigg"] else None
