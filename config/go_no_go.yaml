@@ -1,0 +1,64 @@
+Procedure: "Go No-Go"
+
+# EEG
+Send_EEG_trigg: False
+
+# view parameters
+Screen_color: -0.2
+Text_size: 0.02
+Feedback_size: 0.0677
+Figure_size: 0.0417
+Fix_size: 0.0156
+Text_font: "Arial"
+Text_color: "black"
+Sizes: {
+    "smiley_face.png": 0.0677,
+    "sad_face.png": 0.0677,
+}
+
+# times
+Fixation_show_time: [0.5, 0.5]
+Cue_show_time: [1, 2]
+Target_show_time: [1, 1]
+Empty_screen_show_time: [1, 1]
+Feedback_show_time: [1, 1]
+
+# reaction keys
+# Keys: [num_separator]
+Keys: [rctrl]
+
+# experiment structure
+Experiment_blocks: [
+    {type: break, file_name: "go_no_go/instruction.txt"},
+    {type: training, number_of_go_trials: 10, number_of_shape_trials: 0, number_of_color_trials: 0},
+    {type: break, file_name: "go_no_go/end_training1.txt"},
+    {type: training, number_of_go_trials: 10, number_of_shape_trials: 6, number_of_color_trials: 6},
+    {type: break, file_name: "go_no_go/end_training2.txt"},
+    {type: calibration, number_of_go_trials: 20, number_of_shape_trials: 4, number_of_color_trials: 4},
+    {type: break, file_name: "go_no_go/break1.txt"},
+    {type: experiment, number_of_go_trials: 56, number_of_shape_trials: 14, number_of_color_trials: 14, cutoff: 0.1},
+    {type: break, file_name: "go_no_go/break2.txt"},
+    {type: experiment, number_of_go_trials: 56, number_of_shape_trials: 14, number_of_color_trials: 14, cutoff: 0.1},
+    {type: break, file_name: "go_no_go/break3.txt"},
+    {type: calibration, number_of_go_trials: 20, number_of_shape_trials: 4, number_of_color_trials: 4},
+    {type: break, file_name: "go_no_go/break4.txt"},
+    {type: experiment, number_of_go_trials: 56, number_of_shape_trials: 14, number_of_color_trials: 14, cutoff: 0.1},
+    {type: break, file_name: "go_no_go/break5.txt"},
+    {type: experiment, number_of_go_trials: 56, number_of_shape_trials: 14, number_of_color_trials: 14, cutoff: 0.2},
+    {type: break, file_name: "go_no_go/end.txt"}]
+
+# show feedback
+Feedback_go_positive_show: True
+Feedback_go_negative_show: True
+Feedback_shape_positive_show: False
+Feedback_shape_negative_show: False
+Feedback_color_positive_show: False
+Feedback_color_negative_show: False
+
+# feedback text
+Feedback_go_positive: "smiley_face"
+Feedback_go_negative: "sad_face"
+Feedback_shape_positive_text: "smiley_face"
+Feedback_shape_negative_text: "sad_face"
+Feedback_color_positive_text: "smiley_face"
+Feedback_color_negative_text: "sad_face"

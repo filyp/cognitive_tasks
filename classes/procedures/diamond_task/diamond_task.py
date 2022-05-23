@@ -207,6 +207,7 @@ def diamond_task(
         for trial in block["trials"]:
             behavioral_data = OrderedDict(
                 block_type=block["type"],
+                choice=None,
                 correct_choice=trial["correct"],
                 is_choice_correct=None,
                 arousal=None,
@@ -424,6 +425,7 @@ def diamond_task(
 
             behavioral_data["total_decision_time"] = total_decision_clock.getTime()
             behavioral_data["cues_taken"] = cues_taken
+            behavioral_data["choice"] = participants_choice
 
             # ! clear
             stimulus["right_arrow"].setAutoDraw(False)

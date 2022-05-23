@@ -24,6 +24,7 @@ from classes.experiment_info import display_eeg_info
 # from classes.procedures.ophthalmic_procedure import ophthalmic_procedure
 from classes.procedures.flanker_task.flanker_task import flanker_task
 from classes.procedures.diamond_task.diamond_task import diamond_task
+from classes.procedures.go_no_go.go_no_go import go_no_go
 from classes.procedures.monetary_incentive_delay.monetary_incentive_delay import (
     monetary_incentive_delay,
 )
@@ -68,26 +69,12 @@ def run():
     screen_number = config.get("Screen_number", 0)
     win, screen_res = create_win(screen_color=config["Screen_color"], screen_number=screen_number)
 
-    # # Ophthalmic procedure
-    # if config["Ophthalmic_procedure"]:
-    #     trigger_no, triggers_list = ophthalmic_procedure(
-    #         win=win,
-    #         send_eeg_triggers=config["Send_EEG_trigg"],
-    #         screen_res=screen_res,
-    #         frames_per_sec=frames_per_sec,
-    #         port_eeg=port_eeg,
-    #         trigger_no=trigger_no,
-    #         triggers_list=triggers_list,
-    #         text_size=config["Text_size"],
-    #         text_color=config["Text_color"],
-    #         data_saver=data_saver,
-    #     )
-
     # choose which procedure to run
     procedure = {
         "Flanker task": flanker_task,
         "Diamond task": diamond_task,
         "Monetary Incentive Delay": monetary_incentive_delay,
+        "Go No-Go": go_no_go,
     }[config["Procedure"]]
 
     # Experiment

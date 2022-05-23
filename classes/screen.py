@@ -27,7 +27,6 @@ def create_win(screen_color, screen_number):
     win = visual.Window(
         screen_res_list,
         fullscr=True,
-        monitor="TestMonitor",  # todo? this may be invalid argument value
         units="height",
         screen=screen_number,
         color=screen_color,

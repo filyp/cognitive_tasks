@@ -63,10 +63,7 @@ def flanker_task(
     stimulus = load_stimuli(win=win, config=config, screen_res=screen_res)
 
     # EEG triggers
-    if config["Send_EEG_trigg"]:
-        port_eeg = create_eeg_port()
-    else:
-        port_eeg = None
+    port_eeg = create_eeg_port() if config["Send_EEG_trigg"] else None
     trigger_handler = TriggerHandler(port_eeg, data_saver=data_saver)
 
     for block in config["Experiment_blocks"]:
