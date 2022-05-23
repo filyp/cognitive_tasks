@@ -2,3 +2,4 @@ psychopy
 wxpython
 numpy
 pandas
+screeninfo

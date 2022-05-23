@@ -37,7 +37,7 @@ class DataSaver:
             for row in self.beh:
                 writer.writerow(row)
 
-    def check_exit(self, key="f7"):
+    def check_exit(self, key="escape"):
         stop = event.getKeys(keyList=[key])
         if len(stop) > 0:
             self.save_beh()

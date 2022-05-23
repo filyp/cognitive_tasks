@@ -155,7 +155,7 @@ def diamond_task(
 
         if block["type"] == "break":
             text = read_text_from_file(os.path.join("messages", block["file_name"]))
-            if len(text) < 50:
+            if len(text) < 70:
                 alignText = "center"
             else:
                 alignText = "left"
