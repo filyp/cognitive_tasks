@@ -22,6 +22,8 @@ Cue_show_time: [1, 2]
 Target_show_time: [1, 1]
 Empty_screen_show_time: [1, 1]
 Feedback_show_time: [1, 1]
+# ! NOTE THAT THE TIME EMPTY SCREEN IS SHOWN AFTER RESPONSE IS DECREASED BY THE TIME THE TARGET WAS SHOWN
+# ! THIS BUG IS KEPT IN ON PURPOSE, TO HAVE ALL THE COLLECTED DATA USE ONE PROCEDURE
 
 # reaction keys
 # Keys: [num_separator]

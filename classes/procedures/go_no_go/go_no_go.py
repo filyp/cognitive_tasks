@@ -149,6 +149,8 @@ def go_no_go(
             empty_screen_show_time = random.uniform(
                 config["Empty_screen_show_time"][0], config["Empty_screen_show_time"][1]
             )
+            # ! NOTE THAT THE TIME EMPTY SCREEN IS SHOWN IS DECREASED BY THE TIME THE TARGET WAS SHOWN
+            # ! THIS BUG IS KEPT IN ON PURPOSE, TO HAVE ALL THE COLLECTED DATA USE ONE PROCEDURE
             while clock.getTime() < empty_screen_show_time:
                 data_saver.check_exit()
                 win.flip()
