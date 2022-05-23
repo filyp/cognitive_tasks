@@ -9,6 +9,8 @@ import numpy as np
 print("Printng statistics for the most recent behavioral file in the given directory...")
 print("Statistics based on all the trials apart from training trials.")
 
+RT_after_cue_offset_cutting_off_reactions_on_cue = 0.600
+
 path = sys.argv[1]
 behavioral_data_glob = os.path.join(path, "behavioral_data", "*.csv")
 files = glob.glob(behavioral_data_glob)
@@ -67,7 +69,7 @@ def print_len(data):
 
 anticipation_times = [row["premature_reaction_time_since_cue_offset"] for row in experiment_rows]
 anticipation_times = [float(rt) for rt in anticipation_times if rt != ""]
-anticipation_times = [rt for rt in anticipation_times if rt > 1]
+anticipation_times = [rt for rt in anticipation_times if rt > RT_after_cue_offset_cutting_off_reactions_on_cue]
 
 print(f"""
 REACTION TIMES:
@@ -82,6 +84,6 @@ negative feedback = {num_of_negative_feedback}
 percent of positive feedback = {num_of_positive_feedback / (num_of_positive_feedback + num_of_negative_feedback) * 100:.0f} %
 
 all trials = {len(experiment_rows)}
-trials with premature reaction = {len(anticipation_times)}       (reactions >1s after cue offset, but before target)
+trials with premature reaction = {len(anticipation_times)}       (reactions {int(RT_after_cue_offset_cutting_off_reactions_on_cue * 1000)} ms after cue offset, but before target)
 """
 )

@@ -16,7 +16,7 @@ Stimuli: {
     fixation: ["+.png", 0.03],
     cue_incentive: ["dollar.png", 0.06],
     cue_neutral: ["hash.png", 0.06],
-    feedback_neutral: ["0_bold.png", 0.06],
+    feedback_neutral: ["asterisk.png", 0.06],
     circle: ["circle.png", 0.12],
     target: ["square.png", 0.12],
     feedback_good: ["smiley_face.png", 0.12],
@@ -28,10 +28,14 @@ Empty_screen_between_trials: [0.800, 0.800]
 Fixation_show_time: [0.500, 0.500]
 Cue_show_time: [0.400, 0.400]
 Target_anticipation_time: [2.000, 2.500]
-Target_initial_show_time: 0.200
+Target_initial_show_time: 0.250
 Response_timeout: 1.000
 Empty_screen_between_response_and_feedback: [1.300, 1.300]
 Feedback_show_time: [1.000, 1.000]
+######################
+# reactions sooner than this time, will get PREMATURE_EARLY_REACTION trigger
+# later ones (but still before target), will get PREMATURE_LATE_REACTION
+RT_after_cue_offset_cutting_off_reactions_on_cue: 0.600
 
 # * reaction keys
 Keys: [rctrl]

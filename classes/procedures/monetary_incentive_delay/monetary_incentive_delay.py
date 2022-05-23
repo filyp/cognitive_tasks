@@ -108,7 +108,7 @@ def monetary_incentive_delay(
                 if keys:
                     beh["reacted_too_soon"] = True
                     trigger_handler.prepare_trigger(
-                        trigger_type=TriggerTypes.PREMATURE_REACTION,
+                        trigger_type=TriggerTypes.PREMATURE_EARLY_REACTION,
                         block_type=block["type"],
                         cue_name=cue.name.split("_")[1],
                     )
@@ -130,14 +130,19 @@ def monetary_incentive_delay(
                 while clock.getTime() < blank_screen_time:
                     keys = event.getKeys(keyList=config["Keys"])
                     if keys:
-                        beh["reacted_too_soon"] = True
-                        beh["premature_reaction_time_since_cue_offset"] = clock.getTime()
+                        rt = clock.getTime()
+                        if rt < config["RT_after_cue_offset_cutting_off_reactions_on_cue"]:
+                            trigger_type = TriggerTypes.PREMATURE_EARLY_REACTION
+                        else:
+                            trigger_type = TriggerTypes.PREMATURE_LATE_REACTION
                         trigger_handler.prepare_trigger(
-                            trigger_type=TriggerTypes.PREMATURE_REACTION,
+                            trigger_type=trigger_type,
                             block_type=block["type"],
                             cue_name=cue.name.split("_")[1],
                         )
                         trigger_handler.send_trigger()
+                        beh["reacted_too_soon"] = True
+                        beh["premature_reaction_time_since_cue_offset"] = rt
                         break  # if we got a response, break out of this stage
                     win.flip()
                     data_saver.check_exit()

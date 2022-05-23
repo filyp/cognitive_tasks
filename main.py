@@ -12,8 +12,8 @@ import yaml
 from psychopy import logging
 
 # ERROR, WARNING, DATA, EXP, INFO and DEBUG
-logging.console.setLevel(logging.EXP)
-# logging.console.setLevel(logging.DATA)
+# logging.console.setLevel(logging.EXP)
+logging.console.setLevel(logging.DATA)
 
 from classes.experiment_info import get_participant_info
 
