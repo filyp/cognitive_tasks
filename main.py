@@ -66,7 +66,7 @@ def run():
     logging.data(f"Experiment name: {experiment_name}")
 
     # screen
-    screen_number = config.get("Screen_number", 0)
+    screen_number = config.get("Screen_number", -1)
     win, screen_res = create_win(screen_color=config["Screen_color"], screen_number=screen_number)
 
     # choose which procedure to run

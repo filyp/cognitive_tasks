@@ -21,10 +21,15 @@ python3 -m pip install -r requirements.txt
 Go inside the `cognitive_tasks` folder and run:
 
 ```bash
-python3 main.py config/<task you want to run>.yaml
+python3 main.py config/{task you want to run}.yaml
 ```
 
-See the folder `config` for all the available tasks and their versions. To create a new version of a task, just copy the `config/<task>.yaml` file and change the parameters.
+For example:
+```bash
+python3 main.py config/diamond_task_C.yaml
+```
+
+See the folder `config` for all the available tasks and their versions. To create a new version of a task, just copy the `config/{task}.yaml` file and change the parameters.
 
 To stop the procedure, press `Esc`.
 
@@ -32,7 +37,7 @@ All the output data will be saved in the `results` folder. Each version of a tas
 
 ## Behavioral analysis
 
-There are scripts summarizing behavioral data in `behavioral_analysis` folder. For example to run analysis for flanker task:
-```
-python behavioral_analysis/flankers.py results/<directory with results from your experiment>
+There are scripts summarizing behavioral data (for some tasks) in `behavioral_analysis` folder. For example to run analysis for flanker task:
+```bash
+python3 behavioral_analysis/flankers.py results/{directory with results from your experiment}
 ```
