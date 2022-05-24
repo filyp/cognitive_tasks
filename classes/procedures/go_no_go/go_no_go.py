@@ -35,7 +35,7 @@ def go_no_go(
     rt_sum = 0
     rt_mean = 0
     fixation = visual.TextStim(
-        win, color="black", text="+", height=2 * config["Fix_size"], pos=(0, 0.005)
+        win, color="black", text="+", height=2 * config["Fix_size"], pos=(0, 0.0055)
     )
     clock = core.Clock()
 

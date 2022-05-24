@@ -4,11 +4,11 @@ Procedure: "Go No-Go"
 Send_EEG_trigg: False
 
 # view parameters
-Screen_color: -0.2
-Text_size: 0.02
-Feedback_size: 0.0677
-Figure_size: 0.0417
-Fix_size: 0.0156
+Screen_color: 0
+Text_size: 0.037
+Feedback_size: 0.120
+Figure_size: 0.074
+Fix_size: 0.028
 Text_font: "Arial"
 Text_color: "black"
 Sizes: {
