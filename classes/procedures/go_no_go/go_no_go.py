@@ -23,7 +23,7 @@ def go_no_go(
 
     frame_rate = int(round(win.getActualFrameRate()))
     logging.data(f"Frame rate: {frame_rate}")
-    assert frame_rate in [24, 25, 30, 50, 60, 75, 100, 120, 144, 200, 240, 360], "Illegal frame rate."
+    assert frame_rate in [24, 25, 30, 50, 60, 74, 75, 100, 120, 144, 200, 240, 360], "Illegal frame rate."
     frame_time = 1 / frame_rate
 
     # EEG triggers
