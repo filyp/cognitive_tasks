@@ -12,8 +12,8 @@ Fix_size: 0.028
 Text_font: "Arial"
 Text_color: "black"
 Sizes: {
-    "smiley_face.png": 0.0677,
-    "sad_face.png": 0.0677,
+    "smiley_face.png": 0.110,
+    "sad_face.png": 0.110,
 }
 
 # times

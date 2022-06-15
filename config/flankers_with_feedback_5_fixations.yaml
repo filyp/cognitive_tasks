@@ -30,7 +30,7 @@ Show_feedback: True    # if False, the rest of this block has no effect
 Feedback_good: "smiley_face.png"
 Feedback_bad: "sad_face.png"
 Feedback_initial_threshold_rt: 0.420
-Feedback_size: 0.120
+Feedback_size: 0.110
 
 # * times
 Empty_screen_between_trials: [0.600, 0.800]
