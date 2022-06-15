@@ -144,14 +144,9 @@ def flanker_task(
                 fixation.setAutoDraw(True)
             win.flip()
             core.wait(fixation_show_time)
-            for fixation in stimulus["fixations"]:
-                fixation.setAutoDraw(False)
-            if len(stimulus["fixations"]) == 1:
-                middle_fixation = stimulus["fixations"][0]
-            elif len(stimulus["fixations"]) == 5:
-                middle_fixation = stimulus["fixations"][2]
             if not config.get("Keep_fixation_until_target"):
-                middle_fixation.setAutoDraw(False)
+                for fixation in stimulus["fixations"]:
+                    fixation.setAutoDraw(False)
             data_saver.check_exit()
 
             if "Flanker_show_time" in config:
@@ -174,7 +169,8 @@ def flanker_task(
                     flanker.setAutoDraw(False)
 
             if config.get("Keep_fixation_until_target"):
-                middle_fixation.setAutoDraw(False)
+                for fixation in stimulus["fixations"]:
+                    fixation.setAutoDraw(False)
 
             # ! draw target
             trigger_handler.prepare_trigger(
