@@ -207,6 +207,8 @@ def monetary_incentive_delay(
                     score += 1
                 else:
                     target_show_time += 0.010
+                    # ! update score
+                    score -= 1
 
             # ! blank screen between response and feedback
             blank_screen_time = random.uniform(
