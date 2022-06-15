@@ -98,7 +98,7 @@ def monetary_incentive_delay(
                 cue_name=cue.name.split("_")[1],
             )
             cue.setAutoDraw(True)
-            stimulus["circle"].setAutoDraw(True)
+            # stimulus["circle"].setAutoDraw(True)
             win.flip()
             trigger_handler.send_trigger()
             win.callOnFlip(clock.reset)
@@ -117,7 +117,7 @@ def monetary_incentive_delay(
                 win.flip()
                 data_saver.check_exit()
             cue.setAutoDraw(False)
-            stimulus["circle"].setAutoDraw(False)
+            # stimulus["circle"].setAutoDraw(False)
             data_saver.check_exit()
             win.flip()
 

@@ -2,7 +2,7 @@ Procedure: "Monetary Incentive Delay"
 
 # * EEG
 Ophthalmic_procedure: False     # this is currently not supported
-Send_EEG_trigg: False
+Send_EEG_trigg: True
 Actiview_reminder: True
 
 # * view parameters
@@ -38,8 +38,8 @@ Feedback_show_time: [1.000, 1.000]
 RT_after_cue_offset_cutting_off_reactions_on_cue: 0.600
 
 # * reaction keys
-Keys: [rctrl]
-# Keys: [num_delete]
+# Keys: [rctrl]
+Keys: [num_delete]
 
 # * experiment structure
 Experiment_blocks: [

@@ -19,6 +19,8 @@ Fixation_size: [0.07, 0.02830625]  # arrow dimensions are 1600x647
 Flanker_size: [0.07, 0.02830625]  # arrow dimensions are 1600x647
 Flanker_spacing: 0.06
 Orientation: "vertical"
+Use_duplicated_fixations: True    # shows 5 fixations in place of every future arrow, to decrease the photostimulation effect
+Keep_fixation_until_target: True  # keep showing fixation even when the flankers appear
 
 # * cue definition
 Show_cues: False    # if False, the rest of this block has no effect
@@ -33,9 +35,9 @@ Feedback_size: 0.120
 # * times
 Empty_screen_between_trials: [0.600, 0.800]
 Fixation_show_time: [0.600, 0.800]
-# Flanker_show_time: [0.000, 0.000]   # this one is optional
+Flanker_show_time: [0.080, 0.080]   # this one is optional
 Target_show_time: [0.600, 0.600]
-Blank_screen_for_response_show_time: [0.000, 0.000]
+Blank_screen_for_response_show_time: [0.600, 0.600]
 Empty_screen_after_response_show_time: [1.000, 1.000]
 Feedback_show_time: [0.800, 0.800]  # this one is needed only if Show_feedback is True
 

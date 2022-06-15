@@ -25,13 +25,34 @@ def load_stimuli(win, config, screen_res):
     stimuli = dict()
 
     # ! create fixation
-    stimuli["fixation"] = visual.ImageStim(
-        win=win,
-        image=os.path.join("input_data", "flanker_task", config["Fixation"]),
-        size=config["Fixation_size"],
-        name="fixation",
-        interpolate=True,
-    )
+    if config.get("Use_duplicated_fixations"):
+        stimuli["fixations"] = []
+        for i in range(5):
+            if config["Orientation"] == "horizontal":
+                pos = (((i - 2) * config["Flanker_spacing"], 0),)
+            elif config["Orientation"] == "vertical":
+                pos = ((0, (i - 2) * config["Flanker_spacing"]),)
+
+            stimuli["fixations"].append(
+                visual.ImageStim(
+                    win=win,
+                    image=os.path.join("input_data", "flanker_task", config["Fixation"]),
+                    size=config["Fixation_size"],
+                    name="fixation" + str(i),
+                    interpolate=True,
+                    pos=pos,
+                )
+            )
+    else:
+        stimuli["fixations"] = [
+            visual.ImageStim(
+                win=win,
+                image=os.path.join("input_data", "flanker_task", config["Fixation"]),
+                size=config["Fixation_size"],
+                name="fixation",
+                interpolate=True,
+            )
+        ]
 
     # ! create targets and flankers
     left_ = []

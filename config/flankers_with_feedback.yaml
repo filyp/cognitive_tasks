@@ -2,7 +2,7 @@ Procedure: "Flanker task"
 
 # * EEG
 Ophthalmic_procedure: False     # this is currently not supported
-Send_EEG_trigg: False
+Send_EEG_trigg: True
 Actiview_reminder: True
 
 # * view parameters
@@ -34,7 +34,7 @@ Feedback_size: 0.120
 Empty_screen_between_trials: [0.600, 0.800]
 Fixation_show_time: [0.600, 0.800]
 Flanker_show_time: [0.080, 0.080]   # this one is optional
-Target_show_time: [0.030, 0.030]
+Target_show_time: [0.600, 0.600]
 Blank_screen_for_response_show_time: [0.600, 0.600]
 Empty_screen_after_response_show_time: [1.000, 1.000]
 Feedback_show_time: [0.800, 0.800]  # this one is needed only if Show_feedback is True
@@ -47,8 +47,8 @@ Use_whole_response_time_window: False
 # * reaction keys
 # first one is for left response, second one is for right response
 # Keys: [mouse_left, mouse_right]
-Keys: [lctrl, rctrl]
-# Keys: [lctrl, num_delete]
+# Keys: [lctrl, rctrl]
+Keys: [lctrl, num_delete]
 
 
 

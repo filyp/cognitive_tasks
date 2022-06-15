@@ -140,10 +140,13 @@ def flanker_task(
 
             # ! draw fixation
             fixation_show_time = random.uniform(*config["Fixation_show_time"])
-            stimulus["fixation"].setAutoDraw(True)
+            for fixation in stimulus["fixations"]:
+                fixation.setAutoDraw(True)
             win.flip()
             core.wait(fixation_show_time)
-            stimulus["fixation"].setAutoDraw(False)
+            if not config.get("Keep_fixation_until_target"):
+                for fixation in stimulus["fixations"]:
+                    fixation.setAutoDraw(False)
             data_saver.check_exit()
 
             if "Flanker_show_time" in config:
@@ -164,6 +167,10 @@ def flanker_task(
                 core.wait(flanker_show_time)
                 for flanker in trial["flankers"]:
                     flanker.setAutoDraw(False)
+
+            if config.get("Keep_fixation_until_target"):
+                for fixation in stimulus["fixations"]:
+                    fixation.setAutoDraw(False)
 
             # ! draw target
             trigger_handler.prepare_trigger(
