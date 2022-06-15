@@ -229,8 +229,8 @@ def monetary_incentive_delay(
                 trigger_type = TriggerTypes.FEEDBACK_NEUTRAL
 
             stimulus[beh["feedback_type"]].setAutoDraw(True)
-            if trial["cue"].name == "cue_neutral":
-                stimulus["circle"].setAutoDraw(True)
+            # if trial["cue"].name == "cue_neutral":
+            #     stimulus["circle"].setAutoDraw(True)
             trigger_handler.prepare_trigger(
                 trigger_type=trigger_type,
                 block_type=block["type"],
@@ -240,8 +240,8 @@ def monetary_incentive_delay(
             trigger_handler.send_trigger()
             core.wait(feedback_show_time)
             stimulus[beh["feedback_type"]].setAutoDraw(False)
-            if trial["cue"].name == "cue_neutral":
-                stimulus["circle"].setAutoDraw(False)
+            # if trial["cue"].name == "cue_neutral":
+            #     stimulus["circle"].setAutoDraw(False)
             win.flip()
 
             # save beh

@@ -16,11 +16,11 @@ Stimuli: {
     fixation: ["+.png", 0.028],
     cue_incentive: ["dollar.png", 0.06],
     cue_neutral: ["hash.png", 0.06],
-    feedback_neutral: ["asterisk.png", 0.06],
+    feedback_neutral: ["+0.png", 0.1],
     circle: ["circle.png", 0.12],
     target: ["square.png", 0.12],
-    feedback_good: ["smiley_face.png", 0.12],
-    feedback_bad: ["sad_face.png", 0.12],
+    feedback_good: ["+1.png", 0.1],
+    feedback_bad: ["-1_custom.png", 0.1],
 }
 
 # * times
