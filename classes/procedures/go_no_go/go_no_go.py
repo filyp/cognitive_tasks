@@ -32,7 +32,6 @@ def go_no_go(
     trigger_no = 0
     data_saver.triggers_list = triggers_list
 
-    beh = []
     rt_sum = 0
     rt_mean = 0
     fixation = visual.TextStim(
@@ -51,7 +50,7 @@ def go_no_go(
             )
             continue
         elif block["type"] in ["calibration", "experiment", "training"]:
-            block["trials"] = prepare_trials(block, stimulus)
+            block["trials"] = prepare_trials(block, stimulus, config["Experiment_version"])
         else:
             raise Exception(
                 "{} is bad block type in config Experiment_blocks".format(block["type"])

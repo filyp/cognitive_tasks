@@ -25,14 +25,23 @@ def prepare_stimulus_pairs(cue_name, target_name, stim_name, stimulus):
             return stimulus_pairs
 
 
-def prepare_trials(block, stimulus):
+def prepare_trials(block, stimulus, experiment_version):
     all_trials = []
+
+    if experiment_version == "A":
+        go_color = "color_1"
+        nogo_color = "color_2"
+    elif experiment_version == "B":
+        go_color = "color_2"
+        nogo_color = "color_1"
+    else:
+        raise ValueError("Please set some experiment version")
 
     if "number_of_shape_trials" in block:
 
         stimulus_pairs = prepare_stimulus_pairs(
             cue_name="neutral",
-            target_name="color_1",
+            target_name=go_color,
             stim_name="shape",
             stimulus=stimulus,
         )
@@ -53,7 +62,7 @@ def prepare_trials(block, stimulus):
 
     if "number_of_go_trials" in block:
         stimulus_pairs = prepare_stimulus_pairs(
-            cue_name="neutral", target_name="color_1", stim_name="go", stimulus=stimulus
+            cue_name="neutral", target_name=go_color, stim_name="go", stimulus=stimulus
         )
         trials = prepare_trials_type(
             stimulus_pairs=stimulus_pairs, number_of_trials=block["number_of_go_trials"]
@@ -63,7 +72,7 @@ def prepare_trials(block, stimulus):
     if "number_of_color_trials" in block:
         stimulus_pairs = prepare_stimulus_pairs(
             cue_name="neutral",
-            target_name="color_2",
+            target_name=nogo_color,
             stim_name="color",
             stimulus=stimulus,
         )

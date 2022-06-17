@@ -56,8 +56,9 @@ def run():
 
     if config.get("Actiview_reminder", False):
         display_eeg_info()
-    participant_info = get_participant_info()
+    participant_info, experiment_version = get_participant_info()
     # participant_info = "mock_info"  # TODO reenable after testing
+    config["Experiment_version"] = experiment_version
 
     data_saver = DataSaver(participant_info, experiment_name, beh=[], triggers_list=[])
     # copy config file to results folder

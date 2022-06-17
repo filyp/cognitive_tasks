@@ -16,7 +16,7 @@ def get_participant_info():
     my_dlg.addField("ID:")
     my_dlg.addField("Wiek:")
     my_dlg.addField("Plec:", choices=["Mezczyzna", "Kobieta"])
-    my_dlg.addField("Wersja:", choices=["-", "Nadz", "BezNadz"])
+    my_dlg.addField("Wersja:", choices=["-", "A", "B"])
 
     my_dlg.show()
     if not my_dlg.OK:
@@ -29,7 +29,7 @@ def get_participant_info():
 
     date = date.replace(":", "-")
     participant_info = "{}_{}_{}_{}_{}".format(part_id, sex, age, version, date)
-    return participant_info
+    return participant_info, version
 
 
 def display_eeg_info():
