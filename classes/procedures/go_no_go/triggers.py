@@ -47,7 +47,7 @@ def prepare_trigger(trigger_no, triggers_list, trigger_type, trigger_name=None):
         trigger_no = 1
     if trigger_name is not None:
         trigger_type = trigger_type + trigger_name
-    triggers_list.append((str(trigger_no), trigger_type))
+    triggers_list.append(f"{trigger_no}:{trigger_type}")
     return trigger_no, triggers_list
 
 

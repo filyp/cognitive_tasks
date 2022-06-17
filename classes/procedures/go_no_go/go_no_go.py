@@ -30,6 +30,7 @@ def go_no_go(
     port_eeg = create_eeg_port() if config["Send_EEG_trigg"] else None
     triggers_list = list()
     trigger_no = 0
+    data_saver.triggers_list = triggers_list
 
     beh = []
     rt_sum = 0
@@ -76,7 +77,6 @@ def go_no_go(
             fixation.setAutoDraw(False)
             data_saver.check_exit()
             win.flip()
-
 
             # draw cue
             trigger_no, triggers_list = prepare_trigger(
@@ -214,21 +214,20 @@ def go_no_go(
                     win.flip()
 
             # save beh
-            beh.append(
-                {
-                    "block type": block["type"],
-                    "trial type": trial["type"],
-                    "cue name": trial["cue"]["name"],
-                    "target name": trial["target"]["name"],
-                    "response": response,
-                    "rt": reaction_time,
-                    "reaction": True if acc == "positive" else False,
-                    "cal mean rt": rt_mean,
-                    "cutoff": block["cutoff"] if block["type"] == "experiment" else None,
-                }
-            )
+            behavioral_data = {
+                "block type": block["type"],
+                "trial type": trial["type"],
+                "cue name": trial["cue"]["name"],
+                "target name": trial["target"]["name"],
+                "response": response,
+                "rt": reaction_time,
+                "reaction": True if acc == "positive" else False,
+                "cal mean rt": rt_mean,
+                "cutoff": block["cutoff"] if block["type"] == "experiment" else None,
+            }
+            data_saver.beh.append(behavioral_data)
 
         if block["type"] == "calibration":
             rt_mean = rt_sum / len([trial for trial in block["trials"] if trial["type"] == "go"])
-
-    return beh, triggers_list
+        
+    return
