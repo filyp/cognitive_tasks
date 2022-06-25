@@ -14,7 +14,7 @@ def get_participant_info():
     my_dlg = gui.Dlg(title="Participant info")
     my_dlg.addText("Informacje:")
     my_dlg.addField("ID:")
-    my_dlg.addField("Wersja:", choices=["*" "A", "B"])
+    my_dlg.addField("Wersja:", choices=["*", "A", "B"])
 
     my_dlg.show()
     if not my_dlg.OK:
