@@ -14,21 +14,17 @@ def get_participant_info():
     my_dlg = gui.Dlg(title="Participant info")
     my_dlg.addText("Informacje:")
     my_dlg.addField("ID:")
-    my_dlg.addField("Wiek:")
-    my_dlg.addField("Plec:", choices=["Mezczyzna", "Kobieta"])
-    my_dlg.addField("Wersja:", choices=["-", "A", "B"])
+    my_dlg.addField("Wersja:", choices=["*" "A", "B"])
 
     my_dlg.show()
     if not my_dlg.OK:
         exit(1)
 
     part_id = my_dlg.data[0]
-    age = my_dlg.data[1]
-    sex = my_dlg.data[2]
-    version = my_dlg.data[3]
+    version = my_dlg.data[1]
 
     date = date.replace(":", "-")
-    participant_info = "{}_{}_{}_{}_{}".format(part_id, sex, age, version, date)
+    participant_info = "{}-{}-{}".format(part_id, version, date)
     return participant_info, version
 
 
@@ -38,7 +34,7 @@ def display_eeg_info():
     """
 
     my_dlg = gui.Dlg(title="Reminder")
-    my_dlg.addText("\n\tUruchom ActiView zanim zaczniesz zadanie.")
+    my_dlg.addText("\n\tZanim zaczniesz zadanie, uruchom ActiView i rozpocznij zapis.")
     my_dlg.addText("")
 
     my_dlg.show()

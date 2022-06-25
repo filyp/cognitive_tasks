@@ -2,6 +2,7 @@ Procedure: "Go No-Go"
 
 # EEG
 Send_EEG_trigg: True
+Actiview_reminder: True
 
 # view parameters
 Screen_color: 0
