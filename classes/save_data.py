@@ -18,8 +18,10 @@ class DataSaver:
         filename = "triggerMap_{}.txt".format(self.participant_info)
         path = os.path.join(trigger_directory, filename)
         with open(path, "w") as map_file:
-            lines = ((trigger + "\n") for trigger in self.triggers_list)
-            map_file.writelines(lines)
+            for trigger_string in self.triggers_list:
+                map_file.writelines(trigger_string + "\n")
+            # lines = ((trigger + "\n") for trigger in self.triggers_list)
+            # map_file.writelines(lines)
 
     def save_beh(self):
         behavioral_directory = os.path.join(self.directory, "behavioral_data")
