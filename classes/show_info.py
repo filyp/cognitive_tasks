@@ -58,8 +58,8 @@ def show_info(
     )
     hello_msg.draw()
     win.flip()
-    key = event.waitKeys(keyList=["escape", "return", "space"])
-    if key == ["escape"]:
+    key = event.waitKeys(keyList=["f7", "return", "space"])
+    if key == ["f7"]:
         data_saver.save_beh()
         data_saver.save_triggers()
         logging.critical("Experiment finished by user! {} pressed.".format(key))
