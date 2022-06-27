@@ -3,28 +3,29 @@ import datetime
 from psychopy import gui
 
 
-def get_participant_info():
+def get_participant_info(ask_for_experiment_version=False):
     """
     okienko dialogowe na podczas uruchomienia procedury
     :return: participant_info
     """
-    now = datetime.datetime.now()
-    date = now.strftime("%Y-%m-%d %H:%M")
-
     my_dlg = gui.Dlg(title="Participant info")
     my_dlg.addText("Informacje:")
     my_dlg.addField("ID:")
-    my_dlg.addField("Wersja:", choices=["*", "A", "B"])
+    if ask_for_experiment_version:
+        my_dlg.addField("Wersja:", choices=["-", "A", "B"])
 
     my_dlg.show()
     if not my_dlg.OK:
         exit(1)
 
     part_id = my_dlg.data[0]
-    version = my_dlg.data[1]
 
-    date = date.replace(":", "-")
-    participant_info = "{}-{}-{}".format(part_id, version, date)
+    if ask_for_experiment_version:
+        version = my_dlg.data[1]
+    else:
+        version = None
+
+    participant_info = "{}".format(part_id)
     return participant_info, version
 
 

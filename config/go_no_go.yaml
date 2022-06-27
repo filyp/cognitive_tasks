@@ -1,4 +1,5 @@
 Procedure: "Go No-Go"
+Ask_for_experiment_version: True
 
 # EEG
 Send_EEG_trigg: True

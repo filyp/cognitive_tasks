@@ -29,11 +29,11 @@ def prepare_trials(block, stimulus, experiment_version):
     all_trials = []
 
     if experiment_version == "A":
+        go_color = "color_2"   # green
+        nogo_color = "color_1" # orange
+    elif experiment_version == "B":
         go_color = "color_1"
         nogo_color = "color_2"
-    elif experiment_version == "B":
-        go_color = "color_2"
-        nogo_color = "color_1"
     else:
         raise ValueError("Please set some experiment version")
 
