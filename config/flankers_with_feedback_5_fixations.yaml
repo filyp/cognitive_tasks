@@ -50,7 +50,7 @@ Use_whole_response_time_window: False
 # first one is for left response, second one is for right response
 # Keys: [mouse_left, mouse_right]
 # Keys: [lctrl, rctrl]
-Keys: [lctrl, num_delete]
+Keys: [lctrl, num_separator]
 
 
 

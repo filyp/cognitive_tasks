@@ -39,7 +39,7 @@ RT_after_cue_offset_cutting_off_reactions_on_cue: 0.600
 
 # * reaction keys
 # Keys: [rctrl]
-Keys: [num_delete]
+Keys: [num_separator]
 
 # * experiment structure
 Experiment_blocks: [

@@ -28,7 +28,7 @@ Feedback_show_time: [1, 1]
 # ! THIS BUG IS KEPT IN ON PURPOSE, TO HAVE ALL THE COLLECTED DATA USE ONE PROCEDURE
 
 # reaction keys
-Keys: [num_delete]
+Keys: [num_separator]
 # Keys: [rctrl]
 
 # experiment structure
