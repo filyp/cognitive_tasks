@@ -1,0 +1,3 @@
+Twój wynik to: <--insert-->
+Koniec zadania.
+Zaczekaj na osobę przeprowadzającą eksperyment.

@@ -54,5 +54,5 @@ Experiment_blocks: [
     {type: experiment, number_of_trials: 35, cue_incentive_ratio: 0.7},
     {type: break, file_name: monetary_incentive_delay/break3.txt},
     {type: experiment, number_of_trials: 35, cue_incentive_ratio: 0.7},
-    {type: break, file_name: end.txt}
+    {type: break, file_name: monetary_incentive_delay/end.txt},
 ]
