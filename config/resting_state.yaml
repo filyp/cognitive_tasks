@@ -1,0 +1,18 @@
+Procedure: "Resting state"
+
+# * EEG
+Send_EEG_trigg: True
+
+
+# * view parameters
+Screen_number: -1       # 0 is built-in; 1 is external; -1 means "last", so it will be external if external is connected, otherwise built-in
+Screen_color: -0.25    # -1 is black, 1 is white, -0.25 corresponds to RGB 96
+Text_color: "black"
+Text_size: 0.03        # this is size of the text in the instructions
+Text_font: "Arial"
+Fixation_size: 0.028
+
+# * times
+Command_show_time: 4
+Open_eyes_duration: 240
+Closed_eyes_duration: 240

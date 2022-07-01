@@ -22,6 +22,7 @@ from classes.screen import create_win
 from classes.experiment_info import display_eeg_info
 
 # from classes.procedures.ophthalmic_procedure import ophthalmic_procedure
+from classes.procedures.resting_state import resting_state
 from classes.procedures.flanker_task.flanker_task import flanker_task
 from classes.procedures.diamond_task.diamond_task import diamond_task
 from classes.procedures.go_no_go.go_no_go import go_no_go
@@ -75,6 +76,7 @@ def run():
         "Diamond task": diamond_task,
         "Monetary Incentive Delay": monetary_incentive_delay,
         "Go No-Go": go_no_go,
+        "Resting state": resting_state,
     }[config["Procedure"]]
 
     # Experiment
