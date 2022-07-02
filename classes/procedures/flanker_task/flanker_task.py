@@ -95,7 +95,7 @@ def flanker_task(
                 config=config,
                 screen_width=screen_res["width"],
                 data_saver=data_saver,
-                insert=get_reaction_stats(RTs_in_block, num_of_errors_in_block)
+                insert=get_reaction_stats(RTs_in_block, num_of_errors_in_block),
             )
             continue
         elif block["type"] in ["experiment", "training"]:
