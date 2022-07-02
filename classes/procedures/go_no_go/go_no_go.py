@@ -74,6 +74,9 @@ def go_no_go(
             rt_mean = 0
             rt_sum = 0
 
+        RTs_in_block = []
+        num_of_errors_in_block = 0
+
         for trial in block["trials"]:
             trigger_name = prepare_trigger_name(trial=trial, block_type=block["type"])
             reaction_time = None
