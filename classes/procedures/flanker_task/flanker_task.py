@@ -50,6 +50,16 @@ def check_response(config, event, mouse, clock, trigger_handler, block, trial, r
         return None
 
 
+def get_reaction_stats(RTs_in_block, num_of_errors_in_block):
+    if RTs_in_block is None or num_of_errors_in_block is None:
+        return ""
+    if RTs_in_block == []:
+        return ""
+
+    mean_rt = sum(RTs_in_block) / len(RTs_in_block)
+    return f"Średni czas reakcji: {int(mean_rt * 1000)} ms\nLiczba błędów: {num_of_errors_in_block}"
+
+
 def flanker_task(
     win,
     screen_res,
@@ -58,6 +68,9 @@ def flanker_task(
 ):
     clock = core.Clock()
     mouse = event.Mouse(win=win, visible=False)
+
+    RTs_in_block = None
+    num_of_errors_in_block = None
 
     # load stimulus
     stimulus = load_stimuli(win=win, config=config, screen_res=screen_res)
@@ -82,6 +95,7 @@ def flanker_task(
                 config=config,
                 screen_width=screen_res["width"],
                 data_saver=data_saver,
+                insert=get_reaction_stats(RTs_in_block, num_of_errors_in_block)
             )
             continue
         elif block["type"] in ["experiment", "training"]:
@@ -98,6 +112,9 @@ def flanker_task(
                 config["Feedback_initial_threshold_rt"],
                 timer_names=config["Cues"] if config["Show_cues"] else [""],
             )
+        
+        RTs_in_block = []
+        num_of_errors_in_block = 0
 
         for trial in block["trials"]:
             response_data = []
@@ -336,5 +353,11 @@ def flanker_task(
             )
             # fmt: on
             data_saver.beh.append(behavioral_data)
+
+            # update block stats
+            if reaction_time is not None:
+                RTs_in_block.append(reaction_time)
+            num_of_errors_in_block += 1 if reaction == "incorrect" else 0
+
             logging.data(f"Behavioral data: {behavioral_data}\n")
             logging.flush()
