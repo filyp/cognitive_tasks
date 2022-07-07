@@ -63,8 +63,9 @@ class TriggerHandler:
         if self.port_eeg is not None:
             try:
                 self.port_eeg.setData(self.trigger_no)
-                time.sleep(0.01)
+                time.sleep(0.005)
                 self.port_eeg.setData(0x00)
+                time.sleep(0.005)
             except Exception as ex:
                 logging.error(ex)
                 pass
