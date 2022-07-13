@@ -246,7 +246,9 @@ def go_no_go(
             # update block stats
             if reaction_time is not None:
                 RTs_in_block.append(reaction_time)
-            num_of_errors_in_block += 1 if acc == "negative" else 0
+            if response and trial["type"] != "go":
+                num_of_errors_in_block += 1 
+
 
         if block["type"] == "calibration":
             rt_mean = rt_sum / len([trial for trial in block["trials"] if trial["type"] == "go"])
