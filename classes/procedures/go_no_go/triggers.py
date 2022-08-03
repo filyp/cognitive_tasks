@@ -61,8 +61,9 @@ def send_trigger(
     if send_eeg_triggers:
         try:
             port_eeg.setData(trigger_no)
-            time.sleep(0.01)
+            time.sleep(0.005)
             port_eeg.setData(0x00)
+            time.sleep(0.005)
         except:
             pass
     if send_nirs_triggers:
