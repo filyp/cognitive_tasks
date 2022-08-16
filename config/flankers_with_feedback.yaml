@@ -46,9 +46,8 @@ Use_whole_response_time_window: False
 
 # * reaction keys
 # first one is for left response, second one is for right response
-# Keys: [mouse_left, mouse_right]
-# Keys: [lctrl, rctrl]
-Keys: [lctrl, num_separator]
+# Keys: [[mouse_left], [mouse_right]]
+Keys: [[lctrl], [num_separator, num_delete, rctrl]]
 
 
 

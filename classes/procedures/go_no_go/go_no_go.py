@@ -156,7 +156,7 @@ def go_no_go(
                         trigger_no=trigger_no,
                         send_eeg_triggers=config["Send_EEG_trigg"],
                     )
-                    response = key[0]
+                    response = True
                     break
 
                 data_saver.check_exit()

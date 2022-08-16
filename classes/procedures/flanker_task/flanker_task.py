@@ -18,7 +18,8 @@ from classes.procedures.flanker_task.feedback import (
 
 
 def check_response(config, event, mouse, clock, trigger_handler, block, trial, response_data):
-    keys = event.getKeys(keyList=config["Keys"])
+    keylist = [key for group in config["Keys"] for key in group]
+    keys = event.getKeys(keyList=keylist)
     _, mouse_press_times = mouse.getPressed(getTime=True)
 
     if mouse_press_times[0] != 0.0:
@@ -287,16 +288,20 @@ def flanker_task(
             # check if reaction was correct
             if trial["target_name"] in ["congruent_lll", "incongruent_rlr"]:
                 # left is correct
-                correct_key = config["Keys"][0]
+                correct_keys = config["Keys"][0]
             elif trial["target_name"] in ["congruent_rrr", "incongruent_lrl"]:
                 # right is correct
-                correct_key = config["Keys"][1]
+                correct_keys = config["Keys"][1]
 
-            response, reaction_time = response_data[0] if response_data != [] else (None, None)
-            if response == correct_key:
+            response_keyname, reaction_time = response_data[0] if response_data != [] else (None, None)
+            if response_keyname in correct_keys:
                 reaction = "correct"
             else:
                 reaction = "incorrect"
+            if response_keyname in config["Keys"][0]:
+                response_side = "l"
+            elif response_keyname in config["Keys"][1]:
+                response_side = "r"
 
             # ! draw feedback
             if config["Show_feedback"]:
@@ -337,7 +342,7 @@ def flanker_task(
                 trial_type=trial["type"],
                 cue_name=cue_name,
                 target_name=trial["target_name"],
-                response=response,
+                response=response_side,
                 rt=reaction_time,
                 reaction=reaction,
                 threshold_rt=feedback_timer.thresholds[cue_name] if config["Show_feedback"] else None,

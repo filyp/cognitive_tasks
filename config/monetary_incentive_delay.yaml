@@ -38,8 +38,7 @@ Feedback_show_time: [1.000, 1.000]
 RT_after_cue_offset_cutting_off_reactions_on_cue: 0.600
 
 # * reaction keys
-# Keys: [rctrl]
-Keys: [num_separator]
+Keys: [num_separator, num_delete, rctrl]
 
 # * experiment structure
 Experiment_blocks: [
