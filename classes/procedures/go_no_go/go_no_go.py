@@ -149,7 +149,7 @@ def go_no_go(
                         trigger_type=TriggerTypes.RE,
                         trigger_no=trigger_no,
                         triggers_list=triggers_list,
-                        trigger_name=trigger_name[:-1] + key[0],
+                        trigger_name=trigger_name[:-1] + "responded",
                     )
                     send_trigger(
                         port_eeg=port_eeg,

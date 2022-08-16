@@ -35,18 +35,22 @@ def check_response(config, event, mouse, clock, trigger_handler, block, trial, r
             trigger_type = TriggerTypes.REACTION
         else:
             trigger_type = TriggerTypes.SECOND_REACTION
+        if keys[0] in config["Keys"][0]:
+            response_side = "l"
+        elif keys[0] in config["Keys"][1]:
+            response_side = "r"
+        
         trigger_handler.prepare_trigger(
             trigger_type=trigger_type,
             block_type=block["type"],
             cue_name=trial["cue"].text,
             target_name=trial["target_name"],
-            response=keys[0],
+            response=response_side,
         )
         trigger_handler.send_trigger()
-        response = keys[0]
         mouse.clickReset()
         event.clearEvents()
-        return response, reaction_time
+        return response_side, reaction_time
     else:
         return None
 
@@ -288,20 +292,16 @@ def flanker_task(
             # check if reaction was correct
             if trial["target_name"] in ["congruent_lll", "incongruent_rlr"]:
                 # left is correct
-                correct_keys = config["Keys"][0]
+                correct_side = "l"
             elif trial["target_name"] in ["congruent_rrr", "incongruent_lrl"]:
                 # right is correct
-                correct_keys = config["Keys"][1]
+                correct_side = "r"
 
-            response_keyname, reaction_time = response_data[0] if response_data != [] else (None, None)
-            if response_keyname in correct_keys:
+            response_side, reaction_time = response_data[0] if response_data != [] else (None, None)
+            if response_side == correct_side:
                 reaction = "correct"
             else:
                 reaction = "incorrect"
-            if response_keyname in config["Keys"][0]:
-                response_side = "l"
-            elif response_keyname in config["Keys"][1]:
-                response_side = "r"
 
             # ! draw feedback
             if config["Show_feedback"]:
