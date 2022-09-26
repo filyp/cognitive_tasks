@@ -86,8 +86,9 @@ def get_value_from_slider(
     return slider.markerPos
 
 
-def random_time(min_time, max_time, step):
-    possible_times = np.arange(min_time, max_time + step, step)
+def random_time(min_time, max_time, step=0.100):
+    steps = int((max_time - min_time) / step + 1)
+    possible_times = np.linspace(min_time, max_time, steps)
     return random.choice(possible_times)
 
 
