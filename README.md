@@ -16,9 +16,9 @@ cd cognitive_tasks
 python3 -m pip install -r requirements.txt
 ```
 
-Instead of downloading the latest version of the procedures, you may want some older version, marked with some tag. For example, for tag `diamond_task_tested`, you can use this command instead:
+Instead of downloading the latest version of the procedures, you may want some particular version. For example, for branch `diamond_task`, you can use this command instead:
 ```
-git clone --branch diamond_task_tested https://github.com/filyp/cognitive_tasks.git
+git clone --branch diamond_task https://github.com/filyp/cognitive_tasks.git
 ```
 
 ## Running
