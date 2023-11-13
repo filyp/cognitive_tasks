@@ -2,7 +2,7 @@ Procedure: "Flanker task"
 
 # * EEG
 Ophthalmic_procedure: False
-Send_EEG_trigg: False
+Send_EEG_trigg: True
 Actiview_reminder: True
 
 # * view parameters
