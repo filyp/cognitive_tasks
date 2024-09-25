@@ -1,0 +1,68 @@
+Procedure: "Flanker task"
+
+# * EEG
+Ophthalmic_procedure: False     # this is currently not supported
+Send_EEG_trigg: True
+Actiview_reminder: True
+
+# * view parameters
+Screen_color: 0
+Text_color: "black"
+Text_size: 0.037
+Text_font: "Arial"
+
+# * flanker parameters
+Fixation: "fixation.png"
+Arrow_left: "arrow_left.png"
+Arrow_right: "arrow_right.png"
+Fixation_size: [0.07, 0.02830625]  # arrow dimensions are 1600x647
+Flanker_size: [0.07, 0.02830625]  # arrow dimensions are 1600x647
+Flanker_spacing: 0.06
+Orientation: "vertical"
+
+# * cue definition
+Show_cues: False    # if False, the rest of this block has no effect
+
+# * feedback  definition
+Show_feedback: True    # if False, the rest of this block has no effect
+Feedback_good: "smiley_face.png"
+Feedback_bad: "sad_face.png"
+Feedback_initial_threshold_rt: 0.420
+Feedback_size: 0.110
+
+# * times
+Empty_screen_between_trials: [0.600, 0.800]
+Fixation_show_time: [0.600, 0.800]
+Flanker_show_time: [0.080, 0.080]   # this one is optional
+Target_show_time: [0.600, 0.600]
+Blank_screen_for_response_show_time: [0.600, 0.600]
+Empty_screen_after_response_show_time: [1.000, 1.000]
+Feedback_show_time: [0.800, 0.800]  # this one is needed only if Show_feedback is True
+
+# if this is False, we will end response time windw immediately after response, and carry on
+# if True, we will wait until the whole window ends even after the response, like in Hajcak2005
+Use_whole_response_time_window: False
+
+
+# * reaction keys
+# first one is for left response, second one is for right response
+# Keys: [[mouse_left], [mouse_right]]
+Keys: [[lctrl], [num_separator, num_delete, rctrl]]
+
+
+
+# * experiment structure
+Experiment_blocks: [
+    {type: break, file_name: instruction.txt},
+    {type: training, number_of_trials: 20, ratio_of_congruent: 0.7},
+    {type: break, file_name: end_training.txt},
+    {type: experiment, number_of_trials: 60, ratio_of_congruent: 0.7},
+    {type: break, file_name: flanker_task/break1.txt},
+    {type: experiment, number_of_trials: 60, ratio_of_congruent: 0.7},
+    {type: break, file_name: flanker_task/break2.txt},
+    {type: experiment, number_of_trials: 60, ratio_of_congruent: 0.7},
+    {type: break, file_name: flanker_task/break3.txt},
+    {type: experiment, number_of_trials: 60, ratio_of_congruent: 0.7},
+    {type: break, file_name: flanker_task/break4.txt},
+    {type: experiment, number_of_trials: 60, ratio_of_congruent: 0.7},
+    {type: break, file_name: flanker_task/end.txt}]
