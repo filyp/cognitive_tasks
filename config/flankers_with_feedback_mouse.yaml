@@ -8,6 +8,9 @@ Actiview_reminder: True
 # * view parameters
 Screen_color: 0
 Text_color: "black"
+# Screen_color: "black"
+# Text_color: "white"
+# todo needs also changing arrow...png if we change the screen color
 Text_size: 0.037
 Text_font: "Arial"
 
@@ -46,8 +49,8 @@ Use_whole_response_time_window: False
 
 # * reaction keys
 # first one is for left response, second one is for right response
-# Keys: [[mouse_left], [mouse_right]]
-Keys: [[lctrl], [num_separator, num_delete, rctrl]]
+Keys: [[mouse_left], [mouse_right]]
+# Keys: [[lctrl], [num_separator, num_delete, rctrl]]
 
 
 
