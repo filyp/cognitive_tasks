@@ -96,7 +96,7 @@ def topological_task(
         pos=(-side * 0.2, -0.2),
     )
 
-    df = pd.read_excel(os.path.join("input_data", "topological_task.xlsx"))
+    df = pd.read_csv(os.path.join("input_data", "topological_task_shuffled.csv"))
 
     # instructions #######
     for instr_file in [
@@ -117,9 +117,17 @@ def topological_task(
             },
         )
 
+    training = True
+    # for training, use the last 6 trials
+
     # ! run trials
     for _, row in df.iterrows():
+        # todo need to do it two times, the second time with reversed particle
+        # todo also reverse particle if version==B
+
         trigger_handler.open_trial()
+        image_id = row["Nazwa_pliku"].split(".")[0]
+        shown_particle = row["Term"]
 
         # ! prepare stimuli
         pre_question = f"""\
@@ -164,7 +172,7 @@ do czarnego przedmiotu?"""
         win.flip()
 
         # ! show image
-        image = images_dict["NA-22"]  # todo
+        image = images_dict[image_id]
         trigger_handler.prepare_trigger("todo_name")
         image.setAutoDraw(True)
         win.flip()
@@ -183,10 +191,11 @@ do czarnego przedmiotu?"""
         win.flip()
 
         # ! show particle
-        particle = na_particle
+        particle = na_particle if shown_particle == "NA" else w_particle
         trigger_handler.prepare_trigger("todo_name")
         particle.setAutoDraw(True)
-        post_question_stim.setAutoDraw(True)
+        if training:
+            post_question_stim.setAutoDraw(True)
         win.flip()
         trigger_handler.send_trigger()
         core.wait(config["Particle_show_time"])
@@ -202,13 +211,15 @@ do czarnego przedmiotu?"""
         trigger_handler.send_trigger()
         keys = event.waitKeys(
             keyList=[yes_key, no_key],
-            maxWait=config["Maximal_response_time"],
+            maxWait=config["Maximal_response_time"] if not training else float("inf"),
         )
+        key_pressed = keys[0] if keys else None
         reaction_time = clock.getTime()
         yes_option.setAutoDraw(False)
         no_option.setAutoDraw(False)
         particle.setAutoDraw(False)
-        post_question_stim.setAutoDraw(False)
+        if training:
+            post_question_stim.setAutoDraw(False)
         win.flip()
 
         # ! show third fixation
@@ -222,6 +233,12 @@ do czarnego przedmiotu?"""
 
         # ! close the trial
         behavioral_data = OrderedDict(
+            image_id=image_id,
+            image_type=row["Signature"],
+            shown_particle=shown_particle,
+            key_pressed=key_pressed,
+            reaction_time=reaction_time,
+            training=training,
             # block_type=block["type"],
             # trial_type=trial["type"],
             # font_color=trial["font_color"],
