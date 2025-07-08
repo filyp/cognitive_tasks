@@ -8,12 +8,14 @@ This repository contains procedures for multiple cognitive psychology experiment
 
 ## Installation
 
-First, make sure you have python3.6 or newer installed. Then, run in bash:
+First, make sure you have python3.10 or python3.8 installed (psychopy strongly recommends it). Then, run in bash:
 
 ```bash
 git clone https://github.com/filyp/cognitive_tasks.git
 cd cognitive_tasks
-python3 -m pip install -r requirements.txt
+python3.10 -m venv .venv --copies
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
 Instead of downloading the latest version of the procedures, you may want some particular version. For example, for branch `diamond_task`, you can use this command instead:

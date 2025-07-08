@@ -2,11 +2,11 @@
 # how to run:
 # venv/bin/python main.py config/some_task.yaml
 
-import os
-import sys
-import json
-import shutil
 import hashlib
+import json
+import os
+import shutil
+import sys
 
 import yaml
 from psychopy import logging
@@ -15,20 +15,19 @@ from psychopy import logging
 # logging.console.setLevel(logging.EXP)
 logging.console.setLevel(logging.DATA)
 
-from classes.experiment_info import get_participant_info
-
-from classes.save_data import DataSaver
-from classes.screen import create_win
-from classes.experiment_info import display_eeg_info
-
-# from classes.procedures.ophthalmic_procedure import ophthalmic_procedure
-from classes.procedures.resting_state import resting_state
-from classes.procedures.flanker_task.flanker_task import flanker_task
+from classes.experiment_info import display_eeg_info, get_participant_info
 from classes.procedures.diamond_task.diamond_task import diamond_task
+from classes.procedures.flanker_task.flanker_task import flanker_task
 from classes.procedures.go_no_go.go_no_go import go_no_go
 from classes.procedures.monetary_incentive_delay.monetary_incentive_delay import (
     monetary_incentive_delay,
 )
+from classes.procedures.resting_state import resting_state
+from classes.procedures.topological_task.topological_task import topological_task
+from classes.save_data import DataSaver
+from classes.screen import create_win
+
+# from classes.procedures.ophthalmic_procedure import ophthalmic_procedure
 
 __author__ = ["ociepkam", "filyp"]
 
@@ -57,7 +56,10 @@ def run():
 
     if config.get("Actiview_reminder", False):
         display_eeg_info()
-    participant_info, experiment_version = get_participant_info(config.get("Ask_for_experiment_version", False))
+    participant_info, experiment_version = get_participant_info(
+        config.get("Ask_for_experiment_version", False)
+    )
+    assert experiment_version != "-", "Wybierz wersję eksperymentu"
     config["Experiment_version"] = experiment_version
 
     data_saver = DataSaver(participant_info, experiment_name, beh=[], triggers_list=[])
@@ -68,7 +70,9 @@ def run():
 
     # screen
     screen_number = config.get("Screen_number", -1)
-    win, screen_res = create_win(screen_color=config["Screen_color"], screen_number=screen_number)
+    win, screen_res = create_win(
+        screen_color=config["Screen_color"], screen_number=screen_number
+    )
 
     # choose which procedure to run
     procedure = {
@@ -76,6 +80,7 @@ def run():
         "Diamond task": diamond_task,
         "Monetary Incentive Delay": monetary_incentive_delay,
         "Go No-Go": go_no_go,
+        "Topological task": topological_task,
         "Resting state": resting_state,
     }[config["Procedure"]]
 

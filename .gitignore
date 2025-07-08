@@ -3,8 +3,8 @@ results
 .idea
 .vscode
 venv
+.venv
 junk
 behavioral_analysis.ipynb
-input_data/diamond_task/*
 _results_old
 ERPinator

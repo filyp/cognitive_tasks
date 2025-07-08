@@ -1,21 +1,10 @@
 import codecs
 import os
-from os.path import join
 
-import yaml
 from psychopy import visual
 
 possible_images_format = ("bmp", "jpg", "png", "gif")
 possible_audio_format = ("mp3", "au", "mp2", "wav", "wma", "ogg")
-
-
-def load_config():
-    try:
-        with open(join("docs", "config.yaml")) as yaml_file:
-            doc = yaml.safe_load(yaml_file)
-        return doc
-    except:
-        raise Exception("Can't load config file")
 
 
 def load_data(win, folder_name, config, screen_res):

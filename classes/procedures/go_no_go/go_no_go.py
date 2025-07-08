@@ -5,7 +5,7 @@ import time
 from psychopy import core, event, visual, logging
 
 from classes.show_info import show_info
-from classes.procedures.go_no_go.load_data import load_data
+from classes.load_data import load_data
 from classes.procedures.go_no_go.prepare_experiment import prepare_trials
 from classes.procedures.go_no_go.triggers import TriggerTypes, prepare_trigger, prepare_trigger_name, send_trigger, create_eeg_port
 
