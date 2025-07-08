@@ -5,12 +5,11 @@ from psychopy import event, logging
 
 
 class DataSaver:
-    def __init__(self, participant_info, experiment_name, beh=[], triggers_list=[]):
+    def __init__(self, participant_info, experiment_name):
         self.participant_info = participant_info
-        self.experiment_name = experiment_name
-        self.beh = beh
-        self.triggers_list = triggers_list
-        self.directory = os.path.join("results", self.experiment_name)
+        self.beh = []
+        self.triggers_list = []
+        self.directory = os.path.join("results", experiment_name)
 
     def save_triggers(self):
         trigger_directory = os.path.join(self.directory, "triggers_maps")

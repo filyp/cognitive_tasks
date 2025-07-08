@@ -1,6 +1,5 @@
 import os
 import time
-import random
 from typing import OrderedDict
 
 import pandas as pd
@@ -49,8 +48,10 @@ def topological_task(
     clock = core.Clock()
 
     # ! prepare response keys
-    yes_key = random.choice(["lctrl", "rctrl"])
-    no_key = "lctrl" if yes_key == "rctrl" else "rctrl"
+    if config["Random_condition"] == 1:
+        yes_key, no_key = "lctrl", "rctrl"
+    elif config["Random_condition"] == 2:
+        yes_key, no_key = "rctrl", "lctrl"
     print(f"yes_key: {yes_key}, no_key: {no_key}")
 
     # ! load images and data
@@ -96,16 +97,6 @@ def topological_task(
     )
 
     df = pd.read_excel(os.path.join("input_data", "topological_task.xlsx"))
-
-    # # Response options
-    # response_yes = visual.TextStim(
-    #     win, color="black", text="yes", height=config["Response_text_size"],
-    #     pos=(0, -config["Response_text_offset"])
-    # )
-    # response_no = visual.TextStim(
-    #     win, color="black", text="no", height=config["Response_text_size"],
-    #     pos=(0, -config["Response_text_offset"] - config["Response_text_spacing"])
-    # )
 
     # instructions #######
     for instr_file in [
@@ -205,10 +196,15 @@ do czarnego przedmiotu?"""
         trigger_handler.prepare_trigger("todo_name")
         yes_option.setAutoDraw(True)
         no_option.setAutoDraw(True)
+        event.clearEvents()
+        win.callOnFlip(clock.reset)
         win.flip()
         trigger_handler.send_trigger()
-        core.wait(config["Maximal_response_time"])
-        # todo for loop with waiting
+        keys = event.waitKeys(
+            keyList=[yes_key, no_key],
+            maxWait=config["Maximal_response_time"],
+        )
+        reaction_time = clock.getTime()
         yes_option.setAutoDraw(False)
         no_option.setAutoDraw(False)
         particle.setAutoDraw(False)
@@ -223,8 +219,6 @@ do czarnego przedmiotu?"""
         core.wait(config["Third_fixation_show_time"])
         fixation.setAutoDraw(False)
         win.flip()
-
-
 
         # ! close the trial
         behavioral_data = OrderedDict(
@@ -242,125 +236,4 @@ do czarnego przedmiotu?"""
         trigger_handler.close_trial(value="-")  # todo response side
         data_saver.check_exit()
 
-
-        break
-
     return
-
-    reaction_time = None
-    response = None
-
-    # 1. Text prompt for 2 seconds
-    # Create prompt text with image name substitution
-    prompt_text = config["Prompt_text"].replace("X", trial["image_name"])
-    prompt_stimulus = visual.TextStim(
-        win,
-        color="black",
-        text=prompt_text,
-        height=config["Prompt_text_size"],
-        pos=(0, 0),
-        wrapWidth=config["Prompt_wrap_width"],
-    )
-
-    prompt_stimulus.setAutoDraw(True)
-    win.flip()
-    time.sleep(config["Prompt_show_time"])
-    prompt_stimulus.setAutoDraw(False)
-    data_saver.check_exit()
-    win.flip()
-
-    # 2. Fixation cross for 800 ms
-    fixation.setAutoDraw(True)
-    win.flip()
-    time.sleep(config["Fixation_before_image_time"])
-    fixation.setAutoDraw(False)
-    data_saver.check_exit()
-    win.flip()
-
-    # 3. Image for 3 seconds
-    trial["image"]["stimulus"].setAutoDraw(True)
-    win.flip()
-    time.sleep(config["Image_show_time"])
-    trial["image"]["stimulus"].setAutoDraw(False)
-    data_saver.check_exit()
-    win.flip()
-
-    # 4. Fixation cross for 800 ms
-    fixation.setAutoDraw(True)
-    win.flip()
-    time.sleep(config["Fixation_before_label_time"])
-    fixation.setAutoDraw(False)
-    data_saver.check_exit()
-    win.flip()
-
-    # 5. NA or W for 1000 ms (no responses allowed)
-    label_stimulus = visual.TextStim(
-        win,
-        color="black",
-        text=trial["label"],
-        height=config["Label_text_size"],
-        pos=(0, 0),
-    )
-    label_stimulus.setAutoDraw(True)
-    win.flip()
-
-    # Clear any existing key presses
-    event.clearEvents()
-
-    # Wait for 1000ms with no responses allowed
-    time.sleep(config["Label_no_response_time"])
-    data_saver.check_exit()
-
-    # 6. Response options appear below NA or W for 3 seconds or until response
-    response_yes.setAutoDraw(True)
-    response_no.setAutoDraw(True)
-    win.callOnFlip(clock.reset)
-    win.flip()
-
-    # Collect response
-    response_collected = False
-    response_keys = config["Response_keys"]  # ["lctrl", "rctrl"]
-
-    while clock.getTime() < config["Response_window_time"] and not response_collected:
-        keys = event.getKeys(keyList=response_keys, timeStamped=clock)
-        if keys:
-            key_pressed, reaction_time = keys[0]
-            response_collected = True
-
-            # Map key to response based on participant's key mapping
-            if key_pressed == config["Yes_key"]:
-                response = "yes"
-            elif key_pressed == config["No_key"]:
-                response = "no"
-
-            break
-
-        data_saver.check_exit()
-        win.flip()
-
-    # Clear stimuli
-    label_stimulus.setAutoDraw(False)
-    response_yes.setAutoDraw(False)
-    response_no.setAutoDraw(False)
-    win.flip()
-
-    # 7. Fixation cross for 800 ms before next trial
-    fixation.setAutoDraw(True)
-    win.flip()
-    time.sleep(config["Fixation_end_trial_time"])
-    fixation.setAutoDraw(False)
-    data_saver.check_exit()
-    win.flip()
-
-    # For now, just log the trial results (you can expand this later)
-    print(
-        f"Trial completed: Image={trial['image_name']}, Label={trial['label']}, Response={response}, RT={reaction_time}"
-    )
-
-    return {
-        "image_name": trial["image_name"],
-        "label": trial["label"],
-        "response": response,
-        "reaction_time": reaction_time,
-        "expected_response": trial["expected_response"],
-    }

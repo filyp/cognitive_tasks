@@ -5,6 +5,7 @@
 import hashlib
 import json
 import os
+import random
 import shutil
 import sys
 
@@ -59,10 +60,20 @@ def run():
     participant_info, experiment_version = get_participant_info(
         config.get("Ask_for_experiment_version", False)
     )
-    assert experiment_version != "-", "Wybierz wersję eksperymentu"
-    config["Experiment_version"] = experiment_version
 
-    data_saver = DataSaver(participant_info, experiment_name, beh=[], triggers_list=[])
+    # ! handle experiment version
+    assert experiment_version != "-", "Wybierz wersję eksperymentu"
+    if experiment_version is not None:
+        participant_info = participant_info + "_" + experiment_version
+    config["Experiment_version"] = experiment_version
+    # ! handle random condition
+    if "Num_random_conditions" in config:
+        config["Random_condition"] = random.randint(1, config["Num_random_conditions"])
+        print(f"Random condition: {config['Random_condition']}")
+        participant_info = participant_info + "_" + str(config["Random_condition"])
+
+    data_saver = DataSaver(participant_info, experiment_name)
+
     # copy config file to results folder
     os.makedirs(data_saver.directory, exist_ok=True)
     shutil.copy2(config_path, data_saver.directory)

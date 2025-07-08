@@ -1,5 +1,6 @@
 Procedure: "Topological task"
 Ask_for_experiment_version: True
+Num_random_conditions: 2
 
 # EEG
 # Send_EEG_trigg: True  # todo change back
