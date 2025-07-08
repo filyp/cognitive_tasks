@@ -23,7 +23,7 @@ def read_text_from_file(file_name, insert=""):
     final_message = whole_message.replace("<--insert-->", insert)
     return final_message
 
-
+# for more functionality, you can also adopt: https://github.com/filyp/psychopy_experiment_helpers/blob/355e71cade005eedeb1186274ba819f91e561179/show_info.py
 def show_info(
     win,
     file_name,
@@ -33,6 +33,7 @@ def show_info(
     insert="",
     alignText="center",
     pos=(0, 0),
+    insert_dict={},
 ):
     """
     Clear way to show info message into screen.
@@ -44,7 +45,9 @@ def show_info(
     :param insert: extra text for read_text_from_file
     :return:
     """
+    # note: using insert is deprecated - better to use insert_dict
     hello_msg = read_text_from_file(os.path.join("messages", file_name), insert=insert)
+    hello_msg = hello_msg.format(**insert_dict)
     hello_msg = visual.TextStim(
         win=win,
         antialias=True,

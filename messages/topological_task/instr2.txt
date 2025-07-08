@@ -1,0 +1,15 @@
+Na początku zobaczysz planszę krótko opisującą,
+co pojawi się na obrazku 
+(np. Za chwilę zobaczysz psa. Gdzie jest pies?).
+
+Następnie zobaczysz obrazek przedstawiający 
+dwa obiekty: pomarańczowy i czarny.
+
+Po obejrzeniu obrazka wyświetli się
+jedno z dwóch słów: NA lub W.
+
+Twoim zadaniem jest ocenić, czy wyświetlone słowo
+poprawnie opisuje relację pomarańczowego obiektu
+w stosunku do czarnego.
+
+Naciśnij SPACJĘ, aby przejść dalej.

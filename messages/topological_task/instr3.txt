@@ -1,0 +1,8 @@
+Jeśli uważasz, że wyświetlone słowo poprawnie opisuje relację,
+naciśnij {yes_key_text}
+
+Jeśli uważasz, że wyświetlone słowo jest nieprawidłowe,
+naciśnij {no_key_text}.
+
+
+Naciśnij SPACJĘ, aby przejść dalej.

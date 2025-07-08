@@ -73,3 +73,26 @@ def read_text_from_file(file_name, insert=""):
                 else:
                     msg.append(line)
     return "".join(msg)
+
+
+# def load_stimuli(win, config, screen_res):
+#     """
+#     ladowanie tekstu, zdjec i dzwiekow
+#     :param screen_res:
+#     :param config:
+#     :param win: visual.Window z psychopy
+#     :param folder_name: nazwa folderu z ktorego beda ladowane pliki
+#     """
+#     stimuli = dict()
+
+#     for stimulus_name, stimulus_definition in config["Stimuli"].items():
+#         path, size = stimulus_definition
+#         stimuli[stimulus_name] = visual.ImageStim(
+#             win=win,
+#             image=os.path.join("input_data", path),
+#             size=size,
+#             name=stimulus_name,
+#             interpolate=True,
+#         )
+
+#     return stimuli

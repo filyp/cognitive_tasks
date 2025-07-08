@@ -1,0 +1,5 @@
+Twoim zadaniem będzie ocena relacji przestrzennych
+między dwoma obiektami widocznymi na obrazkach:
+pomarańczowym i czarnym.
+
+Naciśnij SPACJĘ, aby przejść dalej.
