@@ -3,10 +3,10 @@ Ask_for_experiment_version: True
 Num_random_conditions: 2
 
 # EEG
-# Send_EEG_trigg: True  # todo change back
-# Actiview_reminder: True  # todo change back
-Send_EEG_trigg: False
-Actiview_reminder: False
+Send_EEG_trigg: True
+Actiview_reminder: True
+# Send_EEG_trigg: False
+# Actiview_reminder: False
 
 Screen_number: 0  # maybe todo: remove later?
     
