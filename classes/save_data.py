@@ -35,10 +35,13 @@ class DataSaver:
             for row in self.beh:
                 writer.writerow(row)
 
+    def terminate_early(self):
+        self.save_beh()
+        self.save_triggers()
+        logging.critical("Experiment terminated early!")
+        exit(1)
+
     def check_exit(self, key="f7"):
         stop = event.getKeys(keyList=[key])
         if len(stop) > 0:
-            self.save_beh()
-            self.save_triggers()
-            logging.critical("Experiment finished by user! {} pressed.".format(key))
-            exit(1)
+            self.terminate_early()

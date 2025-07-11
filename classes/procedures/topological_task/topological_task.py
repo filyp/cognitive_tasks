@@ -6,6 +6,7 @@ import pandas as pd
 from psychopy import core, event, logging, visual
 
 from classes.load_data import load_data
+from classes.show_info import show_text
 from classes.triggers_common import TriggerHandler, create_eeg_port
 
 text_path = Path("messages") / "topological_task"
@@ -84,12 +85,6 @@ def topological_task(
         font=config["Text"]["font"],
     )
 
-    def draw_text(text):
-        visual.TextStim(
-            text=text, win=win, wrapWidth=screen_res["width"], **config["Text"]
-        ).draw()
-        win.flip()
-
     def trial(row, training):
         trigger_handler.open_trial()
         image_id = row["file_name"].split(".")[0]
@@ -160,7 +155,6 @@ do czarnego przedmiotu?"""
         win.flip()
         trigger_handler.send_trigger()
         core.wait(config["Word_show_time"])
-        win.flip()
         data_saver.check_exit()
 
         # ! response
@@ -247,8 +241,7 @@ do czarnego przedmiotu?"""
         "instr4.txt",
     ]:
         text = (text_path / instr_file).read_text().format(**text_vals)
-        draw_text(text)
-        event.waitKeys(keyList=["space"])
+        show_text(text, win, data_saver, **config["Text"])
 
     # * training
     # for training, use some 6 non-ambiguous trials
@@ -259,12 +252,8 @@ do czarnego przedmiotu?"""
     for _, row in df.iterrows():
         trial(row, training=True)
 
-    draw_text("Koniec treningu.")
-    core.wait(1)
-
     text = (text_path / "instr5.txt").read_text().format(**text_vals)
-    draw_text(text)
-    event.waitKeys(keyList=["space"])
+    show_text(text, win, data_saver, **config["Text"])
 
     df = pd.read_csv(
         os.path.join("input_data", "topological_task_shuffled.csv"),
@@ -280,5 +269,4 @@ do czarnego przedmiotu?"""
         if i % 24 == 0 and i != 0:
             # * break
             text = (text_path / "break.txt").read_text().format(**text_vals)
-            draw_text(text)
-            event.waitKeys(keyList=["space"])
+            show_text(text, win, data_saver, **config["Text"])

@@ -8,27 +8,18 @@ from psychopy import event, logging, visual
 def show_text(
     text,
     win,
-    config,
-    data_saver=None,
+    data_saver,
     **text_stim_kwargs,
 ):
-    text_stim = visual.TextStim(
+    visual.TextStim(
         text=text,
         win=win,
-        font=config["Text_font"],
-        height=config["Text_size"],
-        color=config["Text_color"],
-        **text_stim_kwargs
-    )
-    text_stim.draw()
+        **text_stim_kwargs,
+    ).draw()
     win.flip()
-    key = event.waitKeys(keyList=["f7", "return", "space"])
-
+    key = event.waitKeys(keyList=["f7", "space"])
     if key == ["f7"]:
-        data_saver.save_beh()
-        data_saver.save_triggers()
-        logging.critical("Experiment finished by user! {} pressed.".format(key))
-        exit(1)
+        data_saver.terminate_early()
 
 
 # ! the rest of the file is deprecated but needed for old procedures
