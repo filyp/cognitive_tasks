@@ -11,30 +11,26 @@ Actiview_reminder: False
 Screen_number: 1  # todo remove it later
 
 # view parameters
+Text:
+    height: 0.037
+    font: "Arial"
+    color: "black"
 Screen_color: "white"
-Text_size: 0.037
-Text_font: "Arial"
-Text_color: "black"
-Figure_size: 0.5
+Figure_size: [null, 0.5]
 Fixation_size: 0.028
-Particle_size: 0.1
+Word_size: 0.1
 Sizes: {}
-
 
 # times
 Pre_question_show_time: 2
 First_fixation_show_time: 0.8
 Image_show_time: 3
 Second_fixation_show_time: 0.8
-Particle_show_time: 1
+Word_show_time: 1
 Maximal_response_time: 3
 Third_fixation_show_time: 0.8
 
-
-
 # reaction keys
-A_Keys: {yes_key: "lctrl", no_key: "rctrl"}
-B_Keys: {yes_key: "rctrl", no_key: "lctrl"}
 key_names:
     lctrl: "LEWY CONTROL"
     rctrl: "PRAWY CONTROL"

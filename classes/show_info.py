@@ -4,6 +4,37 @@ import codecs
 from psychopy import event, logging, visual
 
 
+
+def show_text(
+    text,
+    win,
+    config,
+    data_saver=None,
+    **text_stim_kwargs,
+):
+    text_stim = visual.TextStim(
+        text=text,
+        win=win,
+        font=config["Text_font"],
+        height=config["Text_size"],
+        color=config["Text_color"],
+        **text_stim_kwargs
+    )
+    text_stim.draw()
+    win.flip()
+    key = event.waitKeys(keyList=["f7", "return", "space"])
+
+    if key == ["f7"]:
+        data_saver.save_beh()
+        data_saver.save_triggers()
+        logging.critical("Experiment finished by user! {} pressed.".format(key))
+        exit(1)
+
+
+# ! the rest of the file is deprecated but needed for old procedures
+# ! for new ones, just use the show_text function above
+
+
 def read_text_from_file(file_name, insert=""):
     """
     Method that read message from text file, and optionally add some
@@ -35,16 +66,6 @@ def show_info(
     pos=(0, 0),
     insert_dict={},
 ):
-    """
-    Clear way to show info message into screen.
-    :param win:
-    :param file_name:
-    :param screen_width:
-    :param text_size:
-    :param text_color:
-    :param insert: extra text for read_text_from_file
-    :return:
-    """
     # note: using insert is deprecated - better to use insert_dict
     hello_msg = read_text_from_file(os.path.join("messages", file_name), insert=insert)
     hello_msg = hello_msg.format(**insert_dict)

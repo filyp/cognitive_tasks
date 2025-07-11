@@ -33,8 +33,8 @@ class TriggerHandler:
 
     def send_trigger(self):
         # if self.trial is not None:
-        #     logging.data("TRIGGER: " + self.trial[-1])
-        #     logging.flush()
+            # logging.data("TRIGGER: " + self.trial[-1])
+            # logging.flush()
         if self.port_eeg is not None:
             try:
                 self.port_eeg.setData(self.trigger_no)

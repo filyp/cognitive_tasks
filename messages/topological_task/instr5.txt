@@ -1,0 +1,15 @@
+Za chwilę rozpocznie się właściwa część badania.
+
+Potrwa ono około 30 minut. Zaprezentowanych zostanie
+192 obrazków. Co 24 próby, wyświetli się plansza,
+podczas której będzie można chwilę odpocząć
+przed dalszą częścią zadania.
+
+Zapamiętaj:
+{yes_key_text} - wyraz poprawnie opisuje relację
+{no_key_text} - wyraz niepoprawnie opisuje relację
+
+Podczas właściwego badania,
+nad wyrazem nie będzie już wyświetlało się pytanie.
+
+Naciśnij SPACJĘ, aby przejść do badania.

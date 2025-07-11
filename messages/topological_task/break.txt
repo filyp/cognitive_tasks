@@ -1,0 +1,10 @@
+Przerwa.
+
+Możesz teraz chwilę odpocząć.
+
+Pamiętaj:
+{yes_key_text} - wyraz poprawnie opisuje relację
+{no_key_text} - wyraz niepoprawnie opisuje relację
+
+
+Naciśnij SPACJĘ, aby kontynuować badanie.
