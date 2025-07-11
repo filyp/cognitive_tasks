@@ -5,6 +5,7 @@ This repository contains procedures for multiple cognitive psychology experiment
 - diamond decision task
 - monetary incentive delay
 - go no-go task
+- topological task
 
 ## Installation
 

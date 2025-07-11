@@ -7,9 +7,9 @@ Num_random_conditions: 2
 # Actiview_reminder: True  # todo change back
 Send_EEG_trigg: False
 Actiview_reminder: False
-    
-Screen_number: 1  # todo remove it later
 
+Screen_number: 0  # maybe todo: remove later?
+    
 # view parameters
 Text:
     height: 0.037

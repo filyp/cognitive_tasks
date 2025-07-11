@@ -4,5 +4,7 @@ naciśnij {yes_key_text}
 Jeśli uważasz, że wyświetlone słowo jest nieprawidłowe,
 naciśnij {no_key_text}.
 
+Po wyświetleniu "NA"/"W", przez sekundę nie można jeszcze udzielić odpowiedzi.
+Odpowiedz dopiero gdy pojawią się opcje "TAK" i "NIE".
 
 Naciśnij SPACJĘ, aby przejść dalej.
