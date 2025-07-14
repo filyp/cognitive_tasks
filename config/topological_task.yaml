@@ -3,10 +3,10 @@ Ask_for_experiment_version: True
 Num_random_conditions: 2
 
 # EEG
-Send_EEG_trigg: True
-Actiview_reminder: True
-# Send_EEG_trigg: False
-# Actiview_reminder: False
+# Send_EEG_trigg: True
+# Actiview_reminder: True
+Send_EEG_trigg: False
+Actiview_reminder: False
 
 Screen_number: 0  # maybe todo: remove later?
     
@@ -20,6 +20,8 @@ Figure_size: [null, 0.5]
 Fixation_size: 0.028
 Word_size: 0.1
 Sizes: {}
+Yes_no_stim_distance: 0.1
+Yes_no_stim_height: 0.037
 
 # times
 Pre_question_show_time: 2

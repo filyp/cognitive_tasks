@@ -1,7 +1,7 @@
 import os
 import codecs
 
-from psychopy import event, logging, visual
+from psychopy import core, event, logging, visual
 
 
 
@@ -9,6 +9,7 @@ def show_text(
     text,
     win,
     data_saver,
+    duration=None,
     **text_stim_kwargs,
 ):
     visual.TextStim(
@@ -17,6 +18,11 @@ def show_text(
         **text_stim_kwargs,
     ).draw()
     win.flip()
+
+    if duration is not None:
+        core.wait(duration)
+        return
+
     key = event.waitKeys(keyList=["f7", "space"])
     if key == ["f7"]:
         data_saver.terminate_early()

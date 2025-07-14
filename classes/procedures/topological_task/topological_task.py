@@ -68,20 +68,21 @@ def topological_task(
         pos=(0, 0),
     )
     side = 1 if yes_key == "rctrl" else -1
+    dist = config["Yes_no_stim_distance"]
     yes_option = visual.TextStim(
         win,
         color="green",
         text="TAK",
-        pos=(side * 0.2, -0.2),
-        height=config["Text"]["height"],
+        pos=(side * dist, -dist),
+        height=config["Yes_no_stim_height"],
         font=config["Text"]["font"],
     )
     no_option = visual.TextStim(
         win,
         color="red",
         text="NIE",
-        pos=(-side * 0.2, -0.2),
-        height=config["Text"]["height"],
+        pos=(-side * dist, -dist),
+        height=config["Yes_no_stim_height"],
         font=config["Text"]["font"],
     )
 
