@@ -103,7 +103,7 @@ do czarnego przedmiotu?"""
             win, text=pre_question, pos=(0, 0), **config["Text"]
         )
         post_question_stim = visual.TextStim(
-            win, text=post_question, pos=(0, 0.2), **config["Text"]
+            win, text=post_question, pos=(0, 0.14), **config["Text"]
         )
 
         # ! show pre-question
