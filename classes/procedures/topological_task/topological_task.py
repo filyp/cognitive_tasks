@@ -14,11 +14,13 @@ text_path = Path("messages") / "topological_task"
 
 def get_trigger_name(row, training, event):
     """example triggers:
-    TR*FIX*A*NA*{}
-    EX*RES*NA*NA*{}
+    TR*FIX*A*NA-7*{}
+    EX*RES*NA*NA-7*{}
     """
+    stem = row["file_name"].split(".")[0]
     return (
-        f"{'TR' if training else 'EX'}*{event}*{row['image_type']}*{row['shown_word']}*"
+        # f"{'TR' if training else 'EX'}*{event}*{row['image_type']}*{row['shown_word']}*"
+        f"{'TR' if training else 'EX'}*{event}*{row['image_type']}*{stem}*"
         + "{}"
     )
 
