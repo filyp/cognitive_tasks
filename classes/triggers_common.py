@@ -3,15 +3,32 @@ import time
 from psychopy import logging
 
 
+# def create_eeg_port():
+#     try:
+#         import parallel
+
+#         port = parallel.Parallel()
+#         port.setData(0x00)
+#         return port
+#     except:
+#         raise Exception("Can't connect to EEG")
+
 def create_eeg_port():
     try:
-        import parallel
+        import serial
 
-        port = parallel.Parallel()
-        port.setData(0x00)
+        port = serial.Serial("/dev/ttyUSB0", baudrate=115200)
+        port.write(0x00)
         return port
     except:
         raise Exception("Can't connect to EEG")
+
+
+def simple_send_trigger(port_eeg, trigger_no):
+    port_eeg.write(trigger_no.to_bytes(1, 'big'))
+    time.sleep(0.005)
+    port_eeg.write(0x00)
+    time.sleep(0.005)
 
 
 class TriggerHandler:
@@ -37,10 +54,7 @@ class TriggerHandler:
             # logging.flush()
         if self.port_eeg is not None:
             try:
-                self.port_eeg.setData(self.trigger_no)
-                time.sleep(0.005)
-                self.port_eeg.setData(0x00)
-                time.sleep(0.005)
+                simple_send_trigger(self.port_eeg, self.trigger_no)
             except Exception as ex:
                 logging.error(ex)
 

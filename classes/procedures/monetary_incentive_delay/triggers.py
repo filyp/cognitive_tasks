@@ -1,6 +1,7 @@
 import time
 
 from psychopy import logging
+from classes.triggers_common import simple_send_trigger
 
 
 class TriggerTypes:
@@ -15,17 +16,6 @@ class TriggerTypes:
     FEEDBACK_GOOD = "F_GOOD___"
     FEEDBACK_BAD = "F_BAD____"
     FEEDBACK_NEUTRAL = "F_NEUTRAL"
-
-
-def create_eeg_port():
-    try:
-        import parallel
-
-        port = parallel.Parallel()
-        port.setData(0x00)
-        return port
-    except:
-        raise Exception("Can't connect to EEG")
 
 
 def create_nirs_dev():
@@ -62,10 +52,7 @@ class TriggerHandler:
         logging.data("TRIGGER: " + self.data_saver.triggers_list[-1])
         if self.port_eeg is not None:
             try:
-                self.port_eeg.setData(self.trigger_no)
-                time.sleep(0.005)
-                self.port_eeg.setData(0x00)
-                time.sleep(0.005)
+                simple_send_trigger(self.port_eeg, self.trigger_no)
             except Exception as ex:
                 logging.error(ex)
                 pass

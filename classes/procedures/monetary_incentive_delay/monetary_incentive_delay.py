@@ -9,9 +9,8 @@ from classes.procedures.monetary_incentive_delay.prepare_experiment import prepa
 from classes.procedures.monetary_incentive_delay.triggers import (
     TriggerHandler,
     TriggerTypes,
-    create_eeg_port,
 )
-
+from classes.triggers_common import create_eeg_port
 
 def monetary_incentive_delay(
     win,

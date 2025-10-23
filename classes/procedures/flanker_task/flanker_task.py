@@ -8,8 +8,8 @@ from classes.procedures.flanker_task.load_data import load_stimuli
 from classes.procedures.flanker_task.triggers import (
     TriggerHandler,
     TriggerTypes,
-    create_eeg_port,
 )
+from classes.triggers_common import create_eeg_port
 from classes.procedures.flanker_task.prepare_experiment import prepare_trials
 from classes.procedures.flanker_task.feedback import (
     FeedbackTimerSteps,

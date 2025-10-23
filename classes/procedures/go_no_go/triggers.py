@@ -1,5 +1,7 @@
 import time
 
+from classes.triggers_common import simple_send_trigger
+
 
 class TriggerTypes(object):
     BLINK = "BLINK"
@@ -8,17 +10,6 @@ class TriggerTypes(object):
     RE = "RE"
     FEEDB_GOOD = "FG"
     FEEDB_BAD = "FB"
-
-
-def create_eeg_port():
-    try:
-        import parallel
-
-        port = parallel.Parallel()
-        port.setData(0x00)
-        return port
-    except:
-        raise Exception("Can't connect to EEG")
 
 
 def create_nirs_dev():
@@ -60,10 +51,7 @@ def send_trigger(
 ):
     if send_eeg_triggers:
         try:
-            port_eeg.setData(trigger_no)
-            time.sleep(0.005)
-            port_eeg.setData(0x00)
-            time.sleep(0.005)
+            simple_send_trigger(port_eeg, trigger_no)
         except:
             pass
     if send_nirs_triggers:
