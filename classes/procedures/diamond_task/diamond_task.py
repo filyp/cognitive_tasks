@@ -10,8 +10,8 @@ from classes.show_info import show_info, read_text_from_file
 from classes.procedures.diamond_task.triggers import (
     TriggerHandler,
     TriggerTypes,
-    create_eeg_port,
 )
+from classes.triggers_common import create_eeg_port
 from classes.procedures.diamond_task.prepare_experiment import prepare_trials
 from classes.procedures.diamond_task.load_data import load_stimuli
 
