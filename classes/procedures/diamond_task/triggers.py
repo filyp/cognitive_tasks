@@ -36,17 +36,16 @@ class TriggerHandler:
     def __init__(self, port_eeg, data_saver):
         self.port_eeg = port_eeg
         self.data_saver = data_saver
-        self.trigger_no = 0
+        self.trigger_no = 1
 
     def prepare_trigger(
         self,
         trigger_type,
         block_type="--",
     ):
-        self.trigger_no += 1
-        if self.trigger_no == 9:
+        self.trigger_no *= 2
+        if self.trigger_no == 256:
             self.trigger_no = 1
-
         trigger_name = f"{self.trigger_no}:{trigger_type}*{block_type[:2]}"
         self.data_saver.triggers_list.append(trigger_name)
 
