@@ -32,10 +32,10 @@ def go_no_go(
     stimulus = load_data(win=win, folder_name=os.path.join("input_data", "go_no_go"), config=config, screen_res=screen_res)
     stimulus_dict = {stim["name"]: stim for stim in stimulus}
 
-    frame_rate = int(round(win.getActualFrameRate()))
-    logging.data(f"Frame rate: {frame_rate}")
-    assert frame_rate in [24, 25, 30, 50, 60, 74, 75, 100, 120, 144, 200, 240, 360], "Illegal frame rate."
-    frame_time = 1 / frame_rate
+    # frame_rate = int(round(win.getActualFrameRate()))
+    # logging.data(f"Frame rate: {frame_rate}")
+    # assert frame_rate in [24, 25, 30, 50, 60, 74, 75, 100, 120, 144, 200, 240, 360], "Illegal frame rate."
+    # frame_time = 1 / frame_rate
 
     # EEG triggers
     port_eeg = create_eeg_port() if config["Send_EEG_trigg"] else None
@@ -225,7 +225,8 @@ def go_no_go(
                         trigger_no=trigger_no,
                         send_eeg_triggers=config["Send_EEG_trigg"],
                     )
-                    time.sleep(feedback_show_time - frame_time)
+                    # time.sleep(feedback_show_time - frame_time)
+                    time.sleep(feedback_show_time)
                     feedback.setAutoDraw(False)
                     data_saver.check_exit()
                     win.flip()
