@@ -40,7 +40,7 @@ def go_no_go(
     # EEG triggers
     port_eeg = create_eeg_port() if config["Send_EEG_trigg"] else None
     triggers_list = list()
-    trigger_no = 0
+    trigger_no = 1
     data_saver.triggers_list = triggers_list
 
     rt_sum = 0

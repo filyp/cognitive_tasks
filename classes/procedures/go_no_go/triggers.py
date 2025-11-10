@@ -33,8 +33,8 @@ def prepare_trigger_name(trial, block_type):
 
 
 def prepare_trigger(trigger_no, triggers_list, trigger_type, trigger_name=None):
-    trigger_no += 1
-    if trigger_no == 9:
+    trigger_no *= 2
+    if trigger_no == 256:
         trigger_no = 1
     if trigger_name is not None:
         trigger_type = trigger_type + trigger_name
