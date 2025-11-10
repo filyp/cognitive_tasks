@@ -8,8 +8,6 @@ Actiview_reminder: True
 # Send_EEG_trigg: False
 # Actiview_reminder: False
 
-Screen_number: 0  # maybe todo: remove later?
-    
 # view parameters
 Text:
     height: 0.037
